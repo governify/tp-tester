@@ -1,0 +1,45 @@
+{
+  "config": {
+    "scopeManager": "http://host.docker.internal:5700/api/v1/scopes/development"
+  },
+  "metric": {
+    "computing": "actual",
+    "element": "number",
+    "event": {
+      "githubGQL": {
+        "custom": {
+          "type": "graphQL",
+          "title": "Get pull requests with at least one comment by member",
+          "steps": {
+            "0": {
+              "type": "queryGetObject",
+              "query": "{\r\n  repository(name: \"%PROJECT.github.repository%\", owner: \"%PROJECT.github.repoOwner%\") {\r\n    pullRequests(first: 100) {\r\n      pageInfo {\r\n        endCursor\r\n        hasNextPage\r\n      }\r\n      nodes {\r\n        bodyText\r\n        number\r\n        state\r\n        createdAt\r\n        author {\r\n          login\r\n        }\r\n        mergedAt\r\n        mergedBy {\r\n          login\r\n        }\r\n        comments(first: 50) {\r\n          nodes {\r\n            author {\r\n              login\r\n            }\r\n            bodyText\r\n            createdAt\r\n          }\r\n        }\r\n        reviews(first: 30) {\r\n          nodes {\r\n            state\r\n            createdAt\r\n            bodyText\r\n            author {\r\n              login\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n}"
+            },
+            "1": {
+              "type": "objectGetSubObjects",
+              "location": "data.repository.pullRequests.nodes"
+            },
+            "2": {
+              "type": "runScript",
+              "variables": {},
+              "script": "module.exports.generic = function getPullRequestsWithAtLeastOneCommentByMember(inputData,variables)  {\r\n    let pullRequestsMergedAndOpenWithAtLeastOneComment = []\r\n    for (let pullRequest of inputData) {\r\n\r\n        if (pullRequest.author.login === '%MEMBER.github.username%') continue;\r\n\r\n        let isPullRequestAlreadyAdded = false;\r\n\r\n        if (pullRequest.state === 'OPEN' || pullRequest.state === 'MERGED' && Math.max(new Date(variables.from), new Date(pullRequest.createdAt)) <= Math.min(new Date(variables.to), new Date(pullRequest.mergedAt))) {\r\n            for (let comment of pullRequest.comments.nodes) {\r\n                if (comment.author.login === '%MEMBER.github.username%' && new Date(comment.createdAt) > new Date(variables.from) && new Date(comment.createdAt) < new Date(variables.to)) {\r\n                    pullRequestsMergedAndOpenWithAtLeastOneComment.push(pullRequest)\r\n                    isPullRequestAlreadyAdded = true;\r\n                    break;\r\n                }\r\n            }\r\n\r\n            if (isPullRequestAlreadyAdded) continue;\r\n\r\n            for (let review of pullRequest.reviews.nodes) {\r\n                if (review.bodyText.length > 0 && review.author.login === '%MEMBER.github.username%' && new Date(review.createdAt) > new Date(variables.from) && new Date(review.createdAt) < new Date(variables.to)) {\r\n                    pullRequestsMergedAndOpenWithAtLeastOneComment.push(pullRequest)\r\n                    break;\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    return pullRequestsMergedAndOpenWithAtLeastOneComment;\r\n}"
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "project": "TFG-GH-JaviFdez7_ISPP-G1-Talent",
+      "class": "TFG",
+      "member": "*"
+    },
+    "window": {
+      "type": "static",
+      "period": "hourly",
+      "initial": "2024-03-14T00:00:00.000Z",
+      "from": "2024-03-14T00:00:00.000Z",
+      "end": "2024-03-14T23:59:59.999Z",
+      "timeZone": "America/Los_Angeles"
+    }
+  }
+}
