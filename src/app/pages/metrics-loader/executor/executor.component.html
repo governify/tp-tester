@@ -1,0 +1,31 @@
+<body>
+  <div class="row">
+    <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  </div>
+  <div class="row" id="context">
+    <div>You are executing <strong>{{fileName}}</strong>.</div>
+  </div>
+  <button class="btn btn-secondary" (click)="saveToJson()">Save as json</button>
+  <p [ngClass]="messageClass">{{message}}</p>
+  <div class="row">
+    <button class="btn btn-secondary btn-right" (click)="search()">Search</button>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
+  </div>
+
+  <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
+
+
+  <button class="btn" (click)="postContent()">Post</button>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loader"></div>
+    <p class="loading-text">Collecting resources from Bluejay</p>
+  </div>
+  <button class="btn" (click)="getComputation()" [disabled]="!computationUrl">Get Computation</button>
+  <div class="busquedaRespuesta">
+    <button class="btn btn-secondary btn-right btn-search" (click)="searchResponse()" [disabled]="!response">Search in Response</button>
+
+    <input type="text" [(ngModel)]="searchTermResponse" placeholder="Search in response..." class="search-bar" (keyup.enter)="searchResponse()">
+  </div>
+  <textarea id="responseTextarea" class="fullwidth" [(ngModel)]="response" readonly></textarea>
+
+</body>
