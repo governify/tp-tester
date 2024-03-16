@@ -7,12 +7,60 @@
   </div>
   <button class="btn btn-secondary" (click)="saveToJson()">Save as json</button>
   <p [ngClass]="messageClass">{{message}}</p>
+
+  <form>
+    <h2 style="display: flex; justify-content: center; align-items: center;">Context Section</h2>
+    <div class="row">
+      <h4>Scope Information</h4>
+      <div class="col">
+        <label for="project">Project:</label>
+        <input type="text" id="project" [(ngModel)]="scope.project" name="project" class="form-control">
+      </div>
+      <div class="col">
+        <label for="class">Class:</label>
+        <input type="text" id="class" [(ngModel)]="scope.class" name="class" class="form-control">
+      </div>
+      <div class="col">
+        <label for="member">Member:</label>
+        <input type="text" id="member" [(ngModel)]="scope.member" name="member" class="form-control">
+      </div>
+    </div>
+    <div class="row">
+      <h4>Computation Search</h4>
+      <div class="col">
+        <label for="type">Type:</label>
+        <input type="text" id="type" [(ngModel)]="window.type" name="type" class="form-control">
+      </div>
+      <div class="col">
+        <label for="period">Period: </label>
+        <input type="text" id="period" [(ngModel)]="window.period" name="period" class="form-control">
+      </div>
+      <div class="col">
+        <label for="initial">Initial: </label>
+        <input type="text" id="initial" [(ngModel)]="window.initial" name="initial" class="form-control">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="from">From:</label>
+        <input type="text" id="from" [(ngModel)]="window.from" name="from" class="form-control">
+      </div>
+      <div class="col">
+        <label for="end">End:</label>
+        <input type="text" id="end" [(ngModel)]="window.end" name="end" class="form-control">
+      </div>
+      <div class="col">
+        <label for="timeZone">Timezone:</label>
+        <input type="text" id="timeZone" [(ngModel)]="window.timeZone" name="timeZone" class="form-control">
+      </div>
+    </div>
+    <button class="btn btn-yellow" (click)="setToCurrentHour()">Actual hour computation</button>  </form>
   <div class="row">
+    <h2 style="display: flex; justify-content: center; align-items: center;">Execution Section</h2>
 
     <button class="btn btn-secondary btn-right" (click)="search()">Search</button>
     <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
   </div>
-
   <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
 
 
