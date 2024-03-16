@@ -1,0 +1,27 @@
+<body>
+<button class="btn btn-outline-primary btn-right2" (click)="goBack()">Back</button>
+<table class="file-list">
+  <thead>
+  <tr>
+    <th>File Name</th>
+    <th>View File</th>
+    <th>Execute / Edit File</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let file of files">
+    <td class="file-name">{{ file }}</td>
+    <td>
+      <a [routerLink]="['/metrics-loader/viewer', file]" class="icon">
+        <i class="fa-regular fa-file"></i>
+      </a>
+    </td>
+    <td>
+      <a [routerLink]="['/metrics-loader/executor', file]" class="icon">
+        <i class="fa-solid fa-pen"></i>
+      </a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>

@@ -16,6 +16,7 @@ export class ExecutorComponent implements OnInit {
   fileName!: string;
   message = '';
   messageClass = '';
+
   constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
   isLoading = false;
   ngOnInit(): void {
@@ -115,6 +116,7 @@ export class ExecutorComponent implements OnInit {
         this.message = 'An error occurred: ' + error;
         this.messageClass = 'error';
       }
+
     );
   }
   goBack(): void {

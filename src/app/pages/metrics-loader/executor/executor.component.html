@@ -8,6 +8,7 @@
   <button class="btn btn-secondary" (click)="saveToJson()">Save as json</button>
   <p [ngClass]="messageClass">{{message}}</p>
   <div class="row">
+
     <button class="btn btn-secondary btn-right" (click)="search()">Search</button>
     <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
   </div>

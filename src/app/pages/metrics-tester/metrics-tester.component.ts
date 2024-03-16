@@ -7,17 +7,15 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./metrics-tester.component.css']
 })
 export class MetricsTesterComponent implements OnInit {
-  data!: string; // Cambia el tipo de 'data' a 'string'
+  data!: string;
   response: string | null = null;
   computationUrl: string | null = null;
   searchTerm!: string;
   searchTermResponse!: string;
-<<<<<<< Updated upstream
-=======
   fileName!: string;
   message = '';
   messageClass = '';
->>>>>>> Stashed changes
+
   constructor(private http: HttpClient) { }
   isLoading = false;
   ngOnInit(): void {
@@ -94,8 +92,6 @@ export class MetricsTesterComponent implements OnInit {
       alert('Word not found in response!');
     }
   }
-<<<<<<< Updated upstream
-=======
 
   saveToJson(): void {
     if (!this.fileName) {
@@ -116,5 +112,5 @@ export class MetricsTesterComponent implements OnInit {
       }
     );
   }
->>>>>>> Stashed changes
+
 }

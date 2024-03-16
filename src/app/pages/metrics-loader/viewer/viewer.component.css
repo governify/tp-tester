@@ -9,28 +9,13 @@ textarea {
   height: 600px;
   resize: none;
 }
-button:enabled {
-  background-color: green;
-  color: white;
-  margin: 5px;
-}
-#volver:enabled {
-  background-color: inherit; /* Cambia esto al color que prefieras */
-  color:dodgerblue;
-}
-button:disabled {
-  background-color: gray;
-  margin: 5px;
-}
+
 .search-bar {
   float: right;
   border-radius: 25px;
   width: auto;
 }
 
-button, pre {
-  flex-shrink: 0;
-}
 .fullwidth{
   width: 100%;
 }
@@ -51,9 +36,7 @@ textarea::-webkit-scrollbar-thumb {
 textarea::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-.busquedaRespuesta{
-  margin-top: -30px;
-}
+
 
 .loading-overlay {
   display: flex;
@@ -75,8 +58,8 @@ textarea::-webkit-scrollbar-thumb:hover {
   text-align: center;
 }
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -88,8 +71,9 @@ textarea::-webkit-scrollbar-thumb:hover {
   100% { transform: rotate(360deg); }
 }
 .mat-spinner circle, .mat-progress-spinner circle {
-  stroke: #000; /* Cambia esto al color que prefieras */
+  stroke: #000;
 }
+
 
 .btn-right {
   float: right;
@@ -121,26 +105,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   display: inline-block;
 }
 
-.success {
-  background-color: #25af25;
-  margin-top: 8px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-radius: 15px;
-  color: white;
-  text-align: center;
-
-}
-
-.error {
-  background-color: #c51f1f;
-  margin-top: 8px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-radius: 15px;
-  color: white;
-  text-align: center;
-}
 
 .row {
   display: flex; /* Añade esta línea */
@@ -149,3 +113,5 @@ textarea::-webkit-scrollbar-thumb:hover {
 
   margin-right: 20px;margin-bottom: 10px!important;
 }
+
+

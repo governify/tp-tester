@@ -1,0 +1,15 @@
+<body>
+  <div class="row">
+    <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  </div>
+  <div class="row" id="context">
+    <div>You are viewing <strong>{{fileName}}</strong>.</div>
+  </div>
+  <div class="row">
+    <button class="btn btn-secondary btn-right" (click)="search()">Search</button>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
+  </div>
+
+
+  <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
+</body>
