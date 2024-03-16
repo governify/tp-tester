@@ -20,6 +20,28 @@ app.post('/tpa/save', (req, res) => {
     }
   });
 });
+app.post('/tpa/update', (req, res) => {
+  const data = req.body;
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics', `${data.fileName}`);
+
+  // Verifica si el archivo ya existe
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      // Si el archivo existe, lo borra
+      fs.unlinkSync(filePath);
+    }
+
+    // Crea el nuevo archivo
+    fs.writeFile(filePath, JSON.stringify(data.content, null, 2), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while saving the file.' });
+      } else {
+        res.json({ message: 'File updated successfully.' });
+      }
+    });
+  });
+});
 
 // Método GET para obtener todos los archivos .json en la carpeta de assets
 app.get('/tpa/files', (req, res) => {
