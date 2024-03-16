@@ -1,25 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
+import {HttpClient} from "@angular/common/http";
+import { ActivatedRoute } from '@angular/router';
+import {Location} from "@angular/common";
 @Component({
-  selector: 'app-metrics-tester',
-  templateUrl: './metrics-tester.component.html',
-  styleUrls: ['./metrics-tester.component.css']
+  selector: 'app-executor',
+  templateUrl: './executor.component.html',
+  styleUrls: ['./executor.component.css']
 })
-export class MetricsTesterComponent implements OnInit {
+export class ExecutorComponent implements OnInit {
   data!: string;
   response: string | null = null;
   computationUrl: string | null = null;
   searchTerm!: string;
   searchTermResponse!: string;
   fileName!: string;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
   isLoading = false;
   ngOnInit(): void {
-    this.http.get('assets/basicMetric.json').subscribe(data => {
-      this.data = JSON.stringify(data, null, 2); // Convierte el objeto a una cadena JSON
+    this.route.paramMap.subscribe(params => {
+      const fileName = params.get('fileName');
+      if (fileName) {
+        this.fileName = fileName; // Asegúrate de que esta línea está presente
+        this.http.get(`assets/savedMetrics/${fileName}`).subscribe(data => {
+          this.data = JSON.stringify(data, null, 2);
+        });
+      }
     });
-
   }
 
   postContent(): void {
@@ -96,5 +102,8 @@ export class MetricsTesterComponent implements OnInit {
       () => console.log('File saved successfully'),
       (error) => console.error('An error occurred:', error)
     );
+  }
+  goBack(): void {
+    this.location.back();
   }
 }
