@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MetricsLoaderComponent } from './pages/metrics-loader/metrics-loader.component';
+import { ExecutorComponent } from './pages/metrics-loader/executor/executor.component';
+import { ViewerComponent } from './pages/metrics-loader/viewer/viewer.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +22,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FooterComponent,
     HomeComponent,
     TpaLoadedComponent,
-    MetricsTesterComponent
+    MetricsTesterComponent,
+    MetricsLoaderComponent,
+    ExecutorComponent,
+    ViewerComponent
   ],
   imports: [
     BrowserModule,

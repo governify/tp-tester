@@ -1,8 +1,17 @@
 <body>
-<button class="btn btn-secondary btn-right" (click)="search()">Search</button>
-<input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
-<input type="text" [(ngModel)]="fileName" placeholder="Enter file name">
-<button (click)="saveToJson()">Guardar como JSON</button>
+  <div class="row">
+    <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  </div>
+  <div class="row" id="context">
+    <div>You are executing <strong>{{fileName}}</strong>.</div>
+  </div>
+  <button class="btn btn-secondary" (click)="saveToJson()">Save as json</button>
+  <div class="row">
+
+    <button class="btn btn-secondary btn-right" (click)="search()">Search</button>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
+  </div>
+
   <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
 
 
@@ -13,7 +22,7 @@
   </div>
   <button class="btn" (click)="getComputation()" [disabled]="!computationUrl">Get Computation</button>
   <div class="busquedaRespuesta">
-    <button class="btn btn-secondary btn-right" (click)="searchResponse()" [disabled]="!response">Search in Response</button>
+    <button class="btn btn-secondary btn-right btn-search" (click)="searchResponse()" [disabled]="!response">Search in Response</button>
 
     <input type="text" [(ngModel)]="searchTermResponse" placeholder="Search in response..." class="search-bar" (keyup.enter)="searchResponse()">
   </div>
