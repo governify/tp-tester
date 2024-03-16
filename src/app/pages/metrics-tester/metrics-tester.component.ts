@@ -13,6 +13,9 @@ export class MetricsTesterComponent implements OnInit {
   searchTerm!: string;
   searchTermResponse!: string;
   fileName!: string;
+  message = '';
+  messageClass = '';
+
   constructor(private http: HttpClient) { }
   isLoading = false;
   ngOnInit(): void {
@@ -91,10 +94,23 @@ export class MetricsTesterComponent implements OnInit {
   }
 
   saveToJson(): void {
+    if (!this.fileName) {
+      this.message = 'Filename cannot be empty';
+      this.messageClass = 'error';
+      return;
+    }
+
     const data = JSON.parse(this.data);
     this.http.post('http://localhost:4202/tpa/save', { fileName: this.fileName, content: data }).subscribe(
-      () => console.log('File saved successfully'),
-      (error) => console.error('An error occurred:', error)
+      () => {
+        this.message = 'File saved successfully';
+        this.messageClass = 'success';
+      },
+      (error) => {
+        this.message = 'An error occurred: ' + error;
+        this.messageClass = 'error';
+      }
     );
   }
+
 }

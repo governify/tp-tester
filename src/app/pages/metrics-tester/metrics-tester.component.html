@@ -3,6 +3,8 @@
 <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
 <input type="text" [(ngModel)]="fileName" placeholder="Enter file name">
 <button (click)="saveToJson()">Guardar como JSON</button>
+<p [ngClass]="messageClass">{{message}}</p>
+
   <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
 
 

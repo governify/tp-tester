@@ -121,6 +121,26 @@ textarea::-webkit-scrollbar-thumb:hover {
   display: inline-block;
 }
 
+.success {
+  background-color: #25af25;
+  margin-top: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+
+}
+
+.error {
+  background-color: #c51f1f;
+  margin-top: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
 
 .row {
   display: flex; /* Añade esta línea */

@@ -42,4 +42,5 @@ testem.log
 Thumbs.db
 
 # Json Guardados
-/src/assets/savedMetrics/*
+/src/assets/savedMetrics/*.json
+

@@ -6,6 +6,7 @@
     <div>You are executing <strong>{{fileName}}</strong>.</div>
   </div>
   <button class="btn btn-secondary" (click)="saveToJson()">Save as json</button>
+  <p [ngClass]="messageClass">{{message}}</p>
   <div class="row">
 
     <button class="btn btn-secondary btn-right" (click)="search()">Search</button>

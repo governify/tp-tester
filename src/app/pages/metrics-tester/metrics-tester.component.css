@@ -84,7 +84,26 @@ textarea::-webkit-scrollbar-thumb:hover {
   height: 120px;
   animation: spin 2s linear infinite;
 }
+.success {
+  background-color: #25af25;
+  margin-top: 20px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
 
+}
+
+.error {
+  background-color: #c51f1f;
+  margin-top: 20px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
