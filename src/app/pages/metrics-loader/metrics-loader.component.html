@@ -1,11 +1,19 @@
 <body>
-<button class="btn btn-outline-primary btn-right2" (click)="goBack()">Back</button>
+
+<div class="row justify-content-end">
+  <button class="btn btn-outline-primary btn-right2" (click)="goBack()">Back</button>
+</div>
+
+<div class="row">
+  <p *ngIf="message" [ngClass]="message.style">{{ message.text }}</p>
+</div>
 <table class="file-list">
   <thead>
   <tr>
     <th>File Name</th>
     <th>View File</th>
     <th>Execute / Edit File</th>
+    <th>Delete File</th>
   </tr>
   </thead>
   <tbody>
@@ -20,6 +28,11 @@
       <a [routerLink]="['/metrics-loader/executor', file]" class="icon">
         <i class="fa-solid fa-pen"></i>
       </a>
+    </td>
+    <td>
+      <button (click)="deleteFile(file)" class="icon">
+        <i class="fa-solid fa-trash"></i>
+      </button>
     </td>
   </tr>
   </tbody>

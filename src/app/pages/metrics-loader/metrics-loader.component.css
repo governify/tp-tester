@@ -2,15 +2,42 @@ body {
   padding: 20px 0;
   border-radius: 15px;
   margin: 0 20px;
+  padding-bottom: 100px!important;
 }
 table.file-list {
   width: 100%;
 }
 
 table.file-list th, table.file-list td {
-  width: 33%;
+  width: 25%;
   text-align: center;
 }
+.success {
+  background-color: #32c232;
+  margin-top: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
+
+.error {
+  background-color: #c51f1f;
+  margin-top: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
+table.file-list td button.icon {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 .btn-right2 {
   float: right;
   margin-right: 25px;

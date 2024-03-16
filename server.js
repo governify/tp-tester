@@ -51,4 +51,23 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
 });
+
+app.delete('/tpa/files/:fileName', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics', `${req.params.fileName}`);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File does not exist:', err);
+      res.status(404).json({ message: 'File does not exist.' });
+    } else {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('An error occurred while deleting the file:', err);
+          res.status(500).json({ message: 'An error occurred while deleting the file.' });
+        } else {
+          res.json({ message: 'File deleted successfully.' });
+        }
+      });
+    }
+  });
+});
 app.listen(4202, () => console.log('Server is running on port 4202'));
