@@ -9,6 +9,8 @@ import { TpaManagementComponent } from "./pages/tpa-management/tpa-management.co
 import{ TpaDeleteComponent } from "./pages/tpa-management/tpa-delete/tpa-delete.component";
 import { TpaViewComponent } from "./pages/tpa-management/tpa-view/tpa-view.component";
 import { TpaEditComponent } from "./pages/tpa-management/tpa-edit/tpa-edit.component";
+import {SectionsComponent} from "./pages/tpa-management/tpa-edit/sections/sections.component";
+import {AllComponent} from "./pages/tpa-management/tpa-edit/all/all.component";
 const routes: Routes = [
   {
     path: '',
@@ -29,6 +31,14 @@ const routes: Routes = [
   {
     path: 'tpa-management/edit/:id',
     component: TpaEditComponent
+  },
+  {
+    path: 'tpa-management/edit/sections/:id',
+    component: SectionsComponent
+  },
+  {
+    path: 'tpa-management/edit/all/:id',
+    component: AllComponent
   },
   {
     path: 'metrics-tester',

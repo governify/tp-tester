@@ -19,6 +19,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { TpaDeleteComponent } from './pages/tpa-management/tpa-delete/tpa-delete.component';
 import { TpaEditComponent } from './pages/tpa-management/tpa-edit/tpa-edit.component';
 import { TpaViewComponent } from './pages/tpa-management/tpa-view/tpa-view.component';
+import { AllComponent } from './pages/tpa-management/tpa-edit/all/all.component';
+import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sections.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +35,8 @@ import { TpaViewComponent } from './pages/tpa-management/tpa-view/tpa-view.compo
     TpaDeleteComponent,
     TpaEditComponent,
     TpaViewComponent,
+    AllComponent,
+    SectionsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,10 @@
 <body>
   <div class="container">
       <div class="row justify-content-center">
+        <h3>Existings TPAs</h3>
         <div class="col-md-12">
           <table class="table table-striped">
+
             <thead>
             <tr>
               <th>ID</th>
@@ -36,5 +38,18 @@
           </table>
         </div>
       </div>
+    <div class="row justify-content-center">
+      <h3>Create TPA</h3>
+      <div *ngIf="notificationMessage" [ngClass]="{'success': lastOperationSuccessful, 'error': lastOperationSuccessful === false}">
+        {{ notificationMessage }}
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <textarea class="form-control" [(ngModel)]="tpaContent"></textarea>
+          <button class="btn btn-primary" (click)="createTpa()">Create TPA</button>
+          <button class="btn btn-secondary" (click)="copyDefaultTPA()">Copy Default TPA</button>
+        </div>
+      </div>
     </div>
+  </div>
 </body>

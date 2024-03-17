@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 d-flex justify-content-end mt-3">
+      <button class="btn btn-back" (click)="goBack()">Back</button>
+    </div>
+  </div>
+  <h2 style="display: flex; justify-content: center; align-items: center;">TPA JSON:</h2>
+  <div class="row">
+    <div class="col-md-12">
+      <pre class="form-control" readonly>{{ tpaData | json }}</pre>
+    </div>
+  </div>
+  <form>
+    <h2 style="display: flex; justify-content: center; align-items: center;">Context Section</h2>
+    <div class="row">
+      <p> In this section, you can found the most importants parts of the TPA, the metrics and guarantees.</p>
+      <div class="container">
+        <h4> METRICS </h4>
+        <div class="row" *ngFor="let metric of metrics | keyvalue; let i = index">
+          <div class="col-md-12">
+            <h5>{{ metric.key }}</h5>
+            <textarea class="form-control" [(ngModel)]="metricsJson[getKeyAsString(metric.key)]" name="metric{{i}}"></textarea>
+          </div>
+        </div>
+        <h4> GUARANTEES </h4>
+        <div class="row" *ngFor="let guarantee of guarantees; let i = index">
+          <div class="col-md-12">
+            <h5>{{ guarantee.id }}</h5>
+            <textarea class="form-control" [(ngModel)]="guaranteesJson[i]" name="guarantee{{i}}"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
