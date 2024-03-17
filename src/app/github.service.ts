@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Octokit } from '@octokit/rest';
-import {catchError, Observable, throwError} from "rxjs";
+import {catchError, map, Observable, switchMap, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,23 +15,38 @@ export class GithubService {
   listBranchesForRepo(owner: string, repo: string): Observable<any> {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}/branches`);
   }
-  async login(token: string) {
-    if (typeof token !== 'string') {
-      throw new Error('Token must be a string');
-    }
 
-    this.octokit = new Octokit({
-      auth: token,
-    });
+  getUserName(token: string): Observable<string> {
+    const headers = new HttpHeaders({ Authorization: `token ${token}` });
+    return this.http.get<{login: string}>('https://api.github.com/user', { headers })
+      .pipe(map(user => user.login));
   }
+
   listRepos(token: string): Observable<any> {
     const headers = new HttpHeaders({ Authorization: `token ${token}` });
-    return this.http.get('https://api.github.com/user/repos', { headers }).pipe(
-      catchError(error => {
-        console.error('Error getting repos:', error);
-        return throwError('Error getting repos');
-      })
+    return this.getUserName(token).pipe(
+      switchMap(userName =>
+        this.http.get<any[]>('https://api.github.com/user/repos', { headers }).pipe(
+          map((repos: any[]) => repos.filter(repo => !repo.private && repo.owner.login === userName)),
+          catchError(error => {
+            console.error('Error getting repos:', error);
+            return throwError('Error getting repos');
+          })
+        )
+      )
     );
+  }
+  async getLatestCommitSha(owner: string, repo: string): Promise<string> {
+    const { data } = await this.octokit.repos.listCommits({
+      owner,
+      repo,
+      per_page: 1
+    });
+
+    return data[0].sha;
+  }
+  getRepoInfo(owner: string, repo: string): Observable<any> {
+    return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }
   async cloneRepo(repoUrl: string) {
     const [owner, repo] = repoUrl.split('/').slice(-2);
@@ -89,6 +104,18 @@ export class GithubService {
       head,
       base,
       body
+    });
+    return data;
+  }
+
+  async createFile(owner: string, repo: string, path: string, message: string, content: string, branch: string) {
+    const { data } = await this.octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message,
+      content: btoa(content), // El contenido debe estar en formato base64
+      branch
     });
     return data;
   }

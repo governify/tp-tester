@@ -63,7 +63,7 @@ const routes: Routes = [
     component: GhSimulatorComponent
   },
   {
-    path: 'gh-simulator/repository/:repoName',
+    path: 'gh-simulator/repository/:owner/:repoName',
     component: RepositoryComponent
   }
 ];

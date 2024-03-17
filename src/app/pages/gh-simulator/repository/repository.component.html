@@ -1,1 +1,22 @@
-<p>repository works!</p>
+<body>
+  <div *ngIf="repoInfo" class="repo-info">
+    <h2 class="repo-name">{{ repoInfo.name }}</h2>
+    <p class="repo-description">{{ repoInfo.description }}</p>
+
+    <h3 class="branches-title">Branches</h3>
+    <ul class="branches-list">
+      <li *ngFor="let branch of branches" class="branch-item">{{ branch.name }}</li>
+    </ul>
+
+    <form [formGroup]="newBranchForm" (ngSubmit)="createBranch()" class="form-new-branch">
+      <input formControlName="branchName" placeholder="New branch name" class="input-branch-name">
+      <button type="submit" class="btn-submit">Create Branch</button>
+    </form>
+
+    <form [formGroup]="newFileForm" (ngSubmit)="createFileAndCommit()" class="form-new-file">
+      <input formControlName="fileName" placeholder="New file name" class="input-file-name">
+      <textarea formControlName="fileContent" placeholder="File content" class="textarea-file-content"></textarea>
+      <button type="submit" class="btn-submit">Create File and Commit</button>
+    </form>
+  </div>
+</body>

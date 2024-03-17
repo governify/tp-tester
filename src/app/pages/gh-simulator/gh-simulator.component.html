@@ -23,6 +23,12 @@
       <div *ngIf="error" class="error">
         Error getting repositories. Please check your token and try again.
       </div>
+      <div *ngIf="error2" class="error">
+        Error getting repositories. Please check wait 1h, you overpass the Github rate limit.
+      </div>
+      <div *ngIf="errorMessage" class="error">
+        {{ errorMessage }}
+      </div>
       <table class="table table-striped">
 
         <thead>
@@ -45,7 +51,7 @@
             </a>
           </td>
           <td class="text-center">
-            <button class="btn btn-warning">
+            <button class="btn btn-warning" (click)="editRepo(repo.owner.login, repo.name)">
               <i class="fa-solid fa-pen"></i>
             </button>
           </td>

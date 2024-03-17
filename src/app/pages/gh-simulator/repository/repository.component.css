@@ -1,0 +1,62 @@
+.repo-info {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.repo-name {
+  color: #333;
+  font-size: 24px;
+}
+
+.repo-description {
+  color: #666;
+  font-size: 16px;
+}
+
+.branches-title {
+  color: #333;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.branches-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.branch-item {
+  color: #666;
+  font-size: 16px;
+}
+
+.form-new-branch,
+.form-new-file {
+  margin-top: 20px;
+}
+
+.input-branch-name,
+.input-file-name,
+.textarea-file-content {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+body {
+  margin-top: 20px;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 20px;
+}
