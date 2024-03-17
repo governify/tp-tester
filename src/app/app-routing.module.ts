@@ -11,6 +11,8 @@ import { TpaViewComponent } from "./pages/tpa-management/tpa-view/tpa-view.compo
 import { TpaEditComponent } from "./pages/tpa-management/tpa-edit/tpa-edit.component";
 import {SectionsComponent} from "./pages/tpa-management/tpa-edit/sections/sections.component";
 import {AllComponent} from "./pages/tpa-management/tpa-edit/all/all.component";
+import {GhSimulatorComponent} from "./pages/gh-simulator/gh-simulator.component";
+import {RepositoryComponent} from "./pages/gh-simulator/repository/repository.component";
 const routes: Routes = [
   {
     path: '',
@@ -55,6 +57,14 @@ const routes: Routes = [
   {
     path: 'metrics-loader/viewer/:fileName',
     component: ViewerComponent
+  },
+  {
+    path: 'gh-simulator',
+    component: GhSimulatorComponent
+  },
+  {
+    path: 'gh-simulator/repository/:repoName',
+    component: RepositoryComponent
   }
 ];
 

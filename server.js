@@ -92,4 +92,61 @@ app.delete('/tpa/files/:fileName', (req, res) => {
     }
   });
 });
+
+app.post('/token/save', (req, res) => {
+  const token = req.body.token;
+  const filePath = path.join(__dirname, '/src/assets/token', 'code.json');
+
+  // Verifica si el archivo ya existe
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      // Si el archivo existe, lo borra
+      fs.unlinkSync(filePath);
+    }
+
+    // Crea el nuevo archivo con el token
+    fs.writeFile(filePath, JSON.stringify({ token }, null, 2), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while saving the token.' });
+      } else {
+        res.json({ message: 'Token saved successfully.' });
+      }
+    });
+  });
+});
+
+app.get('/token/get', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/token', 'code.json');
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the token.' });
+    } else {
+      const { token } = JSON.parse(data);
+      res.json({ token });
+    }
+  });
+});
+
+app.delete('/token/delete', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/token', 'code.json');
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File does not exist:', err);
+      res.status(404).json({ message: 'File does not exist.' });
+    } else {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('An error occurred while deleting the file:', err);
+          res.status(500).json({ message: 'An error occurred while deleting the file.' });
+        } else {
+          res.json({ message: 'File deleted successfully.' });
+        }
+      });
+    }
+  });
+});
 app.listen(4202, () => console.log('Server is running on port 4202'));

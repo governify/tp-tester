@@ -21,6 +21,9 @@ import { TpaEditComponent } from './pages/tpa-management/tpa-edit/tpa-edit.compo
 import { TpaViewComponent } from './pages/tpa-management/tpa-view/tpa-view.component';
 import { AllComponent } from './pages/tpa-management/tpa-edit/all/all.component';
 import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sections.component';
+import { GhSimulatorComponent } from './pages/gh-simulator/gh-simulator.component';
+import { RepositoryComponent } from './pages/gh-simulator/repository/repository.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +40,8 @@ import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sect
     TpaViewComponent,
     AllComponent,
     SectionsComponent,
+    GhSimulatorComponent,
+    RepositoryComponent,
   ],
   imports: [
     BrowserModule,
