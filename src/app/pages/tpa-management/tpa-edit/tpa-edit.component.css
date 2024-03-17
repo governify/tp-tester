@@ -1,0 +1,33 @@
+.btn-back {
+  background-color: white;
+  color: #007BFF; /* Este es un color azul */
+  border: 2px solid #007BFF;
+  margin-top: 10px;
+  margin-bottom: 15px!important;
+}
+
+pre {
+  height: 600px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+h4 {
+  background-color: lightblue;
+}
+
+textarea {
+  height: 500px;
+  margin-bottom: 10px;
+}
+.btn-edit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 200px;
+  margin: 10px;
+  font-size: 20px;
+  padding-top: 10px;
+  margin-bottom: 30px;
+}

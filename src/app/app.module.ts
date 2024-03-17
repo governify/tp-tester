@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
-import { TpaLoadedComponent } from './pages/tpa-loaded/tpa-loaded.component';
 import { MetricsTesterComponent } from './pages/metrics-tester/metrics-tester.component';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,17 +14,29 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MetricsLoaderComponent } from './pages/metrics-loader/metrics-loader.component';
 import { ExecutorComponent } from './pages/metrics-loader/executor/executor.component';
 import { ViewerComponent } from './pages/metrics-loader/viewer/viewer.component';
+import { TpaManagementComponent } from './pages/tpa-management/tpa-management.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { TpaDeleteComponent } from './pages/tpa-management/tpa-delete/tpa-delete.component';
+import { TpaEditComponent } from './pages/tpa-management/tpa-edit/tpa-edit.component';
+import { TpaViewComponent } from './pages/tpa-management/tpa-view/tpa-view.component';
+import { AllComponent } from './pages/tpa-management/tpa-edit/all/all.component';
+import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sections.component';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    TpaLoadedComponent,
     MetricsTesterComponent,
     MetricsLoaderComponent,
     ExecutorComponent,
-    ViewerComponent
+    ViewerComponent,
+    TpaManagementComponent,
+    TpaDeleteComponent,
+    TpaEditComponent,
+    TpaViewComponent,
+    AllComponent,
+    SectionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +45,8 @@ import { ViewerComponent } from './pages/metrics-loader/viewer/viewer.component'
     HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

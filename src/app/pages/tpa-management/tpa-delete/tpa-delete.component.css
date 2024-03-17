@@ -1,0 +1,44 @@
+textarea::-webkit-scrollbar {
+  width: 10px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+textarea {
+  flex-grow: 1;
+  width: 100%;
+  height: 600px;
+  resize: none;
+  margin-bottom: 20px;
+}
+
+.delete-container {
+  border-radius: 15px;
+  background-color: #FFCCCC;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.btn-back {
+  background-color: white;
+  color: #007BFF; /* Este es un color azul */
+  border: 2px solid #007BFF;
+  float: right;
+  margin-top: 20px;
+}
+.confirm-button {
+  align-content: end!important;
+}
