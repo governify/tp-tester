@@ -23,7 +23,8 @@ export class RepositoryComponent implements OnInit {
 
     this.newFileForm = this.formBuilder.group({
       fileName: '',
-      fileContent: ''
+      fileContent: '',
+      branch: '' // new form control for branch selection
     });
   }
 
@@ -52,30 +53,40 @@ export class RepositoryComponent implements OnInit {
     const branchName = this.newBranchForm.get('branchName')?.value;
 
     if (this.owner && this.repoName && branchName) {
+      const owner = this.owner as string;
+      const repoName = this.repoName as string;
+
       // Convert the Promise to an Observable
-      from(this.githubService.getLatestCommitSha(this.owner as string, this.repoName as string)).subscribe(sha => {
-        from(this.githubService.createBranch(this.owner as string, this.repoName as string, branchName, sha)).subscribe(
+      from(this.githubService.getLatestCommitSha(owner, repoName)).subscribe(sha => {
+        from(this.githubService.createBranch(owner, repoName, branchName, sha)).subscribe(
           () => {
             this.branches.push(branchName);
             this.newBranchForm.reset();
+            // Reload branches
+            this.githubService.listBranchesForRepo(owner, repoName).subscribe(
+              branches => {
+                this.branches = branches;
+              }
+            );
           }
         );
       });
     }
   }
 
-  // Remove one of the duplicate methods
   createFileAndCommit(): void {
     const fileName = this.newFileForm.get('fileName')?.value;
     const fileContent = this.newFileForm.get('fileContent')?.value;
+    const branch = this.newFileForm.get('branch')?.value; // get the selected branch
 
-    if (this.owner && this.repoName && fileName && fileContent) {
+    if (this.owner && this.repoName && fileName && fileContent && branch) {
+      const owner = this.owner as string;
+      const repoName = this.repoName as string;
       const path = `path/to/${fileName}`; // Make sure to provide the correct path
       const message = 'Commit message'; // Provide the commit message
-      const branch = 'branch-name'; // Provide the branch name
 
       // Use `then` instead of `subscribe`
-      this.githubService.createFile(this.owner, this.repoName, path, message, btoa(fileContent), branch).then(
+      this.githubService.createFile(owner, repoName, path, message, btoa(fileContent), branch).then(
         () => {
           this.newFileForm.reset();
         }

@@ -25,6 +25,7 @@ export class GhSimulatorComponent implements OnInit {
   showToken = false;
   showEdit = false;
   newToken!: string;
+  repoOwner!: string;
   constructor(private githubService: GithubService, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
@@ -55,9 +56,10 @@ export class GhSimulatorComponent implements OnInit {
     this.githubService.listRepos(this.token).subscribe(
       repos => {
         repos.forEach((repo: any) => {
-          console.log(repo.owner);
+          //console.log(repo.owner);
           console.log(repo.owner.login);
           console.log(repo.name);
+          this.repoOwner = repo.owner.login;
           if (repo.name && repo.owner.login) {
             this.githubService.listBranchesForRepo(repo.owner.login, repo.name).pipe(
               catchError(error => {
@@ -110,9 +112,10 @@ export class GhSimulatorComponent implements OnInit {
     );
   }
 
-  editRepo(owner: string, repoName: string): void {
-    if (owner && repoName) {
-      this.router.navigate(['/gh-simulator/repository', owner, repoName]);
+  editRepo(repoName: string): void {
+
+    if (this.repoOwner && repoName) {
+      this.router.navigate(['/gh-simulator/repository', this.repoOwner, repoName]);
     } else {
       console.error('Owner or repoName is undefined');
     }
