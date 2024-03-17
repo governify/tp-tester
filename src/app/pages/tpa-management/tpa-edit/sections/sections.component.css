@@ -5,7 +5,9 @@
   margin-top: 10px;
   margin-bottom: 15px!important;
 }
-
+.alert alert-warning {
+  margin-top: 20px
+}
 pre {
   height: 600px;
   overflow: auto;

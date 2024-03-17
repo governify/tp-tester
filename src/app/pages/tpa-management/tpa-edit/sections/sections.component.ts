@@ -55,6 +55,7 @@ export class SectionsComponent implements OnInit {
   getKeyAsString(key: unknown): string {
     return String(key);
   }
+
   goBack() {
     this.location.back();
   }
