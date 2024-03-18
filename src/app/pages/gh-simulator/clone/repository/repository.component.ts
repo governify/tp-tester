@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GithubService } from "../../../github.service";
+import { GithubService } from "../../../../github.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { from } from 'rxjs';
 @Component({

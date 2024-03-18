@@ -1,0 +1,66 @@
+<div class="row">
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+</div>
+<div class="token-section">
+  <div>
+   <p *ngIf="token !== 'Token not found'">Token found</p>
+    <button *ngIf="token !== 'Token not found' && !showToken" (click)="showToken = true">View Token</button>
+    <div *ngIf="showToken">
+      <p>Token: {{ token }}</p>
+      <button (click)="showEdit = true">Edit Token</button>
+    </div>
+    <div *ngIf="showEdit">
+      <input [(ngModel)]="newToken" placeholder="Enter new token">
+      <button (click)="updateToken()">Update Token</button>
+    </div>
+    <div *ngIf="token === 'Token not found'">
+      <input [(ngModel)]="newToken" placeholder="Enter new token">
+      <button (click)="saveToken()">Save Token</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div *ngIf="error" class="error">
+        Error getting repositories. Please check your token and try again.
+      </div>
+      <div *ngIf="error2" class="error">
+        Error getting repositories. Please check wait 1h, you overpass the Github rate limit.
+      </div>
+      <div *ngIf="errorMessage" class="error">
+        {{ errorMessage }}
+      </div>
+      <table class="table table-striped">
+
+        <thead>
+        <tr>
+          <th>Repository Name</th>
+          <th class="text-center">Number of Branches</th>
+          <th class="text-center">Last Update</th>
+          <th class="text-center">View</th>
+          <th class="text-center">Edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let repo of reposInfo">
+          <td>{{ repo.name }}</td>
+          <td class="text-center">{{ repo.branches }}</td>
+          <td class="text-center">{{ repo.lastUpdate }}</td>
+          <td class="text-center">
+            <a [href]="repo.url" class="btn btn-primary" target="_blank">
+              <i class="fa-regular fa-file"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-warning" (click)="editRepo(repo.name)">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

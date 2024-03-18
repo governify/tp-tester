@@ -1,63 +1,28 @@
-<div class="token-section">
-  <div>
-   <p *ngIf="token !== 'Token not found'">Token found</p>
-    <button *ngIf="token !== 'Token not found' && !showToken" (click)="showToken = true">View Token</button>
-    <div *ngIf="showToken">
-      <p>Token: {{ token }}</p>
-      <button (click)="showEdit = true">Edit Token</button>
-    </div>
-    <div *ngIf="showEdit">
-      <input [(ngModel)]="newToken" placeholder="Enter new token">
-      <button (click)="updateToken()">Update Token</button>
-    </div>
-    <div *ngIf="token === 'Token not found'">
-      <input [(ngModel)]="newToken" placeholder="Enter new token">
-      <button (click)="saveToken()">Save Token</button>
+<div class="container">
+  <div class="row">
+    <div class="col-12 mt-3">
+      <div class="alert alert-warning" role="alert">
+        To clone a new repository you will need a valid token with access to that repository. For more information, visit: <a href="https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="alert-link" target="_blank">Github token documentation</a>.
+        The token must be introduced in the clone new repository page.
+      </div>
     </div>
   </div>
-</div>
-
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-12">
-      <div *ngIf="error" class="error">
-        Error getting repositories. Please check your token and try again.
+  <div class="row">
+    <div class="col-12 d-flex justify-content-center mt-3">
+      <div class="card mx-2 card-full-height" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Clone new Repository</h5>
+          <p class="card-text">Here you can see all the repositories in which you have access and clone them to test metrics.</p>
+          <button class="btn btn-primary btn-edit" (click)="editAll()">Clone new repository</button>
+        </div>
       </div>
-      <div *ngIf="error2" class="error">
-        Error getting repositories. Please check wait 1h, you overpass the Github rate limit.
+      <div class="card mx-2 card-full-height" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Cloned Repositories</h5>
+          <p class="card-text">All the repositories that you have previously cloned.</p>
+          <button class="btn btn-secondary btn-edit" (click)="editSections()">Cloned repositories</button>
+        </div>
       </div>
-      <div *ngIf="errorMessage" class="error">
-        {{ errorMessage }}
-      </div>
-      <table class="table table-striped">
-
-        <thead>
-        <tr>
-          <th>Repository Name</th>
-          <th class="text-center">Number of Branches</th>
-          <th class="text-center">Last Update</th>
-          <th class="text-center">View</th>
-          <th class="text-center">Edit</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let repo of reposInfo">
-          <td>{{ repo.name }}</td>
-          <td class="text-center">{{ repo.branches }}</td>
-          <td class="text-center">{{ repo.lastUpdate }}</td>
-          <td class="text-center">
-            <a [href]="repo.url" class="btn btn-primary" target="_blank">
-              <i class="fa-regular fa-file"></i>
-            </a>
-          </td>
-          <td class="text-center">
-            <button class="btn btn-warning" (click)="editRepo(repo.name)">
-              <i class="fa-solid fa-pen"></i>
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>
