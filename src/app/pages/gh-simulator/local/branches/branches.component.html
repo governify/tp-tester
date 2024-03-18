@@ -25,7 +25,7 @@
   </div>
 
   <div class="row justify-content-center">
-    <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="col-md-6">
+    <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="col-md-12 mb-3">
       <div class="input-group">
         <input type="text" formControlName="branchName" class="form-control" placeholder="New branch name">
         <div class="input-group-append">
@@ -33,6 +33,26 @@
         </div>
       </div>
     </form>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="input-group col-md-12 mb-3">
+      <select [(ngModel)]="selectedBranch" class="form-control">
+        <option *ngFor="let branch of branches">{{ branch }}</option>
+      </select>
+      <div class="input-group-append">
+        <button (click)="deleteBranch()" class="btn btn-outline-danger">Delete Branch</button>
+      </div>
+    </div>
+
+    <div class="input-group col-md-12 mb-3">
+      <select [(ngModel)]="branchToChangeTo" class="form-control">
+        <option *ngFor="let branch of branches">{{ branch }}</option>
+      </select>
+      <div class="input-group-append">
+        <button (click)="changeBranch()" class="btn btn-outline-secondary">Change Branch</button>
+      </div>
+    </div>
   </div>
 </div>
 </body>

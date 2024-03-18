@@ -4,18 +4,25 @@ ul {
   padding: 0;
 }
 
-li {
+li  {
   padding: 10px;
   background-color: #f8f9fa;
   margin-bottom: 10px;
   border-radius: 5px;
 }
 
+
+
 form {
   display: flex;
   margin-top: 20px;
 }
-
+.col-md-12.mb-3 {
+  max-width: 700px;
+}
+.btn.btn-outline-danger{
+  background-color: #c51f1f;
+}
 input {
   flex-grow: 1;
   padding: 10px;

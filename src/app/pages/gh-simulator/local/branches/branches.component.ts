@@ -14,7 +14,8 @@ export class BranchesComponent implements OnInit {
   private apiUrl = 'http://localhost:4202';
   repoName!: string | null;
   branchForm!: FormGroup;
-
+  selectedBranch!: string;
+  branchToChangeTo!: string;
   constructor(private http: HttpClient, private route: ActivatedRoute, private formBuilder: FormBuilder, private location: Location) { }
 
   ngOnInit(): void {
@@ -39,6 +40,21 @@ export class BranchesComponent implements OnInit {
     });
   }
 
+  deleteBranch() {
+    this.http.delete(`${this.apiUrl}/deleteBranch/${this.repoName}/${this.selectedBranch}`).subscribe(() => {
+      this.getBranches();
+    });
+  }
+
+  pullBranch() {
+    this.http.get(`${this.apiUrl}/pullCurrentBranch/${this.repoName}`).subscribe();
+  }
+
+  changeBranch() {
+    this.http.post(`${this.apiUrl}/changeBranch/${this.repoName}/${this.branchToChangeTo}`, {}).subscribe(() => {
+      this.getBranches();
+    });
+  }
   goBack(): void {
     this.location.back();
   }

@@ -230,4 +230,58 @@ app.post('/createBranch/:repoName', async (req, res) => {
     res.status(500).send('Error executing git command: ' + err.message);
   }
 });
+
+app.get('/pullCurrentBranch/:repoName', async (req, res) => {
+  const { repoName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec('git pull', { cwd: repoPath });
+    if (stderr) {
+      console.error('Error pulling current branch:', stderr);
+      res.status(500).send('Error pulling current branch: ' + stderr);
+    } else {
+      res.json({ message: `Pulled current branch successfully` });
+    }
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
+});
+
+app.delete('/deleteBranch/:repoName/:branchName', async (req, res) => {
+  const { repoName, branchName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec(`git branch -d ${branchName}`, { cwd: repoPath });
+    if (stderr) {
+      console.error('Error deleting branch:', stderr);
+      res.status(500).send('Error deleting branch: ' + stderr);
+    } else {
+      res.json({ message: `Branch ${branchName} deleted successfully` });
+    }
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
+});
+
+app.post('/changeBranch/:repoName/:branchName', async (req, res) => {
+  const { repoName, branchName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec(`git checkout ${branchName}`, { cwd: repoPath });
+    if (stderr && !stderr.includes('Switched to branch')) {
+      console.error('Error changing branch:', stderr);
+      res.status(500).send('Error changing branch: ' + stderr);
+    } else {
+      res.json({ message: `Switched to branch ${branchName} successfully` });
+    }
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
+});
 app.listen(4202, () => console.log('Server is running on port 4202'));
