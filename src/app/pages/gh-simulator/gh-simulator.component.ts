@@ -22,7 +22,7 @@ export class GhSimulatorComponent implements OnInit {
   }
 
   editSections(): void {
-    this.router.navigate([`/tpa-management/edit/sections/`]);
+    this.router.navigate([`/gh-simulator/local`]);
   }
 
 }

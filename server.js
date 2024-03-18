@@ -155,7 +155,8 @@ app.delete('/token/delete', (req, res) => {
 
 //GITHUB
 app.post('/cloneRepo', (req, res) => {
-  const { repoName } = req.body;
+  const { owner, repoName } = req.body;
+  const repoUrl = `https://github.com/${owner}/${repoName}.git`;
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
   // Delete the directory before cloning
@@ -164,7 +165,7 @@ app.post('/cloneRepo', (req, res) => {
       res.status(500).send('Error deleting directory: ' + err.message);
     } else {
       console.log(`Cloning repository ${repoName} into ${repoPath}`);
-      git.clone(`https://github.com/${repoName}.git`, repoPath)
+      git.clone(repoUrl, repoPath)
         .then(() => {
           console.log('Repository cloned successfully');
           res.json({ message: 'Repository cloned successfully' });
@@ -175,5 +176,58 @@ app.post('/cloneRepo', (req, res) => {
         });
     }
   });
+});
+app.get('/listRepos', (req, res) => {
+  const repoPath = path.join(__dirname, 'assets', 'repositories');
+
+  try {
+    const files = fs.readdirSync(repoPath, { withFileTypes: true });
+    const directories = files
+      .filter(file => file.isDirectory() && !file.name.startsWith('.'))
+      .map(file => file.name);
+    res.json({ repositories: directories });
+  } catch (err) {
+    res.status(500).send('Error reading directory: ' + err.message);
+  }
+});
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
+app.get('/branches/:repoName', async (req, res) => {
+  const { repoName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec('git branch', { cwd: repoPath });
+    if (stderr) {
+      console.error('Error listing branches:', stderr);
+      res.status(500).send('Error listing branches: ' + stderr);
+    } else {
+      const branches = stdout.split('\n').map(branch => branch.trim()).filter(Boolean);
+      res.json({ branches });
+    }
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
+});
+
+app.post('/createBranch/:repoName', async (req, res) => {
+  const { repoName } = req.params;
+  const { branchName } = req.body;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec(`git checkout -b ${branchName}`, { cwd: repoPath });
+    if (stderr && !stderr.includes('Switched to a new branch')) {
+      console.error('Error creating branch:', stderr);
+      res.status(500).send('Error creating branch: ' + stderr);
+    } else {
+      res.json({ message: `Branch ${branchName} created successfully` });
+    }
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
 });
 app.listen(4202, () => console.log('Server is running on port 4202'));

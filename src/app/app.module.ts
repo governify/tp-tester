@@ -26,6 +26,8 @@ import { RepositoryComponent } from './pages/gh-simulator/clone/repository/repos
 import {GhSimulatorComponent} from "./pages/gh-simulator/gh-simulator.component";
 import { LocalComponent } from './pages/gh-simulator/local/local.component';
 import { ActionsComponent } from './pages/gh-simulator/local/actions/actions.component';
+import { BranchesComponent } from './pages/gh-simulator/local/branches/branches.component';
+import { PullRequestComponent } from './pages/gh-simulator/local/pull-request/pull-request.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { ActionsComponent } from './pages/gh-simulator/local/actions/actions.com
     RepositoryComponent,
     GhSimulatorComponent,
     LocalComponent,
-    ActionsComponent
+    ActionsComponent,
+    BranchesComponent,
+    PullRequestComponent
   ],
   imports: [
     BrowserModule,

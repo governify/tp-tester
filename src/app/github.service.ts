@@ -49,8 +49,8 @@ export class GithubService {
   getRepoInfo(owner: string, repo: string): Observable<any> {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }
-  cloneRepo(repoName: string): Observable<any> {
-    return this.http.post(`http://localhost:4202/cloneRepo`, { repoName });
+  cloneRepo(owner: string, repoName: string): Observable<any> {
+    return this.http.post(`http://localhost:4202/cloneRepo`, { owner, repoName });
   }
 
 
