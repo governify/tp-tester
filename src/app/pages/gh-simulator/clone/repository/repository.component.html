@@ -12,7 +12,7 @@
     <input formControlName="branchName" placeholder="New branch name" class="input-branch-name">
     <button type="submit" class="btn-submit">Create Branch</button>
   </form>
-
+  <button type="submit" class="btn-submit" (click)="cloneRepo()">Clone Repository</button>
   <form [formGroup]="newFileForm" (ngSubmit)="createFileAndCommit()" class="form-new-file">
     <input formControlName="fileName" placeholder="New file name" class="input-file-name">
     <textarea formControlName="fileContent" placeholder="File content" class="textarea-file-content"></textarea>

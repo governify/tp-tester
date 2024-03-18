@@ -3,8 +3,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-
+const simpleGit = require('simple-git');
+const git = simpleGit();
 const app = express();
+const rimraf = require('rimraf'); // Add this at the top of your file
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -146,6 +149,30 @@ app.delete('/token/delete', (req, res) => {
           res.json({ message: 'File deleted successfully.' });
         }
       });
+    }
+  });
+});
+
+//GITHUB
+app.post('/cloneRepo', (req, res) => {
+  const { repoName } = req.body;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  // Delete the directory before cloning
+  rimraf(repoPath, (err) => {
+    if (err) {
+      res.status(500).send('Error deleting directory: ' + err.message);
+    } else {
+      console.log(`Cloning repository ${repoName} into ${repoPath}`);
+      git.clone(`https://github.com/${repoName}.git`, repoPath)
+        .then(() => {
+          console.log('Repository cloned successfully');
+          res.json({ message: 'Repository cloned successfully' });
+        })
+        .catch((error) => {
+          console.error('Error cloning repository:', error);
+          res.status(500).send('Error cloning repository: ' + error.message);
+        });
     }
   });
 });

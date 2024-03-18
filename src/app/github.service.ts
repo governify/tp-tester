@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Octokit } from '@octokit/rest';
 import {catchError, map, Observable, switchMap, throwError} from "rxjs";
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,22 +49,10 @@ export class GithubService {
   getRepoInfo(owner: string, repo: string): Observable<any> {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }
-  async cloneRepo(repoUrl: string) {
-    const [owner, repo] = repoUrl.split('/').slice(-2);
-    const { data } = await this.octokit.repos.get({
-      owner,
-      repo
-    });
-    return data;
+  cloneRepo(repoName: string): Observable<any> {
+    return this.http.post(`http://localhost:4202/cloneRepo`, { repoName });
   }
 
-  async listBranches(owner: string, repo: string) {
-    const { data } = await this.octokit.repos.listBranches({
-      owner,
-      repo
-    });
-    return data;
-  }
 
   async createBranch(owner: string, repo: string, branchName: string, ref: string) {
     const { data } = await this.octokit.git.createRef({

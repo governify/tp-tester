@@ -73,7 +73,15 @@ export class RepositoryComponent implements OnInit {
       });
     }
   }
-
+  cloneRepo(): void {
+    if (this.owner && this.repoName) {
+      this.githubService.cloneRepo(`${this.owner}/${this.repoName}`)
+        .subscribe(
+          () => console.log('Repository cloned successfully'),
+          error => console.error('Error cloning repository', error)
+        );
+    }
+  }
   createFileAndCommit(): void {
     const fileName = this.newFileForm.get('fileName')?.value;
     const fileContent = this.newFileForm.get('fileContent')?.value;
