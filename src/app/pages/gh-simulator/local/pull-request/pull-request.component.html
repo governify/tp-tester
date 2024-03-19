@@ -1,1 +1,52 @@
-<p>pull-request works!</p>
+<div class="row">
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+</div>
+<body>
+<div class="container">
+  <h1>{{ repo }}</h1>
+  <h2>Create Pull Request</h2>
+  <div>
+    <label for="prTitle">Title:</label>
+    <input type="text" id="prTitle" [(ngModel)]="prTitle">
+  </div>
+  <div>
+    <label for="prHead">Head:</label>
+    <select id="prHead" [(ngModel)]="prHead">
+      <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
+    </select>
+  </div>
+  <div>
+    <label for="prBase">Base:</label>
+    <select id="prBase" [(ngModel)]="prBase">
+      <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
+    </select>
+  </div>
+  <div>
+    <label for="prBody">Body:</label>
+    <textarea id="prBody" [(ngModel)]="prBody"></textarea>
+  </div>
+  <button (click)="createPullRequest()">Create Pull Request</button>
+  <h2>Open Pull Requests</h2>
+  <div *ngIf="openPullRequests.length > 0; else noPullRequests">
+    <div *ngFor="let pr of openPullRequests">
+      <h3>{{ pr.title }}</h3>
+      <p>Number: {{ pr.number }}</p>
+      <p>State: {{ pr.state }}</p>
+      <p>Created at: {{ pr.created_at }}</p>
+      <p>Updated at: {{ pr.updated_at }}</p>
+    </div>
+  </div>
+  <ng-template #noPullRequests>
+    <p>There is not any pull request open.</p>
+  </ng-template>
+  <h2>Merge Pull Request</h2>
+  <div>
+    <label for="mergePrNumber">Pull Request Number:</label>
+    <input type="number" id="mergePrNumber" [(ngModel)]="mergePrNumber">
+  </div>
+  <div>
+    <label for="mergeCommitMessage">Commit Message:</label>
+    <input type="text" id="mergeCommitMessage" [(ngModel)]="mergeCommitMessage">
+  </div>
+  <button (click)="mergePullRequest()">Merge Pull Request</button>
+</div>

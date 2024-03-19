@@ -15,6 +15,7 @@
           <th class="text-center">Branches</th>
           <th class="text-center">Pull Requests</th>
           <th class="text-center">Actions</th>
+          <th class="text-center">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -34,6 +35,11 @@
             <a [routerLink]="['/gh-simulator/local/actions/', repo]" class="btn btn-danger">
               <i class="fa-solid fa-exclamation"></i>
             </a>
+          </td>
+          <td class="text-center">
+            <button (click)="deleteRepo(repo)" class="btn btn-outline-danger">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </td>
         </tr>
         </tbody>

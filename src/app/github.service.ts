@@ -64,39 +64,6 @@ export class GithubService {
     return data;
   }
 
-  async commit(owner: string, repo: string, message: string, tree: string, parents: string[]) {
-    const { data } = await this.octokit.git.createCommit({
-      owner,
-      repo,
-      message,
-      tree,
-      parents
-    });
-    return data;
-  }
-
-  async push(owner: string, repo: string, ref: string, sha: string) {
-    const { data } = await this.octokit.git.updateRef({
-      owner,
-      repo,
-      ref,
-      sha
-    });
-    return data;
-  }
-
-  async pullRequest(owner: string, repo: string, title: string, head: string, base: string, body: string) {
-    const { data } = await this.octokit.pulls.create({
-      owner,
-      repo,
-      title,
-      head,
-      base,
-      body
-    });
-    return data;
-  }
-
   async createFile(owner: string, repo: string, path: string, message: string, content: string, branch: string) {
     const { data } = await this.octokit.repos.createOrUpdateFileContents({
       owner,

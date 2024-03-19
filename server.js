@@ -212,6 +212,21 @@ app.get('/branches/:repoName', async (req, res) => {
   }
 });
 
+app.delete('/deleteRepo/:repoName', (req, res) => {
+  const { repoName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  rimraf(repoPath, (err) => {
+    if (err) {
+      console.error('Error deleting repository:', err);
+      res.status(500).send('Error deleting repository: ' + err.message);
+    } else {
+      console.log(`Repository ${repoName} deleted successfully`);
+      res.json({ message: 'Repository deleted successfully' });
+    }
+  });
+});
+
 app.post('/createBranch/:repoName', async (req, res) => {
   const { repoName } = req.params;
   const { branchName } = req.body;
