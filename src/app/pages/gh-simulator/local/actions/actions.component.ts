@@ -16,7 +16,7 @@ export class ActionsComponent {
   files: string[] = [];
   fileName: string = '';
   commitMessage: string = '';
-  branchToChangeTo!: string;
+  branchToChangeTo: string | null = null;
   message: string = '';
   constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) {
     this.route.paramMap.subscribe(params => {

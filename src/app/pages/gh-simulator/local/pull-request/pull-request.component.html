@@ -5,6 +5,10 @@
 <div class="container">
   <h1>{{ repo }}</h1>
   <h2>Create Pull Request</h2>
+  <div class="alert alert-warning" role="alert">
+    Base is the repository that will be updated. Changes will be added to this repository via the pull request. Head: Head is the repository containing the changes that will be added to the base.
+  </div>
+  <div class="{{messageType}}" *ngIf="message">{{ message }}</div>
   <div>
     <label for="prTitle">Title:</label>
     <input type="text" id="prTitle" [(ngModel)]="prTitle">
@@ -27,6 +31,7 @@
   </div>
   <button (click)="createPullRequest()">Create Pull Request</button>
   <h2>Open Pull Requests</h2>
+  <div class="{{messageType}}" *ngIf="message2">{{ message2 }}</div>
   <div *ngIf="openPullRequests.length > 0; else noPullRequests">
     <div *ngFor="let pr of openPullRequests">
       <h3>{{ pr.title }}</h3>

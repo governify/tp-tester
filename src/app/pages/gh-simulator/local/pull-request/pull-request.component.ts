@@ -23,13 +23,18 @@ export class PullRequestComponent implements OnInit {
   mergePrNumber!: number;
   mergeCommitMessage!: string;
   private apiUrl = 'https://api.github.com';
+  message: string = '';
+  message2: string = '';
+  messageType: 'success' | 'error' | '' = '';
+
+
   constructor(private http: HttpClient, private githubService: GithubService, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.getToken();
     this.repo = this.route.snapshot.paramMap.get('repoName') || '';
-
   }
+
   getToken(): void {
     this.http.get<{ token: string }>('http://localhost:4202/token/get').subscribe(
       response => {
@@ -51,9 +56,19 @@ export class PullRequestComponent implements OnInit {
       };
       const data = { title: this.prTitle, head: this.prHead, base: this.prBase, body: this.prBody };
 
-      this.http.post(url, data, { headers }).toPromise();
+      this.http.post(url, data, { headers }).subscribe(
+        res => {
+          this.message = 'Pull request successfully created';
+          this.messageType = 'success';
+        },
+        err => {
+          this.message = 'Error creating the pull request: ' + err;
+          this.messageType = 'error';
+        }
+      );
     });
   }
+
   getOpenPullRequests(): void {
     this.owner.subscribe(owner => {
       const url = `${this.apiUrl}/repos/${owner}/${this.repo}/pulls?state=open`;
@@ -70,8 +85,9 @@ export class PullRequestComponent implements OnInit {
       );
     });
   }
-  mergePullRequest(): Promise<any> {
-    return this.owner.pipe(
+
+  mergePullRequest(): void {
+    this.owner.pipe(
       switchMap(owner => {
         const url = `${this.apiUrl}/repos/${owner}/${this.repo}/pulls/${this.mergePrNumber}/merge`;
         const headers = {
@@ -80,9 +96,18 @@ export class PullRequestComponent implements OnInit {
         };
         const data = {commit_message: this.mergeCommitMessage};
 
-        return this.http.put(url, data, {headers}).toPromise();
+        return this.http.put(url, data, {headers});
       })
-    ).toPromise();
+    ).subscribe(
+      res => {
+        this.message2 = 'Pull request successfully created';
+        this.messageType = 'success';
+      },
+      err => {
+        this.message2 = 'Error creating the pull request: ' + err;
+        this.messageType = 'error';
+      }
+    );
   }
 
   getBranches(): void {
