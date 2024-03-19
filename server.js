@@ -233,12 +233,16 @@ app.post('/createBranch/:repoName', async (req, res) => {
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
   try {
-    const { stdout, stderr } = await exec(`git checkout -b ${branchName}`, { cwd: repoPath });
-    if (stderr && !stderr.includes('Switched to a new branch')) {
-      console.error('Error creating branch:', stderr);
-      res.status(500).send('Error creating branch: ' + stderr);
+    const { stdout: stdoutCheckout, stderr: stderrCheckout } = await exec(`git checkout -b ${branchName}`, { cwd: repoPath });
+    if (stderrCheckout && !stderrCheckout.includes('Switched to a new branch')) {
+      console.error('Error creating branch:', stderrCheckout);
+      res.status(500).send('Error creating branch: ' + stderrCheckout);
     } else {
-      res.json({ message: `Branch ${branchName} created successfully` });
+      const { stdout: stdoutPush, stderr: stderrPush } = await exec(`git push -u origin ${branchName}`, { cwd: repoPath });
+      if (stderrPush) {
+        console.log('Git push stderr:', stderrPush);
+      }
+      res.json({ message: `Branch ${branchName} created and pushed successfully`, stdout: stdoutCheckout + stdoutPush, stderr: stderrCheckout + stderrPush });
     }
   } catch (err) {
     console.error('Error executing git command:', err);
@@ -299,4 +303,75 @@ app.post('/changeBranch/:repoName/:branchName', async (req, res) => {
     res.status(500).send('Error executing git command: ' + err.message);
   }
 });
+
+app.get('/files/:repoName', (req, res) => {
+  const { repoName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  fs.readdir(repoPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err);
+      res.status(500).send('Error reading directory: ' + err.message);
+    } else {
+      res.json({ files });
+    }
+  });
+});
+
+app.post('/commit/:repoName', async (req, res) => {
+  const { repoName } = req.params;
+  const { fileContent, commitMessage } = req.body;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+  const filePath = path.join(repoPath, 'nuevoFichero');
+
+  fs.writeFile(filePath, fileContent, async (err) => {
+    if (err) {
+      console.error('Error writing file:', err);
+      res.status(500).send('Error writing file: ' + err.message);
+    } else {
+      try {
+        const { stdout, stderr } = await exec(`git add . && git commit -m "${commitMessage}"`, { cwd: repoPath });
+        if (stderr) {
+          console.log('Git commit stderr:', stderr);
+        }
+        res.json({ message: 'Commit created successfully', stdout, stderr });
+      } catch (err) {
+        console.error('Error executing git command:', err);
+        res.status(500).send('Error executing git command: ' + err.message);
+      }
+    }
+  });
+});
+app.post('/createFile/:repoName', (req, res) => {
+  const { repoName } = req.params;
+  const { fileName, fileContent } = req.body;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+  const filePath = path.join(repoPath, fileName);
+
+  fs.writeFile(filePath, fileContent, (err) => {
+    if (err) {
+      console.error('Error creating file:', err);
+      res.status(500).send('Error creating file: ' + err.message);
+    } else {
+      res.json({ message: 'File created successfully' });
+    }
+  });
+});
+
+app.post('/push/:repoName', async (req, res) => {
+  const { repoName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec('git push origin', { cwd: repoPath });
+    if (stderr) {
+      console.log('Git push stderr:', stderr);
+    }
+    res.json({ message: 'Changes pushed successfully', stdout, stderr });
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
+});
+
 app.listen(4202, () => console.log('Server is running on port 4202'));
