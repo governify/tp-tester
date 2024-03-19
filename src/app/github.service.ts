@@ -50,7 +50,7 @@ export class GithubService {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }
   cloneRepo(owner: string, repoName: string): Observable<any> {
-    return this.http.post(`http://localhost:4202/cloneRepo`, { owner, repoName });
+    return this.http.post(`http://localhost:4202/glassmatrix/api/v1/github/cloneRepo`, { owner, repoName });
   }
 
 

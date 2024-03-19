@@ -101,7 +101,7 @@ export class MetricsTesterComponent implements OnInit {
     }
 
     const data = JSON.parse(this.data);
-    this.http.post('http://localhost:4202/tpa/save', { fileName: this.fileName, content: data }).subscribe(
+    this.http.post('http://localhost:4202/glassmatrix/api/v1/tpa/save', { fileName: this.fileName, content: data }).subscribe(
       () => {
         this.message = 'File saved successfully';
         this.messageClass = 'success';

@@ -22,8 +22,9 @@ export class LocalComponent implements OnInit {
   }
 
   getRepos(): void {
-    this.http.get<any>(`${this.apiUrl}/listRepos`).subscribe(data => {
+    this.http.get<any>(`${this.apiUrl}/glassmatrix/api/v1/github/listRepos`).subscribe(data => {
       this.repositories = data.repositories;
+      console.log(this.repositories);
     });
   }
   editRepo(repo: string): void {

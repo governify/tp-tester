@@ -11,7 +11,7 @@ import {Location} from "@angular/common";
 })
 export class BranchesComponent implements OnInit {
   branches: string[] = [];
-  private apiUrl = 'http://localhost:4202';
+  private apiUrl = 'http://localhost:4202/glassmatrix/api/v1/github';
   repoName!: string | null;
   branchForm!: FormGroup;
   selectedBranch!: string;

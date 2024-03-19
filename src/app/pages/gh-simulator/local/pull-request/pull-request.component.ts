@@ -36,7 +36,7 @@ export class PullRequestComponent implements OnInit {
   }
 
   getToken(): void {
-    this.http.get<{ token: string }>('http://localhost:4202/token/get').subscribe(
+    this.http.get<{ token: string }>('http://localhost:4202/glassmatrix/api/v1/github/token/get').subscribe(
       response => {
         this.token = response.token;
         this.owner = this.githubService.getUserName(this.token);
