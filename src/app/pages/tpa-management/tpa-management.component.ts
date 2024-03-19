@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
-
+import {FilesService} from "../../services/files.service";
+import {BluejayService} from "../../services/bluejay.service";
 @Component({
   selector: 'app-tpa-management',
   templateUrl: './tpa-management.component.html',
@@ -9,28 +9,27 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class TpaManagementComponent implements OnInit {
   tps: any;
-  private url = 'http://localhost:5400/api/v6/agreements';
   tpaContent!: string;
   notificationMessage: string = '';
   lastOperationSuccessful: boolean | null = null;
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
+  constructor(private bluejayService: BluejayService, private cdr: ChangeDetectorRef, private filesService: FilesService) { }
 
   ngOnInit(): void {
-    this.http.get<any>(this.url).subscribe(data => {
+    this.getTps()
+  }
+
+  getTps(): void {
+    this.bluejayService.getTps().subscribe(data => {
       this.tps = data;
     });
   }
 
   createTpa() {
-    const tpaData = JSON.parse(this.tpaContent);
-    this.http.post(`http://localhost:5400/api/v6/agreements/`, tpaData, {responseType: 'text'}).subscribe(
+    this.bluejayService.createTpa(this.tpaContent).subscribe(
       () => {
         this.notificationMessage = 'TPA created successfully!';
         this.lastOperationSuccessful = true;
-        // Reload the TPA data from the server
-        this.http.get<any>(this.url).subscribe(data => {
-          this.tps = data;
-        });
+        this.getTps();
       },
       (error) => {
         this.notificationMessage = 'Error creating TPA: ' + error.message;
@@ -40,7 +39,7 @@ export class TpaManagementComponent implements OnInit {
   }
 
   copyDefaultTPA() {
-    this.http.get('assets/defaultTPA.json', {responseType: 'text'}).subscribe(data => {
+    this.filesService.getDefaultTPA().subscribe(data => {
       this.tpaContent = data;
     });
   }

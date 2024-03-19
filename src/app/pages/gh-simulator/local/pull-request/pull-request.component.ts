@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {GithubService} from "../../../../github.service";
+import {GithubService} from "../../../../services/github.service";
 import {Observable, switchMap} from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import {Location} from "@angular/common";

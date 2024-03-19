@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute} from "@angular/router";
-import {Location} from "@angular/common";
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { BluejayService } from '../../../../services/bluejay.service';
 
 @Component({
   selector: 'app-sections',
@@ -12,22 +12,20 @@ export class SectionsComponent implements OnInit {
 
   tpaId!: string;
   tpaData: any;
-  tpaDataJson!: string; // Añade esta línea
-
+  tpaDataJson!: string;
   metrics: any = {};
-  metricsJson: { [key: string]: string } = {}; // Añade esta línea
-
+  metricsJson: { [key: string]: string } = {};
   guarantees: any[] = [];
-  guaranteesJson: string[] = []; // Añade esta línea
+  guaranteesJson: string[] = [];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
+  constructor(private bluejayService: BluejayService, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
         this.tpaId = id;
-        this.http.get(`http://localhost:5400/api/v6/agreements/${id}`).subscribe(data => {
+        this.bluejayService.getTpa(id).subscribe(data => {
           this.tpaData = data;
           this.tpaDataJson = JSON.stringify(this.tpaData, null, 2);
           if (this.tpaData && this.tpaData.terms && this.tpaData.terms.metrics) {
@@ -52,6 +50,7 @@ export class SectionsComponent implements OnInit {
       }
     });
   }
+
   getKeyAsString(key: unknown): string {
     return String(key);
   }

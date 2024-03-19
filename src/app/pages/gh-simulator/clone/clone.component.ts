@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GithubService} from "../../../github.service";
+import {GithubService} from "../../../services/github.service";
 import {HttpClient} from "@angular/common/http";
 import {catchError, concatMap, switchMap, throwError, timer} from "rxjs";
 import {Router} from "@angular/router";

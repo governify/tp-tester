@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute} from "@angular/router";
-import {Location} from "@angular/common";
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { BluejayService } from '../../../../services/bluejay.service';
 
 @Component({
   selector: 'app-all',
@@ -16,28 +16,28 @@ export class AllComponent implements OnInit {
   notificationMessage: string = '';
   lastOperationSuccessful: boolean | null = null;
   metrics: any = {};
-
   guarantees: any[] = [];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
+  constructor(private bluejayService: BluejayService, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
         this.tpaId = id;
-        this.http.get(`http://localhost:5400/api/v6/agreements/${id}`).subscribe(data => {
+        this.bluejayService.getTpa(id).subscribe(data => {
           this.tpaData = data;
           this.tpaDataJson = JSON.stringify(this.tpaData, null, 2);
         });
       }
     });
   }
+
   updateTpa() {
     this.tpaData = JSON.parse(this.tpaDataJson);
-    this.http.delete(`http://localhost:5400/api/v6/agreements/${this.tpaId}`, {responseType: 'text'}).subscribe(
+    this.bluejayService.deleteTpa(this.tpaId).subscribe(
       () => {
-        this.http.post(`http://localhost:5400/api/v6/agreements/`, this.tpaData, {responseType: 'text'}).subscribe(
+        this.bluejayService.createTpa(this.tpaDataJson).subscribe(
           () => {
             this.notificationMessage = 'TPA updated successfully!';
             this.lastOperationSuccessful = true;
@@ -54,6 +54,7 @@ export class AllComponent implements OnInit {
       }
     );
   }
+
   goBack() {
     this.location.back();
   }
