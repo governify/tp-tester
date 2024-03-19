@@ -7,7 +7,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MetricsTesterComponent } from './pages/metrics-tester/metrics-tester.component';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -21,6 +21,14 @@ import { TpaEditComponent } from './pages/tpa-management/tpa-edit/tpa-edit.compo
 import { TpaViewComponent } from './pages/tpa-management/tpa-view/tpa-view.component';
 import { AllComponent } from './pages/tpa-management/tpa-edit/all/all.component';
 import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sections.component';
+import { CloneComponent } from './pages/gh-simulator/clone/clone.component';
+import { RepositoryComponent } from './pages/gh-simulator/clone/repository/repository.component';
+import {GhSimulatorComponent} from "./pages/gh-simulator/gh-simulator.component";
+import { LocalComponent } from './pages/gh-simulator/local/local.component';
+import { ActionsComponent } from './pages/gh-simulator/local/actions/actions.component';
+import { BranchesComponent } from './pages/gh-simulator/local/branches/branches.component';
+import { PullRequestComponent } from './pages/gh-simulator/local/pull-request/pull-request.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +45,13 @@ import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sect
     TpaViewComponent,
     AllComponent,
     SectionsComponent,
+    CloneComponent,
+    RepositoryComponent,
+    GhSimulatorComponent,
+    LocalComponent,
+    ActionsComponent,
+    BranchesComponent,
+    PullRequestComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +61,8 @@ import { SectionsComponent } from './pages/tpa-management/tpa-edit/sections/sect
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

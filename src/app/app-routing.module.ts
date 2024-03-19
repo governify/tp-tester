@@ -11,6 +11,13 @@ import { TpaViewComponent } from "./pages/tpa-management/tpa-view/tpa-view.compo
 import { TpaEditComponent } from "./pages/tpa-management/tpa-edit/tpa-edit.component";
 import {SectionsComponent} from "./pages/tpa-management/tpa-edit/sections/sections.component";
 import {AllComponent} from "./pages/tpa-management/tpa-edit/all/all.component";
+import {CloneComponent} from "./pages/gh-simulator/clone/clone.component";
+import {RepositoryComponent} from "./pages/gh-simulator/clone/repository/repository.component";
+import {GhSimulatorComponent} from "./pages/gh-simulator/gh-simulator.component";
+import {LocalComponent} from "./pages/gh-simulator/local/local.component";
+import {PullRequestComponent} from "./pages/gh-simulator/local/pull-request/pull-request.component";
+import {BranchesComponent} from "./pages/gh-simulator/local/branches/branches.component";
+import {ActionsComponent} from "./pages/gh-simulator/local/actions/actions.component";
 const routes: Routes = [
   {
     path: '',
@@ -55,6 +62,34 @@ const routes: Routes = [
   {
     path: 'metrics-loader/viewer/:fileName',
     component: ViewerComponent
+  },
+  {
+    path: 'gh-simulator',
+    component: GhSimulatorComponent
+  },
+  {
+    path: 'gh-simulator/clone',
+    component: CloneComponent
+  },
+  {
+    path: 'gh-simulator/local',
+    component: LocalComponent
+  },
+  {
+    path: 'gh-simulator/local/branches/:repoName',
+    component: BranchesComponent
+  },
+  {
+    path: 'gh-simulator/local/pull-request/:repoName',
+    component: PullRequestComponent
+  },
+  {
+    path: 'gh-simulator/local/actions/:repoName',
+    component: ActionsComponent
+  },
+  {
+    path: 'gh-simulator/repository/:owner/:repoName',
+    component: RepositoryComponent
   }
 ];
 

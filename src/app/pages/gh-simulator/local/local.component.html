@@ -1,0 +1,50 @@
+<body>
+
+<div class="row">
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+</div>
+
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Repository Name</th>
+          <th class="text-center">Branches</th>
+          <th class="text-center">Pull Requests</th>
+          <th class="text-center">Actions</th>
+          <th class="text-center">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let repo of repositories">
+          <td>{{ repo }}</td>
+          <td class="text-center">
+            <a [routerLink]="['/gh-simulator/local/branches/', repo]" class="btn btn-primary">
+              <i class="fa-solid fa-code-branch"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a [routerLink]="['/gh-simulator/local/pull-request/', repo]" class="btn btn-warning">
+              <i class="fa-solid fa-code-pull-request"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a [routerLink]="['/gh-simulator/local/actions/', repo]" class="btn btn-danger">
+              <i class="fa-solid fa-exclamation"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <button (click)="deleteRepo(repo)" class="btn btn-outline-danger">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>

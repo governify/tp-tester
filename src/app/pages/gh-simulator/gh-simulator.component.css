@@ -1,0 +1,59 @@
+.btn-back, .btn-edit {
+  background-color: white;
+  color: #007BFF;
+  border: 2px solid #007BFF;
+  margin: 10px;
+}
+
+.btn-back {
+  margin-bottom: 15px!important;
+}
+
+.btn-edit {
+  background-color: #6da7e7;
+  color: white;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  width: 50%;
+  font-size: 20px;
+  padding-top: 10px;
+  margin-bottom: 30px;
+}
+
+pre, textarea {
+  overflow: auto;
+  white-space: pre-wrap;
+  height: 500px;
+  margin-bottom: 10px;
+}
+
+pre {
+  height: 600px;
+}
+
+h4 {
+  background-color: lightblue;
+}
+
+.col-12, .card-full-height, .card-body {
+  height: 100%;
+  margin-bottom: 20px;
+}
+
+.card-full-height, .card-body {
+
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-full-height {
+  position: relative;
+  height: 280px;
+}
+
+.alert-warning {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+

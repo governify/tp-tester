@@ -1,0 +1,62 @@
+<div class="row">
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+</div>
+<div class="container">
+  <div class="row justify-content-center">
+    <h2>{{ repoName }} | Actions</h2>
+  </div>
+  <div class="github-link">
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" class="github-logo">
+    <a href="https://github.com/Antoniiosc7/tp-tester" target="_blank">
+      <p>View in GitHub</p>
+    </a>
+  </div>
+  <h3>Available Branches</h3>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Branch Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let branch of branches">
+      <td>{{ branch }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h3>Current Branch: {{ currentBranch }}</h3>
+  <div class="input-group col-md-12 mb-3">
+    <select [(ngModel)]="branchToChangeTo" class="form-control">
+      <option *ngFor="let branch of branches">{{ branch }}</option>
+    </select>
+    <div class="input-group-append">
+      <button (click)="changeBranch()" class="btn btn-outline-secondary">Change Branch</button>
+    </div>
+  </div>
+  <h3>Create New File</h3>
+  <input [(ngModel)]="fileName" placeholder="New file name">
+  <textarea [(ngModel)]="fileContent" placeholder="New file content"></textarea>
+  <button (click)="createFile()">Create File</button>
+
+  <h3>Create New Commit</h3>
+  <input [(ngModel)]="commitMessage" placeholder="Commit message">
+  <button (click)="createCommit()">Create Commit</button>
+
+  <h3>Push Changes</h3>
+  <button (click)="pushChanges()">Push</button>
+
+  <h3>Files in Repository</h3>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>File Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let file of files">
+      <td>{{ file }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
