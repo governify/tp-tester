@@ -12,4 +12,8 @@ export class FilesService {
   getDefaultTPA(): Observable<string> {
     return this.http.get('assets/defaultTPA.json', {responseType: 'text'});
   }
+
+  getBasicMetric(): Observable<any> {
+    return this.http.get('assets/basicMetric.json');
+  }
 }

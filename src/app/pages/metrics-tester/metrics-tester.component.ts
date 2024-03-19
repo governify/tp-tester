@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {GlassmatrixService} from "../../services/glass-matrix.service";
+import {BluejayService} from "../../services/bluejay.service";
+import {FilesService} from "../../services/files.service";
 
 @Component({
   selector: 'app-metrics-tester',
@@ -16,18 +18,21 @@ export class MetricsTesterComponent implements OnInit {
   message = '';
   messageClass = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private filesService: FilesService,
+    private bluejayService: BluejayService,
+    private glassmatrixService: GlassmatrixService
+  ) { }
   isLoading = false;
   ngOnInit(): void {
-    this.http.get('assets/basicMetric.json').subscribe(data => {
+    this.filesService.getBasicMetric().subscribe(data => {
       this.data = JSON.stringify(data, null, 2); // Convierte el objeto a una cadena JSON
     });
-
   }
 
   postContent(): void {
     this.isLoading = true;
-    this.http.post('http://localhost:5500/api/v2/computations', JSON.parse(this.data)).subscribe(
+    this.bluejayService.postComputation(JSON.parse(this.data)).subscribe(
       (response: any) => {
         this.response = JSON.stringify(response, null, 2);
         this.computationUrl = `http://localhost:5500${response.computation}`;
@@ -46,8 +51,8 @@ export class MetricsTesterComponent implements OnInit {
     if (this.computationUrl) {
       this.isLoading = true;
       setTimeout(() => {
-        if (this.computationUrl) { // Asegúrate de que 'this.computationUrl' no es 'null'
-          this.http.get(this.computationUrl).subscribe(
+        if (this.computationUrl) {
+          this.bluejayService.getComputation(this.computationUrl).subscribe(
             (response: any) => {
               this.response = JSON.stringify(response, null, 2);
               this.isLoading = false;
@@ -101,7 +106,7 @@ export class MetricsTesterComponent implements OnInit {
     }
 
     const data = JSON.parse(this.data);
-    this.http.post('http://localhost:4202/glassmatrix/api/v1/tpa/save', { fileName: this.fileName, content: data }).subscribe(
+    this.glassmatrixService.saveToJson(this.fileName, data).subscribe(
       () => {
         this.message = 'File saved successfully';
         this.messageClass = 'success';

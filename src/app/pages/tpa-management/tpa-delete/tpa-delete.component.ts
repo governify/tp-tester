@@ -21,7 +21,7 @@ export class TpaDeleteComponent implements OnInit {
       if (id) {
         this.tpaId = id;
         this.bluejayService.getTpa(id).subscribe(data => {
-          console.log(data); 
+          console.log(data);
           this.tpaData = JSON.stringify(data, null, 2);
         });
       }

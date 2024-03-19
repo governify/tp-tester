@@ -28,4 +28,11 @@ export class BluejayService {
     return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
   }
 
+  postComputation(data: any): Observable<any> {
+    return this.http.post('http://localhost:5500/api/v2/computations', data);
+  }
+
+  getComputation(computationUrl: string): Observable<any> {
+    return this.http.get(computationUrl);
+  }
 }
