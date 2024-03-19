@@ -174,7 +174,7 @@ export class ExecutorComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:4202/tpa/update', { fileName: this.fileName, content: data }).subscribe(
+    this.http.post('http://localhost:4202/glassmatrix/api/v1/tpa/update', { fileName: this.fileName, content: data }).subscribe(
       () => {
         this.message = 'File saved successfully';
         this.messageClass = 'success';

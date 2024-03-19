@@ -34,7 +34,7 @@ export class CloneComponent implements OnInit {
   }
 
   getToken(): void {
-    this.http.get<{ token: string }>('http://localhost:4202/token/get').subscribe(
+    this.http.get<{ token: string }>('http://localhost:4202/glassmatrix/api/v1/github/token/get').subscribe(
       response => {
         this.token = response.token;
         this.getRepos();
@@ -44,7 +44,7 @@ export class CloneComponent implements OnInit {
   }
 
   saveToken(): void {
-    this.http.post('http://localhost:4202/token/save', { token: this.newToken }).subscribe(
+    this.http.post('http://localhost:4202//glassmatrix/api/v1/github/token/save', { token: this.newToken }).subscribe(
       () => {
         this.token = this.newToken;
         this.newToken = '';
@@ -104,7 +104,7 @@ export class CloneComponent implements OnInit {
     this.location.back();
   }
   updateToken(): void {
-    this.http.delete('http://localhost:4202/token/delete').subscribe(
+    this.http.delete('http://localhost:4202/glassmatrix/api/v1/github/token/delete').subscribe(
       () => {
         this.saveToken();
         this.showEdit = false;

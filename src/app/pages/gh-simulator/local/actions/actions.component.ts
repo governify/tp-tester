@@ -18,6 +18,7 @@ export class ActionsComponent {
   commitMessage: string = '';
   branchToChangeTo: string | null = null;
   message: string = '';
+  private apiUrl = 'http://localhost:4202/glassmatrix/api/v1/github';
   constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) {
     this.route.paramMap.subscribe(params => {
       this.repoName = params.get('repoName');
@@ -27,7 +28,7 @@ export class ActionsComponent {
   }
 
   getBranches() {
-    this.http.get<{ branches: string[] }>(`http://localhost:4202/branches/${this.repoName}`).subscribe(
+    this.http.get<{ branches: string[] }>(`${this.apiUrl}/branches/${this.repoName}`).subscribe(
       res => {
         this.branches = res.branches;
         this.message = 'Branches fetched successfully'; // Modify this line
@@ -55,13 +56,13 @@ export class ActionsComponent {
     this.location.back();
   }
   changeBranch() {
-    this.http.post(`http://localhost:4202/changeBranch/${this.repoName}/${this.branchToChangeTo}`, {}).subscribe(() => {
+    this.http.post(`${this.apiUrl}/changeBranch/${this.repoName}/${this.branchToChangeTo}`, {}).subscribe(() => {
       this.getBranches();
     });
   }
 
   getFiles() {
-    this.http.get<{ files: string[] }>(`http://localhost:4202/files/${this.repoName}`).subscribe(
+    this.http.get<{ files: string[] }>(`${this.apiUrl}/files/${this.repoName}`).subscribe(
       res => {
         this.files = res.files;
       },
@@ -71,7 +72,7 @@ export class ActionsComponent {
     );
   }
   createFile() {
-    this.http.post(`http://localhost:4202/createFile/${this.repoName}`, { fileName: this.fileName, fileContent: this.fileContent }).subscribe(
+    this.http.post(`${this.apiUrl}/createFile/${this.repoName}`, { fileName: this.fileName, fileContent: this.fileContent }).subscribe(
       res => {
         this.message = 'File created successfully'; // Modify this line
         this.getFiles();
@@ -81,9 +82,9 @@ export class ActionsComponent {
       }
     );
   }
-
+  //http://localhost:4202/glassmatrix/api/v1/github/push/repoName
   pushChanges() {
-    this.http.post(`http://localhost:4202/push/${this.repoName}`, {}).subscribe(
+    this.http.post(`${this.apiUrl}/push/${this.repoName}`, {}).subscribe(
       res => {
         console.log('Changes pushed successfully');
       },
@@ -93,7 +94,7 @@ export class ActionsComponent {
     );
   }
   createCommit() {
-    this.http.post(`http://localhost:4202/commit/${this.repoName}`, { fileContent: this.fileContent, commitMessage: this.commitMessage }).subscribe(
+    this.http.post(`${this.apiUrl}/commit/${this.repoName}`, { fileContent: this.fileContent, commitMessage: this.commitMessage }).subscribe(
       res => {
         console.log('Commit created');
         this.getFiles();
