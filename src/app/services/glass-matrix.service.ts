@@ -12,4 +12,16 @@ export class GlassmatrixService {
   saveToJson(fileName: string, data: any): Observable<any> {
     return this.http.post(`${this.url}/tpa/save`, { fileName: fileName, content: data });
   }
+
+  deleteFile(fileName: string): Observable<any> {
+    return this.http.delete(`${this.url}/tpa/files/${fileName}`);
+  }
+
+  loadFiles(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/tpa/files`);
+  }
+
+  updateFile(fileName: string, data: any): Observable<any> {
+    return this.http.post(`${this.url}/tpa/update`, { fileName: fileName, content: data });
+  }
 }

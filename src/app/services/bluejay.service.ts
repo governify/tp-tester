@@ -35,4 +35,5 @@ export class BluejayService {
   getComputation(computationUrl: string): Observable<any> {
     return this.http.get(computationUrl);
   }
+
 }

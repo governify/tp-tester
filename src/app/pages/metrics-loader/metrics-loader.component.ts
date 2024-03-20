@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import { Location } from '@angular/common';
+import { GlassmatrixService } from '../../services/glass-matrix.service';
 
 @Component({
   selector: 'app-metrics-loader',
@@ -11,7 +11,7 @@ export class MetricsLoaderComponent implements OnInit {
   files: string[] = [];
   message: { text: string; style: string; } | null = null;
 
-  constructor(private http: HttpClient, private location: Location) { }
+  constructor(private glassmatrixService: GlassmatrixService, private location: Location) { }
 
   ngOnInit(): void {
     this.loadFiles();
@@ -22,7 +22,7 @@ export class MetricsLoaderComponent implements OnInit {
   }
 
   deleteFile(fileName: string): void {
-    this.http.delete(`http://localhost:4202/glassmatrix/api/v1/tpa/files/${fileName}`).subscribe(
+    this.glassmatrixService.deleteFile(fileName).subscribe(
       () => {
         this.message = { text: 'File deleted successfully', style: 'success' }; // Usar 'style' en lugar de 'type'
         this.loadFiles();
@@ -35,7 +35,7 @@ export class MetricsLoaderComponent implements OnInit {
   }
 
   private loadFiles(): void {
-    this.http.get<string[]>('http://localhost:4202/glassmatrix/api/v1/tpa/files').subscribe(
+    this.glassmatrixService.loadFiles().subscribe(
       (files) => {
         this.files = files;
       },

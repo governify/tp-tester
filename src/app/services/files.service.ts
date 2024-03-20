@@ -16,4 +16,8 @@ export class FilesService {
   getBasicMetric(): Observable<any> {
     return this.http.get('assets/basicMetric.json');
   }
+
+  getSavedMetric(fileName: string): Observable<any> {
+    return this.http.get(`assets/savedMetrics/${fileName}`);
+  }
 }

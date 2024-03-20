@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
+import {FilesService} from "../../../services/files.service";
 
 @Component({
   selector: 'app-viewer',
@@ -11,18 +11,17 @@ import {Location} from "@angular/common";
 export class ViewerComponent implements OnInit {
   data!: string;
   response: string | null = null;
-  computationUrl: string | null = null;
   searchTerm!: string;
-  searchTermResponse!: string;
   fileName!: string;
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
+  constructor(private filesService: FilesService, private route: ActivatedRoute, private location: Location) { }
   isLoading = false;
+
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const fileName = params.get('fileName');
       if (fileName) {
-        this.fileName = fileName; // Asegúrate de que esta línea está presente
-        this.http.get(`assets/savedMetrics/${fileName}`).subscribe(data => {
+        this.fileName = fileName;
+        this.filesService.getSavedMetric(fileName).subscribe(data => {
           this.data = JSON.stringify(data, null, 2);
         });
       }
