@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -28,7 +28,11 @@ import { LocalComponent } from './pages/gh-simulator/local/local.component';
 import { ActionsComponent } from './pages/gh-simulator/local/actions/actions.component';
 import { BranchesComponent } from './pages/gh-simulator/local/branches/branches.component';
 import { PullRequestComponent } from './pages/gh-simulator/local/pull-request/pull-request.component';
-
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +55,8 @@ import { PullRequestComponent } from './pages/gh-simulator/local/pull-request/pu
     LocalComponent,
     ActionsComponent,
     BranchesComponent,
-    PullRequestComponent
+    PullRequestComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -62,7 +67,16 @@ import { PullRequestComponent } from './pages/gh-simulator/local/pull-request/pu
     MatInputModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: {
+        deps: [HttpClient],
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory
+
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

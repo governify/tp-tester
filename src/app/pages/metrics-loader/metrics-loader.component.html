@@ -1,11 +1,11 @@
 <body>
 
 <div class="row justify-content-end">
-  <button class="btn btn-outline-primary btn-right2" (click)="goBack()">Back</button>
+  <button class="btn btn-outline-primary btn-right2" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 
 <div class="row">
-  <p *ngIf="message" [ngClass]="message.style">{{ message.text }}</p>
+  <p *ngIf="message" [ngClass]="message.style">{{ 'METRICS_LOADER.MESSAGE_TEXT' | translate:{messageText: message.text} }}</p>
 </div>
 <div class="container">
   <div class="row justify-content-center">
@@ -13,10 +13,10 @@
       <table class="table table-striped">
         <thead>
         <tr>
-          <th>File Name</th>
-          <th class="text-center">View File</th>
-          <th class="text-center">Execute / Edit File</th>
-          <th class="text-center">Delete File</th>
+          <th>{{ 'METRICS_LOADER.FILE_NAME' | translate }}</th>
+          <th class="text-center">{{ 'METRICS_LOADER.VIEW_FILE' | translate }}</th>
+          <th class="text-center">{{ 'METRICS_LOADER.EXECUTE_EDIT_FILE' | translate }}</th>
+          <th class="text-center">{{ 'METRICS_LOADER.DELETE_FILE' | translate }}</th>
         </tr>
         </thead>
         <tbody>

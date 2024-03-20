@@ -1,21 +1,21 @@
 <div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 <div class="token-section">
   <div>
-   <p *ngIf="token !== 'Token not found'">Token found</p>
-    <button *ngIf="token !== 'Token not found' && !showToken" (click)="showToken = true">View Token</button>
+    <p *ngIf="token !== 'Token not found'">{{ 'GH_SIMULATOR.CLONE_PAGE.TOKEN_FOUND' | translate }}</p>
+    <button *ngIf="token !== 'Token not found' && !showToken" (click)="showToken = true">{{ 'GH_SIMULATOR.CLONE_PAGE.VIEW_TOKEN' | translate }}</button>
     <div *ngIf="showToken">
-      <p>Token: {{ token }}</p>
-      <button (click)="showEdit = true">Edit Token</button>
+      <p>{{ 'GH_SIMULATOR.CLONE_PAGE.TOKEN' | translate:{token: token} }}</p>
+      <button (click)="showEdit = true">{{ 'GH_SIMULATOR.CLONE_PAGE.EDIT_TOKEN' | translate }}</button>
     </div>
     <div *ngIf="showEdit">
-      <input [(ngModel)]="newToken" placeholder="Enter new token">
-      <button (click)="updateToken()">Update Token</button>
+      <input [(ngModel)]="newToken" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.ENTER_NEW_TOKEN' | translate }}">
+      <button (click)="updateToken()">{{ 'GH_SIMULATOR.CLONE_PAGE.UPDATE_TOKEN' | translate }}</button>
     </div>
     <div *ngIf="token === 'Token not found'">
-      <input [(ngModel)]="newToken" placeholder="Enter new token">
-      <button (click)="saveToken()">Save Token</button>
+      <input [(ngModel)]="newToken" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.ENTER_NEW_TOKEN' | translate }}">
+      <button (click)="saveToken()">{{ 'GH_SIMULATOR.CLONE_PAGE.SAVE_TOKEN' | translate }}</button>
     </div>
   </div>
 </div>
@@ -24,10 +24,10 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div *ngIf="error" class="error">
-        Error getting repositories. Please check your token and try again.
+        {{ 'GH_SIMULATOR.CLONE_PAGE.ERROR_GETTING_REPOS' | translate }}
       </div>
       <div *ngIf="error2" class="error">
-        Error getting repositories. Please check wait 1h, you overpass the Github rate limit.
+        {{ 'GH_SIMULATOR.CLONE_PAGE.RATE_LIMIT_ERROR' | translate }}
       </div>
       <div *ngIf="errorMessage" class="error">
         {{ errorMessage }}
@@ -36,11 +36,11 @@
 
         <thead>
         <tr>
-          <th>Repository Name</th>
-          <th class="text-center">Number of Branches</th>
-          <th class="text-center">Last Update</th>
-          <th class="text-center">View</th>
-          <th class="text-center">Edit</th>
+          <th>{{ 'GH_SIMULATOR.CLONE_PAGE.REPO_NAME' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.CLONE_PAGE.NUM_BRANCHES' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.CLONE_PAGE.LAST_UPDATE' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.CLONE_PAGE.VIEW' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.CLONE_PAGE.EDIT' | translate }}</th>
         </tr>
         </thead>
         <tbody>

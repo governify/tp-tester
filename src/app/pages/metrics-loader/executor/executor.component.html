@@ -1,81 +1,81 @@
 <body>
+<div class="row">
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+</div>
+<div class="row" id="context">
+  <div>{{ 'METRICS_LOADER.EXECUTOR.EXECUTING' | translate:{fileName: fileName} }}</div>
+</div>
+<button class="btn btn-secondary" (click)="saveToJson()">{{ 'METRICS_LOADER.EXECUTOR.SAVE_AS_JSON' | translate }}</button>
+<p [ngClass]="messageClass">{{message}}</p>
+
+<form>
+  <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.CONTEXT_SECTION' | translate }}</h2>
   <div class="row">
-    <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+    <h4>{{ 'METRICS_LOADER.EXECUTOR.SCOPE_INFORMATION' | translate }}</h4>
+    <div class="col">
+      <label for="project">{{ 'METRICS_LOADER.EXECUTOR.PROJECT' | translate }}</label>
+      <input type="text" id="project" [(ngModel)]="scope.project" name="project" class="form-control">
+    </div>
+    <div class="col">
+      <label for="class">{{ 'METRICS_LOADER.EXECUTOR.CLASS' | translate }}</label>
+      <input type="text" id="class" [(ngModel)]="scope.class" name="class" class="form-control">
+    </div>
+    <div class="col">
+      <label for="member">{{ 'METRICS_LOADER.EXECUTOR.MEMBER' | translate }}</label>
+      <input type="text" id="member" [(ngModel)]="scope.member" name="member" class="form-control">
+    </div>
   </div>
-  <div class="row" id="context">
-    <div>You are executing <strong>{{fileName}}</strong>.</div>
-  </div>
-  <button class="btn btn-secondary" (click)="saveToJson()">Save as json</button>
-  <p [ngClass]="messageClass">{{message}}</p>
-
-  <form>
-    <h2 style="display: flex; justify-content: center; align-items: center;">Context Section</h2>
-    <div class="row">
-      <h4>Scope Information</h4>
-      <div class="col">
-        <label for="project">Project:</label>
-        <input type="text" id="project" [(ngModel)]="scope.project" name="project" class="form-control">
-      </div>
-      <div class="col">
-        <label for="class">Class:</label>
-        <input type="text" id="class" [(ngModel)]="scope.class" name="class" class="form-control">
-      </div>
-      <div class="col">
-        <label for="member">Member:</label>
-        <input type="text" id="member" [(ngModel)]="scope.member" name="member" class="form-control">
-      </div>
-    </div>
-    <div class="row">
-      <h4>Computation Search</h4>
-      <div class="col">
-        <label for="type">Type:</label>
-        <input type="text" id="type" [(ngModel)]="window.type" name="type" class="form-control">
-      </div>
-      <div class="col">
-        <label for="period">Period: </label>
-        <input type="text" id="period" [(ngModel)]="window.period" name="period" class="form-control">
-      </div>
-      <div class="col">
-        <label for="initial">Initial: </label>
-        <input type="text" id="initial" [(ngModel)]="window.initial" name="initial" class="form-control">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <label for="from">From:</label>
-        <input type="text" id="from" [(ngModel)]="window.from" name="from" class="form-control">
-      </div>
-      <div class="col">
-        <label for="end">End:</label>
-        <input type="text" id="end" [(ngModel)]="window.end" name="end" class="form-control">
-      </div>
-      <div class="col">
-        <label for="timeZone">Timezone:</label>
-        <input type="text" id="timeZone" [(ngModel)]="window.timeZone" name="timeZone" class="form-control">
-      </div>
-    </div>
-    <button class="btn btn-yellow" (click)="setToCurrentHour()">Actual hour computation</button>
-  </form>
   <div class="row">
-    <h2 style="display: flex; justify-content: center; align-items: center;">Execution Section</h2>
-
-    <button class="btn btn-secondary btn-right" (click)="search()">Search</button>
-    <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="search-bar" (keyup.enter)="search()">
+    <h4>{{ 'METRICS_LOADER.EXECUTOR.COMPUTATION_SEARCH' | translate }}</h4>
+    <div class="col">
+      <label for="type">{{ 'METRICS_LOADER.EXECUTOR.TYPE' | translate }}</label>
+      <input type="text" id="type" [(ngModel)]="window.type" name="type" class="form-control">
+    </div>
+    <div class="col">
+      <label for="period">{{ 'METRICS_LOADER.EXECUTOR.PERIOD' | translate }}</label>
+      <input type="text" id="period" [(ngModel)]="window.period" name="period" class="form-control">
+    </div>
+    <div class="col">
+      <label for="initial">{{ 'METRICS_LOADER.EXECUTOR.INITIAL' | translate }}</label>
+      <input type="text" id="initial" [(ngModel)]="window.initial" name="initial" class="form-control">
+    </div>
   </div>
-  <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
-
-
-  <button class="btn" (click)="postContent()">Post</button>
-  <div class="loading-overlay" *ngIf="isLoading">
-    <div class="loader"></div>
-    <p class="loading-text">Collecting resources from Bluejay</p>
+  <div class="row">
+    <div class="col">
+      <label for="from">{{ 'METRICS_LOADER.EXECUTOR.FROM' | translate }}</label>
+      <input type="text" id="from" [(ngModel)]="window.from" name="from" class="form-control">
+    </div>
+    <div class="col">
+      <label for="end">{{ 'METRICS_LOADER.EXECUTOR.END' | translate }}</label>
+      <input type="text" id="end" [(ngModel)]="window.end" name="end" class="form-control">
+    </div>
+    <div class="col">
+      <label for="timeZone">{{ 'METRICS_LOADER.EXECUTOR.TIMEZONE' | translate }}</label>
+      <input type="text" id="timeZone" [(ngModel)]="window.timeZone" name="timeZone" class="form-control">
+    </div>
   </div>
-  <button class="btn" (click)="getComputation()" [disabled]="!computationUrl">Get Computation</button>
-  <div class="busquedaRespuesta">
-    <button class="btn btn-secondary btn-right btn-search" (click)="searchResponse()" [disabled]="!response">Search in Response</button>
+  <button class="btn btn-yellow" (click)="setToCurrentHour()">{{ 'METRICS_LOADER.EXECUTOR.ACTUAL_HOUR_COMPUTATION' | translate }}</button>
+</form>
+<div class="row">
+  <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.EXECUTION_SECTION' | translate }}</h2>
 
-    <input type="text" [(ngModel)]="searchTermResponse" placeholder="Search in response..." class="search-bar" (keyup.enter)="searchResponse()">
-  </div>
-  <textarea id="responseTextarea" class="fullwidth" [(ngModel)]="response" readonly></textarea>
+  <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
+  <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">
+</div>
+<textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
+
+
+<button class="btn" (click)="postContent()">{{ 'METRICS_LOADER.EXECUTOR.POST' | translate }}</button>
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="loader"></div>
+  <p class="loading-text">{{ 'METRICS_LOADER.EXECUTOR.COLLECTING_RESOURCES' | translate }}</p>
+</div>
+<button class="btn" (click)="getComputation()" [disabled]="!computationUrl">{{ 'METRICS_LOADER.EXECUTOR.GET_COMPUTATION' | translate }}</button>
+<div class="busquedaRespuesta">
+  <button class="btn btn-secondary btn-right btn-search" (click)="searchResponse()" [disabled]="!response">{{ 'METRICS_LOADER.EXECUTOR.SEARCH_IN_RESPONSE' | translate }}</button>
+
+  <input type="text" [(ngModel)]="searchTermResponse" placeholder="{{ 'METRICS_LOADER.EXECUTOR.SEARCH_IN_RESPONSE_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="searchResponse()">
+</div>
+<textarea id="responseTextarea" class="fullwidth" [(ngModel)]="response" readonly></textarea>
 
 </body>

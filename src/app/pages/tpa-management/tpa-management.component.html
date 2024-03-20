@@ -1,55 +1,55 @@
 <body>
-  <div class="container">
-      <div class="row justify-content-center">
-        <h3>Existings TPAs</h3>
-        <div class="col-md-12">
-          <table class="table table-striped">
+<div class="container">
+  <div class="row justify-content-center">
+    <h3>{{ 'TPA.EXISTING_TPAS' | translate }}</h3>
+    <div class="col-md-12">
+      <table class="table table-striped">
 
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Project</th>
-              <th>Class</th>
-              <th class="text-center">Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let tpa of tps">
-              <td>{{ tpa.id }}</td>
-              <td *ngIf="tpa.context && tpa.context.definitions && tpa.context.definitions.scopes && tpa.context.definitions.scopes.development">
-                {{ tpa.context.definitions.scopes.development.project.default }}
-              </td>
-              <td *ngIf="tpa.context && tpa.context.definitions && tpa.context.definitions.scopes && tpa.context.definitions.scopes.development">
-                {{ tpa.context.definitions.scopes.development.class.default }}
-              </td>
-              <td class="text-center">
-                <button class="btn btn-primary" [routerLink]="['/tpa-management/view', tpa.id]">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-                <button class="btn btn-warning" [routerLink]="['/tpa-management/edit', tpa.id]">
-                  <i class="fa-solid fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" [routerLink]="['/tpa-management/delete', tpa.id]">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    <div class="row justify-content-center">
-      <h3>Create TPA</h3>
-      <div *ngIf="notificationMessage" [ngClass]="{'success': lastOperationSuccessful, 'error': lastOperationSuccessful === false}">
-        {{ notificationMessage }}
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <textarea class="form-control" [(ngModel)]="tpaContent"></textarea>
-          <button class="btn btn-primary" (click)="createTpa()">Create TPA</button>
-          <button class="btn btn-secondary" (click)="copyDefaultTPA()">Copy Default TPA</button>
-        </div>
+        <thead>
+        <tr>
+          <th>{{ 'TPA.ID' | translate }}</th>
+          <th>{{ 'TPA.PROJECT' | translate }}</th>
+          <th>{{ 'TPA.CLASS' | translate }}</th>
+          <th class="text-center">{{ 'TPA.OPTIONS' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let tpa of tps">
+          <td>{{ tpa.id }}</td>
+          <td *ngIf="tpa.context && tpa.context.definitions && tpa.context.definitions.scopes && tpa.context.definitions.scopes.development">
+            {{ tpa.context.definitions.scopes.development.project.default }}
+          </td>
+          <td *ngIf="tpa.context && tpa.context.definitions && tpa.context.definitions.scopes && tpa.context.definitions.scopes.development">
+            {{ tpa.context.definitions.scopes.development.class.default }}
+          </td>
+          <td class="text-center">
+            <button class="btn btn-primary" [routerLink]="['/tpa-management/view', tpa.id]">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button class="btn btn-warning" [routerLink]="['/tpa-management/edit', tpa.id]">
+              <i class="fa-solid fa-edit"></i>
+            </button>
+            <button class="btn btn-danger" [routerLink]="['/tpa-management/delete', tpa.id]">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <h3>{{ 'TPA.CREATE_TPA' | translate }}</h3>
+    <div *ngIf="notificationMessage" [ngClass]="{'success': lastOperationSuccessful, 'error': lastOperationSuccessful === false}">
+      {{ notificationMessage }}
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <textarea class="form-control" [(ngModel)]="tpaContent"></textarea>
+        <button class="btn btn-primary" (click)="createTpa()">{{ 'TPA.CREATE_TPA' | translate }}</button>
+        <button class="btn btn-secondary" (click)="copyDefaultTPA()">{{ 'TPA.COPY_DEFAULT_TPA' | translate }}</button>
       </div>
     </div>
   </div>
+</div>
 </body>

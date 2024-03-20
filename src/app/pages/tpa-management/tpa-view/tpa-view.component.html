@@ -1,28 +1,28 @@
 <div class="container">
   <div class="row">
     <div class="col-12 d-flex justify-content-end mt-3">
-      <button class="btn btn-back" (click)="goBack()">Back</button>
+      <button class="btn btn-back" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
     </div>
   </div>
-  <h2 style="display: flex; justify-content: center; align-items: center;">TPA JSON:</h2>
+  <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.VIEW.TPA_JSON' | translate }}</h2>
   <div class="row">
     <div class="col-md-12">
       <pre class="form-control" readonly>{{ tpaData | json }}</pre>
     </div>
   </div>
   <form>
-    <h2 style="display: flex; justify-content: center; align-items: center;">Context Section</h2>
+    <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.VIEW.CONTEXT_SECTION' | translate }}</h2>
     <div class="row">
-      <p> In this section, you can found the most importants parts of the TPA, the metrics and guarantees.</p>
+      <p>{{ 'TPA.VIEW.CONTEXT_SECTION_DESCRIPTION' | translate }}</p>
       <div class="container">
-       <h4> METRICS </h4>
+        <h4>{{ 'TPA.VIEW.METRICS' | translate }}</h4>
         <div class="row" *ngFor="let metric of metrics | keyvalue">
           <div class="col-md-12">
             <h5>{{ metric.key }}</h5>
             <pre class="form-control" readonly>{{ metric.value | json }}</pre>
           </div>
         </div>
-        <h4> GUARANTEES </h4>
+        <h4>{{ 'TPA.VIEW.GUARANTEES' | translate }}</h4>
         <div class="row" *ngFor="let guarantee of guarantees">
           <div class="col-md-12">
             <h5>{{ guarantee.id }}</h5>
@@ -30,6 +30,6 @@
           </div>
         </div>
       </div>
-      </div>
+    </div>
   </form>
 </div>

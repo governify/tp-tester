@@ -3,15 +3,15 @@
     <div class="col-md-8">
       <div class="row">
         <div class="col-12 d-flex justify-content-end">
-          <button class="btn btn-back" (click)="goBack()">Back</button>
+          <button class="btn btn-back" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
         </div>
         <div class="delete-container">
-          <h2>Confirm Delete</h2>
-          <p>Are you sure to delete this TPA?</p>
-          <button class="btn btn-danger confirm-button" (click)="deleteTpa()">Confirm</button>
+          <h2>{{ 'TPA.DELETE.CONFIRM_DELETE' | translate }}</h2>
+          <p>{{ 'TPA.DELETE.CONFIRM_DELETE_QUESTION' | translate }}</p>
+          <button class="btn btn-danger confirm-button" (click)="deleteTpa()">{{ 'TPA.DELETE.CONFIRM' | translate }}</button>
         </div>
         <div class="form-group">
-          <h4> TPA DATA </h4>
+          <h4>{{ 'TPA.DELETE.TPA_DATA' | translate }}</h4>
           <textarea id="tpaData" class="form-control" readonly>{{ tpaData }}</textarea>
         </div>
       </div>

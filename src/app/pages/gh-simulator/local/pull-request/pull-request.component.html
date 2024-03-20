@@ -1,57 +1,58 @@
 <div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 <body>
 <div class="container">
-  <h1>{{ repo }}</h1>
-  <h2>Create Pull Request</h2>
+  <h1>{{ 'GH_SIMULATOR.PR_PAGE.REPO_NAME' | translate:{repo: repo} }}</h1>
+  <h2>{{ 'GH_SIMULATOR.PR_PAGE.CREATE_PR' | translate }}</h2>
   <div class="alert alert-warning" role="alert">
-    Base is the repository that will be updated. Changes will be added to this repository via the pull request. Head: Head is the repository containing the changes that will be added to the base.
+    {{ 'GH_SIMULATOR.PR_PAGE.PR_INFO' | translate }}
   </div>
   <div class="{{messageType}}" *ngIf="message">{{ message }}</div>
   <div>
-    <label for="prTitle">Title:</label>
+    <label for="prTitle">{{ 'GH_SIMULATOR.PR_PAGE.TITLE' | translate }}</label>
     <input type="text" id="prTitle" [(ngModel)]="prTitle">
   </div>
   <div>
-    <label for="prHead">Head:</label>
+    <label for="prHead">{{ 'GH_SIMULATOR.PR_PAGE.HEAD' | translate }}</label>
     <select id="prHead" [(ngModel)]="prHead">
       <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
     </select>
   </div>
   <div>
-    <label for="prBase">Base:</label>
+    <label for="prBase">{{ 'GH_SIMULATOR.PR_PAGE.BASE' | translate }}</label>
     <select id="prBase" [(ngModel)]="prBase">
       <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
     </select>
   </div>
   <div>
-    <label for="prBody">Body:</label>
+    <label for="prBody">{{ 'GH_SIMULATOR.PR_PAGE.BODY' | translate }}</label>
     <textarea id="prBody" [(ngModel)]="prBody"></textarea>
   </div>
-  <button (click)="createPullRequest()">Create Pull Request</button>
-  <h2>Open Pull Requests</h2>
+  <button (click)="createPullRequest()">{{ 'GH_SIMULATOR.PR_PAGE.CREATE_PR_BUTTON' | translate }}</button>
+  <h2>{{ 'GH_SIMULATOR.PR_PAGE.OPEN_PR' | translate }}</h2>
   <div class="{{messageType}}" *ngIf="message2">{{ message2 }}</div>
   <div *ngIf="openPullRequests.length > 0; else noPullRequests">
     <div *ngFor="let pr of openPullRequests">
       <h3>{{ pr.title }}</h3>
-      <p>Number: {{ pr.number }}</p>
-      <p>State: {{ pr.state }}</p>
-      <p>Created at: {{ pr.created_at }}</p>
-      <p>Updated at: {{ pr.updated_at }}</p>
+      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_NUMBER' | translate:{prNumber: pr.number} }}</p>
+      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_STATE' | translate:{prState: pr.state} }}</p>
+      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_CREATED_AT' | translate:{prCreatedAt: pr.created_at} }}</p>
+      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_UPDATED_AT' | translate:{prUpdatedAt: pr.updated_at} }}</p>
     </div>
   </div>
   <ng-template #noPullRequests>
-    <p>There is not any pull request open.</p>
+    <p>{{ 'GH_SIMULATOR.PR_PAGE.NO_PR' | translate }}</p>
   </ng-template>
-  <h2>Merge Pull Request</h2>
+  <h2>{{ 'GH_SIMULATOR.PR_PAGE.MERGE_PR' | translate }}</h2>
   <div>
-    <label for="mergePrNumber">Pull Request Number:</label>
+    <label for="mergePrNumber">{{ 'GH_SIMULATOR.PR_PAGE.PR_NUMBER' | translate }}</label>
     <input type="number" id="mergePrNumber" [(ngModel)]="mergePrNumber">
   </div>
   <div>
-    <label for="mergeCommitMessage">Commit Message:</label>
+    <label for="mergeCommitMessage">{{ 'GH_SIMULATOR.PR_PAGE.COMMIT_MESSAGE' | translate }}</label>
     <input type="text" id="mergeCommitMessage" [(ngModel)]="mergeCommitMessage">
   </div>
-  <button (click)="mergePullRequest()">Merge Pull Request</button>
+  <button (click)="mergePullRequest()">{{ 'GH_SIMULATOR.PR_PAGE.MERGE_PR_BUTTON' | translate }}</button>
 </div>
+</body>
