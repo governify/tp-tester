@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {HttpClient} from "@angular/common/http";
-import {Location} from "@angular/common";
+import { Location } from '@angular/common';
+import { BluejayService } from '../../../services/bluejay.service';
 
 @Component({
   selector: 'app-tpa-delete',
@@ -12,7 +12,7 @@ export class TpaDeleteComponent implements OnInit {
   tpaId!: string;
   tpaData!: string;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
+  constructor(private bluejayService: BluejayService, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -20,8 +20,8 @@ export class TpaDeleteComponent implements OnInit {
       console.log(id)
       if (id) {
         this.tpaId = id;
-        this.http.get(`http://localhost:5400/api/v6/agreements/${id}`).subscribe(data => {
-          console.log(data); // Añade esta línea
+        this.bluejayService.getTpa(id).subscribe(data => {
+          console.log(data);
           this.tpaData = JSON.stringify(data, null, 2);
         });
       }
@@ -29,7 +29,7 @@ export class TpaDeleteComponent implements OnInit {
   }
 
   deleteTpa() {
-    this.http.delete(`http://localhost:5400/api/v6/agreements/${this.tpaId}`, {responseType: 'text'}).subscribe(() => {
+    this.bluejayService.deleteTpa(this.tpaId).subscribe(() => {
       this.location.back();
     });
   }

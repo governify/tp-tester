@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import { ActivatedRoute } from '@angular/router';
 import {Location} from "@angular/common";
+import {FilesService} from "../../../services/files.service";
+import {BluejayService} from "../../../services/bluejay.service";
+import {GlassmatrixService} from "../../../services/glass-matrix.service";
 
 @Component({
   selector: 'app-executor',
@@ -33,7 +35,13 @@ export class ExecutorComponent implements OnInit {
     timeZone: ''
   };
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
+  constructor(
+    private filesService: FilesService,
+    private bluejayService: BluejayService,
+    private glassmatrixService: GlassmatrixService,
+    private route: ActivatedRoute,
+    private location: Location
+  ) { }
   isLoading = false;
 
   ngOnInit(): void {
@@ -41,7 +49,7 @@ export class ExecutorComponent implements OnInit {
       const fileName = params.get('fileName');
       if (fileName) {
         this.fileName = fileName;
-        this.http.get(`assets/savedMetrics/${fileName}`).subscribe(data => {
+        this.filesService.getSavedMetric(fileName).subscribe(data => {
           this.data = JSON.stringify(data, null, 2);
           const parsedData = JSON.parse(this.data);
           if (parsedData && parsedData.metric) {
@@ -79,7 +87,7 @@ export class ExecutorComponent implements OnInit {
       }
     }
 
-    this.http.post('http://localhost:5500/api/v2/computations', dataCopy).subscribe(
+    this.bluejayService.postComputation(dataCopy).subscribe(
       (response: any) => {
         this.response = JSON.stringify(response, null, 2);
         this.computationUrl = `http://localhost:5500${response.computation}`;
@@ -100,7 +108,7 @@ export class ExecutorComponent implements OnInit {
       this.isLoading = true;
       setTimeout(() => {
         if (this.computationUrl) {
-          this.http.get(this.computationUrl).subscribe(
+          this.bluejayService.getComputation(this.computationUrl).subscribe(
             (response: any) => {
               this.response = JSON.stringify(response, null, 2);
               this.isLoading = false;
@@ -174,7 +182,7 @@ export class ExecutorComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:4202/glassmatrix/api/v1/tpa/update', { fileName: this.fileName, content: data }).subscribe(
+    this.glassmatrixService.updateFile(this.fileName, data).subscribe(
       () => {
         this.message = 'File saved successfully';
         this.messageClass = 'success';

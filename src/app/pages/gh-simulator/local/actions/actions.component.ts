@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {ActivatedRoute} from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import {Location} from "@angular/common";
+import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 
 @Component({
   selector: 'app-actions',
@@ -18,8 +18,8 @@ export class ActionsComponent {
   commitMessage: string = '';
   branchToChangeTo: string | null = null;
   message: string = '';
-  private apiUrl = 'http://localhost:4202/glassmatrix/api/v1/github';
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) {
+
+  constructor(private route: ActivatedRoute, private location: Location, private glassmatrixService: GlassmatrixService) {
     this.route.paramMap.subscribe(params => {
       this.repoName = params.get('repoName');
       this.getBranches();
@@ -28,41 +28,28 @@ export class ActionsComponent {
   }
 
   getBranches() {
-    this.http.get<{ branches: string[] }>(`${this.apiUrl}/branches/${this.repoName}`).subscribe(
+    this.glassmatrixService.getBranches(this.repoName!).subscribe(
       res => {
         this.branches = res.branches;
-        this.message = 'Branches fetched successfully'; // Modify this line
+        this.message = 'Branches fetched successfully';
       },
       err => {
-        this.message = 'Error getting branches: ' + err; // Modify this line
+        this.message = 'Error getting branches: ' + err;
       }
     );
   }
-/*
-  changeBranch(branchName: string) {
-    this.http.post(`http://localhost:4202/changeBranch/${this.repoName}/${branchName}`, {}).subscribe(
-      res => {
-        console.log('Branch changed successfully');
-        this.currentBranch = branchName;
-        this.getBranches(); // Update branches after changing
-      },
-      err => {
-        console.error('Error changing branch:', err);
-      }
-    );
-  }
-*/
+
   goBack(): void {
     this.location.back();
   }
   changeBranch() {
-    this.http.post(`${this.apiUrl}/changeBranch/${this.repoName}/${this.branchToChangeTo}`, {}).subscribe(() => {
+    this.glassmatrixService.changeBranch(this.repoName!, this.branchToChangeTo!).subscribe(() => {
       this.getBranches();
     });
   }
 
   getFiles() {
-    this.http.get<{ files: string[] }>(`${this.apiUrl}/files/${this.repoName}`).subscribe(
+    this.glassmatrixService.getFiles(this.repoName!).subscribe(
       res => {
         this.files = res.files;
       },
@@ -72,19 +59,18 @@ export class ActionsComponent {
     );
   }
   createFile() {
-    this.http.post(`${this.apiUrl}/createFile/${this.repoName}`, { fileName: this.fileName, fileContent: this.fileContent }).subscribe(
+    this.glassmatrixService.createFile(this.repoName!, this.fileName, this.fileContent).subscribe(
       res => {
-        this.message = 'File created successfully'; // Modify this line
+        this.message = 'File created successfully';
         this.getFiles();
       },
       err => {
-        this.message = 'Error creating file: ' + err; // Modify this line
+        this.message = 'Error creating file: ' + err;
       }
     );
   }
-  //http://localhost:4202/glassmatrix/api/v1/github/push/repoName
   pushChanges() {
-    this.http.post(`${this.apiUrl}/push/${this.repoName}`, {}).subscribe(
+    this.glassmatrixService.pushChanges(this.repoName!).subscribe(
       res => {
         console.log('Changes pushed successfully');
       },
@@ -94,7 +80,7 @@ export class ActionsComponent {
     );
   }
   createCommit() {
-    this.http.post(`${this.apiUrl}/commit/${this.repoName}`, { fileContent: this.fileContent, commitMessage: this.commitMessage }).subscribe(
+    this.glassmatrixService.createCommit(this.repoName!, this.fileContent, this.commitMessage).subscribe(
       res => {
         console.log('Commit created');
         this.getFiles();
