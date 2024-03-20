@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {GithubService} from "../../../../services/github.service";
 import {Observable, switchMap} from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import {Location} from "@angular/common";
+import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 
 @Component({
   selector: 'app-pull-request',
@@ -22,13 +22,11 @@ export class PullRequestComponent implements OnInit {
   prBody!: string;
   mergePrNumber!: number;
   mergeCommitMessage!: string;
-  private apiUrl = 'https://api.github.com';
   message: string = '';
   message2: string = '';
   messageType: 'success' | 'error' | '' = '';
 
-
-  constructor(private http: HttpClient, private githubService: GithubService, private route: ActivatedRoute, private location: Location) { }
+  constructor(private githubService: GithubService, private route: ActivatedRoute, private location: Location, private glassmatrixService: GlassmatrixService) { }
 
   ngOnInit(): void {
     this.getToken();
@@ -36,7 +34,7 @@ export class PullRequestComponent implements OnInit {
   }
 
   getToken(): void {
-    this.http.get<{ token: string }>('http://localhost:4202/glassmatrix/api/v1/github/token/get').subscribe(
+    this.glassmatrixService.getToken().subscribe(
       response => {
         this.token = response.token;
         this.owner = this.githubService.getUserName(this.token);
@@ -49,14 +47,7 @@ export class PullRequestComponent implements OnInit {
 
   createPullRequest(): void {
     this.owner.subscribe(owner => {
-      const url = `${this.apiUrl}/repos/${owner}/${this.repo}/pulls`;
-      const headers = {
-        'Authorization': `Bearer ${this.token}`,
-        'Accept': 'application/vnd.github+json'
-      };
-      const data = { title: this.prTitle, head: this.prHead, base: this.prBase, body: this.prBody };
-
-      this.http.post(url, data, { headers }).subscribe(
+      this.githubService.createPullRequest(this.token, owner, this.repo, this.prTitle, this.prHead, this.prBase, this.prBody).subscribe(
         res => {
           this.message = 'Pull request successfully created';
           this.messageType = 'success';
@@ -71,13 +62,7 @@ export class PullRequestComponent implements OnInit {
 
   getOpenPullRequests(): void {
     this.owner.subscribe(owner => {
-      const url = `${this.apiUrl}/repos/${owner}/${this.repo}/pulls?state=open`;
-      const headers = {
-        'Authorization': `Bearer ${this.token}`,
-        'Accept': 'application/vnd.github+json'
-      };
-
-      this.http.get<any[]>(url, { headers }).subscribe(
+      this.githubService.getOpenPullRequests(this.token, owner, this.repo).subscribe(
         response => {
           this.openPullRequests = response;
         },
@@ -89,14 +74,7 @@ export class PullRequestComponent implements OnInit {
   mergePullRequest(): void {
     this.owner.pipe(
       switchMap(owner => {
-        const url = `${this.apiUrl}/repos/${owner}/${this.repo}/pulls/${this.mergePrNumber}/merge`;
-        const headers = {
-          'Authorization': `Bearer ${this.token}`,
-          'Accept': 'application/vnd.github+json'
-        };
-        const data = {commit_message: this.mergeCommitMessage};
-
-        return this.http.put(url, data, {headers});
+        return this.githubService.mergePullRequest(this.token, owner, this.repo, this.mergePrNumber, this.mergeCommitMessage);
       })
     ).subscribe(
       res => {
@@ -112,13 +90,7 @@ export class PullRequestComponent implements OnInit {
 
   getBranches(): void {
     this.owner.subscribe(owner => {
-      const url = `${this.apiUrl}/repos/${owner}/${this.repo}/branches`;
-      const headers = {
-        'Authorization': `Bearer ${this.token}`,
-        'Accept': 'application/vnd.github+json'
-      };
-
-      this.http.get<any[]>(url, { headers }).subscribe(
+      this.githubService.getBranches(this.token, owner, this.repo).subscribe(
         response => {
           this.branches = response.map(branch => branch.name);
         },

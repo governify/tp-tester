@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {GithubService} from "../../../services/github.service";
-import {HttpClient} from "@angular/common/http";
 import {catchError, concatMap, switchMap, throwError, timer} from "rxjs";
 import {Router} from "@angular/router";
 import {Location} from "@angular/common";
+import {GlassmatrixService} from "../../../services/glass-matrix.service";
 
 @Component({
   selector: 'app-gh-simulator',
@@ -27,14 +27,14 @@ export class CloneComponent implements OnInit {
   showEdit = false;
   newToken!: string;
   repoOwner!: string;
-  constructor(private githubService: GithubService, private http: HttpClient, private router: Router, private location: Location) { }
+  constructor(private githubService: GithubService, private glassmatrixService: GlassmatrixService, private router: Router, private location: Location) { }
 
   ngOnInit(): void {
     this.getToken();
   }
 
   getToken(): void {
-    this.http.get<{ token: string }>('http://localhost:4202/glassmatrix/api/v1/github/token/get').subscribe(
+    this.glassmatrixService.getToken().subscribe(
       response => {
         this.token = response.token;
         this.getRepos();
@@ -44,7 +44,7 @@ export class CloneComponent implements OnInit {
   }
 
   saveToken(): void {
-    this.http.post('http://localhost:4202//glassmatrix/api/v1/github/token/save', { token: this.newToken }).subscribe(
+    this.glassmatrixService.saveToken(this.newToken).subscribe(
       () => {
         this.token = this.newToken;
         this.newToken = '';
@@ -104,7 +104,7 @@ export class CloneComponent implements OnInit {
     this.location.back();
   }
   updateToken(): void {
-    this.http.delete('http://localhost:4202/glassmatrix/api/v1/github/token/delete').subscribe(
+    this.glassmatrixService.deleteToken().subscribe(
       () => {
         this.saveToken();
         this.showEdit = false;

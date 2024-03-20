@@ -9,7 +9,7 @@ import {catchError, map, Observable, switchMap, throwError} from "rxjs";
 })
 export class GithubService {
   private octokit: Octokit;
-
+  private apiUrl = 'https://api.github.com';
   constructor(private http: HttpClient) {
     this.octokit = new Octokit();
   }
@@ -49,10 +49,6 @@ export class GithubService {
   getRepoInfo(owner: string, repo: string): Observable<any> {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }
-  cloneRepo(owner: string, repoName: string): Observable<any> {
-    return this.http.post(`http://localhost:4202/glassmatrix/api/v1/github/cloneRepo`, { owner, repoName });
-  }
-
 
   async createBranch(owner: string, repo: string, branchName: string, ref: string) {
     const { data } = await this.octokit.git.createRef({
@@ -74,5 +70,47 @@ export class GithubService {
       branch
     });
     return data;
+  }
+
+  createPullRequest(token: string, owner: string, repo: string, prTitle: string, prHead: string, prBase: string, prBody: string): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+    const data = { title: prTitle, head: prHead, base: prBase, body: prBody };
+
+    return this.http.post(url, data, { headers });
+  }
+
+  getOpenPullRequests(token: string, owner: string, repo: string): Observable<any[]> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls?state=open`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+
+    return this.http.get<any[]>(url, { headers });
+  }
+
+  mergePullRequest(token: string, owner: string, repo: string, mergePrNumber: number, mergeCommitMessage: string): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls/${mergePrNumber}/merge`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+    const data = {commit_message: mergeCommitMessage};
+
+    return this.http.put(url, data, {headers});
+  }
+
+  getBranches(token: string, owner: string, repo: string): Observable<any[]> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/branches`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+
+    return this.http.get<any[]>(url, { headers });
   }
 }

@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {Location} from "@angular/common";
+import {GlassmatrixService} from "../../../services/glass-matrix.service";
+
 
 @Component({
   selector: 'app-local',
@@ -9,9 +10,8 @@ import {Location} from "@angular/common";
 })
 export class LocalComponent implements OnInit {
   repositories: string[] = [];
-  private apiUrl = 'http://localhost:4202';
 
-  constructor(private http: HttpClient, private location: Location) { }
+  constructor(private glassmatrixService: GlassmatrixService, private location: Location) { }
 
   ngOnInit(): void {
     this.getRepos();
@@ -22,17 +22,14 @@ export class LocalComponent implements OnInit {
   }
 
   getRepos(): void {
-    this.http.get<any>(`${this.apiUrl}/glassmatrix/api/v1/github/listRepos`).subscribe(data => {
+    this.glassmatrixService.listRepos().subscribe(data => {
       this.repositories = data.repositories;
       console.log(this.repositories);
     });
   }
-  editRepo(repo: string): void {
-    // Implement your repository editing logic here
-  }
 
   deleteRepo(repo: string): void {
-    this.http.delete(`${this.apiUrl}/deleteRepo/${repo}`).subscribe(
+    this.glassmatrixService.deleteRepo(repo).subscribe(
       () => {
         this.getRepos(); // Refresh the list of repositories
       },

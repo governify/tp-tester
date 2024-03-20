@@ -9,7 +9,7 @@ import {Location} from "@angular/common";
 })
 export class GhSimulatorComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location) {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {

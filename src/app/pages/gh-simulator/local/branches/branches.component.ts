@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {Location} from "@angular/common";
+import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 
 @Component({
   selector: 'app-branches',
@@ -11,12 +11,11 @@ import {Location} from "@angular/common";
 })
 export class BranchesComponent implements OnInit {
   branches: string[] = [];
-  private apiUrl = 'http://localhost:4202/glassmatrix/api/v1/github';
   repoName!: string | null;
   branchForm!: FormGroup;
   selectedBranch!: string;
   branchToChangeTo!: string;
-  constructor(private http: HttpClient, private route: ActivatedRoute, private formBuilder: FormBuilder, private location: Location) { }
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private location: Location, private glassmatrixService: GlassmatrixService) { }
 
   ngOnInit(): void {
     this.repoName = this.route.snapshot.paramMap.get('repoName');
@@ -28,30 +27,30 @@ export class BranchesComponent implements OnInit {
   }
 
   getBranches(): void {
-    this.http.get<any>(`${this.apiUrl}/branches/${this.repoName}`).subscribe(data => {
+    this.glassmatrixService.getBranches(this.repoName!).subscribe(data => {
       this.branches = data.branches;
     });
   }
 
   onSubmit(): void {
-    this.http.post<any>(`${this.apiUrl}/createBranch/${this.repoName}`, this.branchForm.value).subscribe(() => {
+    this.glassmatrixService.createBranch(this.repoName!, this.branchForm.value).subscribe(() => {
       this.getBranches();
       this.branchForm.reset();
     });
   }
 
   deleteBranch() {
-    this.http.delete(`${this.apiUrl}/deleteBranch/${this.repoName}/${this.selectedBranch}`).subscribe(() => {
+    this.glassmatrixService.deleteBranch(this.repoName!, this.selectedBranch).subscribe(() => {
       this.getBranches();
     });
   }
 
   pullBranch() {
-    this.http.get(`${this.apiUrl}/pullCurrentBranch/${this.repoName}`).subscribe();
+    this.glassmatrixService.pullCurrentBranch(this.repoName!).subscribe();
   }
 
   changeBranch() {
-    this.http.post(`${this.apiUrl}/changeBranch/${this.repoName}/${this.branchToChangeTo}`, {}).subscribe(() => {
+    this.glassmatrixService.changeBranch(this.repoName!, this.branchToChangeTo).subscribe(() => {
       this.getBranches();
     });
   }

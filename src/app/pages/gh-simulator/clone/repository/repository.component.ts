@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GithubService } from "../../../../services/github.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { from } from 'rxjs';
+import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 @Component({
   selector: 'app-repository',
   templateUrl: './repository.component.html',
@@ -16,7 +17,7 @@ export class RepositoryComponent implements OnInit {
   newBranchForm: FormGroup;
   newFileForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private githubService: GithubService, private formBuilder: FormBuilder) {
+  constructor(private route: ActivatedRoute, private githubService: GithubService, private glassmatrixService: GlassmatrixService, private formBuilder: FormBuilder) {
     this.newBranchForm = this.formBuilder.group({
       branchName: ''
     });
@@ -56,7 +57,6 @@ export class RepositoryComponent implements OnInit {
       const owner = this.owner as string;
       const repoName = this.repoName as string;
 
-      // Convert the Promise to an Observable
       from(this.githubService.getLatestCommitSha(owner, repoName)).subscribe(sha => {
         from(this.githubService.createBranch(owner, repoName, branchName, sha)).subscribe(
           () => {
@@ -75,7 +75,7 @@ export class RepositoryComponent implements OnInit {
   }
   cloneRepo(): void {
     if (this.owner && this.repoName) {
-      this.githubService.cloneRepo(this.owner, this.repoName)
+      this.glassmatrixService.cloneRepo(this.owner, this.repoName)
         .subscribe(
           () => console.log('Repository cloned successfully'),
           error => console.error('Error cloning repository', error)
