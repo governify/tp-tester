@@ -1,7 +1,7 @@
 <body>
 
 <div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 
 
@@ -11,11 +11,11 @@
       <table class="table table-striped">
         <thead>
         <tr>
-          <th>Repository Name</th>
-          <th class="text-center">Branches</th>
-          <th class="text-center">Pull Requests</th>
-          <th class="text-center">Actions</th>
-          <th class="text-center">Delete</th>
+          <th>{{ 'GH_SIMULATOR.REPO_NAME' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.BRANCHES' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.PR' | translate }} Requests</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.ACTIONS' | translate }}</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.DELETE' | translate }}</th>
         </tr>
         </thead>
         <tbody>

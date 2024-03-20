@@ -2,8 +2,9 @@
   <div class="row">
     <div class="col-12 mt-3">
       <div class="alert alert-warning" role="alert">
-        To clone a new repository you will need a valid token with access to that repository. For more information, visit: <a href="https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="alert-link" target="_blank">Github token documentation</a>.
-        The token must be introduced in the clone new repository page.
+        {{ 'GH_SIMULATOR.ADVER_INFO_1' | translate }}
+        <a href="https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="alert-link" target="_blank">Github token documentation</a>.
+        {{ 'GH_SIMULATOR.ADVER_INFO_2' | translate }}
       </div>
     </div>
   </div>
@@ -11,16 +12,16 @@
     <div class="col-12 d-flex justify-content-center mt-3">
       <div class="card mx-2 card-full-height" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">Clone new Repository</h5>
-          <p class="card-text">Here you can see all the repositories in which you have access and clone them to test metrics.</p>
-          <button class="btn btn-primary btn-edit" (click)="editAll()">Clone new repository</button>
+          <h5 class="card-title">{{ 'GH_SIMULATOR.NEW_REPO' | translate }}</h5>
+          <p class="card-text">{{ 'GH_SIMULATOR.NEW_REPO_INFO' | translate }}</p>
+          <button class="btn btn-primary btn-edit" (click)="editAll()">{{ 'GH_SIMULATOR.NEW_REPO' | translate }}</button>
         </div>
       </div>
       <div class="card mx-2 card-full-height" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">Cloned Repositories</h5>
-          <p class="card-text">All the repositories that you have previously cloned.</p>
-          <button class="btn btn-secondary btn-edit" (click)="editSections()">Cloned repositories</button>
+          <h5 class="card-title">{{ 'GH_SIMULATOR.CLONED_REPO' | translate }}</h5>
+          <p class="card-text">{{ 'GH_SIMULATOR.CLONED_REPO_INFO' | translate }}</p>
+          <button class="btn btn-secondary btn-edit" (click)="editSections()"> {{ 'GH_SIMULATOR.CLONED_REPO' | translate }} </button>
         </div>
       </div>
     </div>

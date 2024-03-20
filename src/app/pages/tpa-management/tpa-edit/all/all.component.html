@@ -1,18 +1,19 @@
 <div class="container">
   <div class="row">
     <div class="col-12 d-flex justify-content-end mt-3">
-      <button class="btn btn-back" (click)="goBack()">Back</button>
+      <button class="btn btn-back" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
     </div>
   </div>
   <div class="row">
-    <button class="btn btn-update float-left" (click)="updateTpa()">TPA Update</button>  <div *ngIf="notificationMessage" [ngClass]="{'success': lastOperationSuccessful, 'error': lastOperationSuccessful === false}" class="notification">
-    {{ notificationMessage }}
-  </div>
-  <h2 style="display: flex; justify-content: center; align-items: center;">TPA JSON:</h2>
-  <div class="row">
-    <div class="col-md-12">
-      <textarea class="form-control" [(ngModel)]="tpaDataJson"></textarea>
+    <button class="btn btn-update float-left" (click)="updateTpa()">{{ 'TPA.EDIT.ALL.TPA_UPDATE' | translate }}</button>
+    <div *ngIf="notificationMessage" [ngClass]="{'success': lastOperationSuccessful, 'error': lastOperationSuccessful === false}" class="notification">
+      {{ notificationMessage }}
     </div>
-  </div>
+    <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.EDIT.ALL.TPA_JSON' | translate }}</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <textarea class="form-control" [(ngModel)]="tpaDataJson"></textarea>
+      </div>
+    </div>
   </div>
 </div>

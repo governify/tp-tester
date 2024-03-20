@@ -1,21 +1,21 @@
 <div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 <div class="container">
   <div class="row justify-content-center">
-    <h2>{{ repoName }} | Actions</h2>
+    <h2>{{ 'GH_SIMULATOR.ACTIONS_PAGE.REPO_ACTIONS' | translate:{repoName: repoName} }}</h2>
   </div>
   <div class="github-link">
     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" class="github-logo">
     <a href="https://github.com/Antoniiosc7/tp-tester" target="_blank">
-      <p>View in GitHub</p>
+      <p>{{ 'GH_SIMULATOR.ACTIONS_PAGE.VIEW_GITHUB' | translate }}</p>
     </a>
   </div>
-  <h3>Available Branches</h3>
+  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.AVAILABLE_BRANCHES' | translate }}</h3>
   <table class="table table-striped">
     <thead>
     <tr>
-      <th>Branch Name</th>
+      <th>{{ 'GH_SIMULATOR.ACTIONS_PAGE.BRANCH_NAME' | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -25,32 +25,32 @@
     </tbody>
   </table>
 
-  <h3>Current Branch: {{ currentBranch }}</h3>
+  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CURRENT_BRANCH' | translate:{currentBranch: currentBranch} }}</h3>
   <div class="input-group col-md-12 mb-3">
     <select [(ngModel)]="branchToChangeTo" class="form-control">
       <option *ngFor="let branch of branches">{{ branch }}</option>
     </select>
     <div class="input-group-append">
-      <button (click)="changeBranch()" class="btn btn-outline-secondary">Change Branch</button>
+      <button (click)="changeBranch()" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CHANGE_BRANCH' | translate }}</button>
     </div>
   </div>
-  <h3>Create New File</h3>
-  <input [(ngModel)]="fileName" placeholder="New file name">
-  <textarea [(ngModel)]="fileContent" placeholder="New file content"></textarea>
-  <button (click)="createFile()">Create File</button>
+  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_NEW_FILE' | translate }}</h3>
+  <input [(ngModel)]="fileName" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.NEW_FILE_NAME' | translate }}">
+  <textarea [(ngModel)]="fileContent" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.NEW_FILE_CONTENT' | translate }}"></textarea>
+  <button (click)="createFile()">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_FILE' | translate }}</button>
 
-  <h3>Create New Commit</h3>
-  <input [(ngModel)]="commitMessage" placeholder="Commit message">
-  <button (click)="createCommit()">Create Commit</button>
+  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_NEW_COMMIT' | translate }}</h3>
+  <input [(ngModel)]="commitMessage" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.COMMIT_MESSAGE' | translate }}">
+  <button (click)="createCommit()">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_COMMIT' | translate }}</button>
 
-  <h3>Push Changes</h3>
-  <button (click)="pushChanges()">Push</button>
+  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.PUSH_CHANGES' | translate }}</h3>
+  <button (click)="pushChanges()">{{ 'GH_SIMULATOR.ACTIONS_PAGE.PUSH_CHANGES' | translate }}</button>
 
-  <h3>Files in Repository</h3>
+  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.FILES_IN_REPO' | translate }}</h3>
   <table class="table table-striped">
     <thead>
     <tr>
-      <th>File Name</th>
+      <th>{{ 'GH_SIMULATOR.ACTIONS_PAGE.FILE_NAME' | translate }}</th>
     </tr>
     </thead>
     <tbody>

@@ -1,0 +1,139 @@
+{
+  "COMMON": {
+    "BACK": "Atrás",
+    "SEARCH": "Buscar",
+    "SEARCH_PLACEHOLDER": "Buscar..."
+  },
+  "HOME": {
+    "TPA_TITLE": "Acuerdos de Prácticas de Equipo (TPA)",
+    "TPA_OVERVIEW": "Resumen",
+    "TPA_DESCRIPTION_1": "Bluejay utiliza Acuerdos de Prácticas de Equipo (TPA) en lugar de Acuerdos de Nivel de Servicio (SLA) ya que el propósito de los TPA es auditar equipos ágiles. Sin embargo, son el mismo concepto y, por lo tanto, los TPA deben seguir la sintaxis de iAgree al igual que los SLA en la infraestructura de Governify.",
+    "TPA_DESCRIPTION_2": "Los TPA se definen como documentos JSON o YAML que contienen toda la información para modelar, medir y auditar uno o más procesos o información relacionada con servicios en línea. El objetivo de este archivo es proporcionar suficiente información para recuperar datos de los servicios y medir que se están siguiendo las garantías especificadas en el acuerdo.",
+    "METRICS_TITLE": "Métricas",
+    "METRICS_OVERVIEW": "Resumen",
+    "METRICS_DESCRIPTION_1": "El Acuerdo conformado por varias Garantías contiene toda la información necesaria para calcularlas. Cada garantía contiene un objetivo, que puede involucrar una o más métricas. La métrica es el instrumento utilizado para obtener la información requerida y extraer un valor para que el sistema verifique el cumplimiento del objetivo.",
+    "COLLECTORS_TITLE": "Recolectores",
+    "COLLECTORS_DESCRIPTION_1": "Los recolectores son el componente que al recibir una métrica como entrada, pueden conectarse a las diferentes fuentes de datos para extraer la información necesaria para ella y calcular el resultado final.",
+    "COLLECTORS_DESCRIPTION_2": "Actualmente, hay 3 recolectores diferentes disponibles. Las métricas se modelan como un objeto JSON siguiendo la especificación de iAgree. Cada recolector tiene su propia sintaxis y son similares para ser consistentes, pero hay algunas diferencias para extender las características.",
+    "EVENT_COLLECTOR_TITLE": "Recolector de Eventos",
+    "EVENT_COLLECTOR_DESCRIPTION": "El Recolector de Eventos es capaz de utilizar diferentes fuentes de datos como entrada y unir la información para correlacionar diferentes cargas útiles componiendo métricas más complejas. Actualmente puede obtener información de Github, Pivotal Tracker, Travis CI, CodeClimate y Heroku.",
+    "GITHUB_COLLECTOR_TITLE": "Recolector de GitHub",
+    "GITHUB_COLLECTOR_DESCRIPTION_1": "Utilizando la API v4 de GitHub, puede acceder a la información de los Kanbans de Proyectos de GitHub para realizar un seguimiento de las diferentes tarjetas y los cambios.",
+    "GITHUB_COLLECTOR_DESCRIPTION_2": "Se puede encontrar más información en la documentación oficial de Github GraphQL aquí."
+  },
+  "TPA": {
+    "EXISTING_TPAS": "TPAs existentes",
+    "ID": "ID",
+    "PROJECT": "Proyecto",
+    "CLASS": "Clase",
+    "OPTIONS": "Opciones",
+    "VIEW": "Ver",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "CREATE_TPA": "Crear TPA",
+    "COPY_DEFAULT_TPA": "Copiar TPA predeterminado",
+    "SUCCESS": "Éxito",
+    "ERROR": "Error",
+    "VIEW": {
+      "BACK": "Atrás",
+      "TPA_JSON": "TPA JSON:",
+      "CONTEXT_SECTION": "Sección de Contexto",
+      "CONTEXT_SECTION_DESCRIPTION": "En esta sección, puedes encontrar las partes más importantes del TPA, las métricas y garantías.",
+      "METRICS": "MÉTRICAS",
+      "GUARANTEES": "GARANTÍAS"
+    },
+    "EDIT": {
+      "WARNING": "Estás a punto de entrar en la pantalla de edición de TPA. Una vez editado, no puedes volver atrás. Para más información, visita:",
+      "LINK": "https://docs.bluejay.governify.io/customization/agreement-modeling/team-practices-agreements",
+      "EDIT_COMPLETE_TPA": "Editar TPA Completo",
+      "EDIT_METRICS_GUARANTEES": "Editar Solo Métricas y Garantías",
+      "SECTIONS": {
+        "BACK": "Atrás",
+        "WORK_IN_PROGRESS": "Trabajo en progreso",
+        "TPA_JSON": "TPA JSON:",
+        "CONTEXT_SECTION": "Sección de Contexto",
+        "CONTEXT_SECTION_DESCRIPTION": "En esta sección, puedes encontrar las partes más importantes del TPA, las métricas y garantías.",
+        "METRICS": "MÉTRICAS",
+        "GUARANTEES": "GARANTÍAS"
+      },
+      "ALL": {
+        "BACK": "Atrás",
+        "TPA_UPDATE": "Actualizar TPA",
+        "TPA_JSON": "TPA JSON:"
+      }
+    },
+    "DELETE": {
+      "BACK": "Atrás",
+      "CONFIRM_DELETE": "Confirmar Eliminación",
+      "CONFIRM_DELETE_QUESTION": "¿Estás seguro de que quieres eliminar este TPA?",
+      "CONFIRM": "Confirmar",
+      "TPA_DATA": "DATOS DE TPA"
+    }
+  },
+  "METRICS_TESTER": {
+    "ENTER_FILE_NAME": "Introduce el nombre del archivo",
+    "SAVE_AS_JSON": "Guardar como JSON",
+    "POST": "Publicar",
+    "COLLECTING_RESOURCES": "Recopilando recursos de Bluejay",
+    "GET_COMPUTATION": "Obtener Cálculo",
+    "SEARCH_IN_RESPONSE": "Buscar en la respuesta",
+    "SEARCH_IN_RESPONSE_PLACEHOLDER": "Buscar en la respuesta..."
+  },
+  "METRICS_LOADER": {
+    "MESSAGE_TEXT": "{{messageText}}",
+    "FILE_NAME": "Nombre del archivo",
+    "VIEW_FILE": "Ver archivo",
+    "EXECUTE_EDIT_FILE": "Ejecutar / Editar archivo",
+    "DELETE_FILE": "Eliminar archivo",
+    "VIEWER": {
+      "VIEWING": "Estás viendo {{fileName}}."
+    },
+    "EXECUTOR": {
+      "EXECUTING": "Estás ejecutando {{fileName}}.",
+      "SAVE_AS_JSON": "Guardar como json",
+      "CONTEXT_SECTION": "Sección de Contexto",
+      "SCOPE_INFORMATION": "Información de Alcance",
+      "PROJECT": "Proyecto",
+      "CLASS": "Clase",
+      "MEMBER": "Miembro",
+      "COMPUTATION_SEARCH": "Búsqueda de Cálculo",
+      "TYPE": "Tipo",
+      "PERIOD": "Periodo",
+      "INITIAL": "Inicial",
+      "FROM": "Desde",
+      "END": "Hasta",
+      "TIMEZONE": "Zona horaria",
+      "ACTUAL_HOUR_COMPUTATION": "Cálculo de hora actual",
+      "EXECUTION_SECTION": "Sección de Ejecución",
+      "POST": "Publicar",
+      "COLLECTING_RESOURCES": "Recopilando recursos de Bluejay",
+      "GET_COMPUTATION": "Obtener Cálculo",
+      "SEARCH_IN_RESPONSE": "Buscar en la respuesta",
+      "SEARCH_IN_RESPONSE_PLACEHOLDER": "Buscar en la respuesta..."
+    }
+  },
+  "GH_SIMULATOR": {
+    "ADVER_INFO_1": "Para clonar un nuevo repositorio necesitarás un token válido con acceso a ese repositorio. Para más información, visita:",
+    "ADVER_INFO_2": "El token debe ser introducido en la página de clonar nuevo repositorio.",
+    "NEW_REPO": "Clonar nuevo repositorio",
+    "NEW_REPO_INFO": "Aquí puedes ver todos los repositorios a los que tienes acceso y clonarlos para probar métricas.",
+    "CLONED_REPO": "Repositorios clonados",
+    "CLONED_REPO_INFO": "Todos los repositorios que has clonado previamente.",
+    "REPO_NAME": "Nombre del repositorio",
+    "NUM_BRANCHES": "Número de Ramas",
+    "LAST_UPDATE": "Última Actualización",
+    "VIEW": "Ver",
+    "EDIT": "Editar",
+    "REPOSITORY": {
+      "REPO_NAME": "{{repoName}}",
+      "REPO_DESCRIPTION": "{{repoDescription}}",
+      "BRANCHES_TITLE": "Ramas",
+      "NEW_BRANCH_NAME": "Nombre de la nueva rama",
+      "CREATE_BRANCH": "Crear Rama",
+      "CLONE_REPOSITORY": "Clonar Repositorio",
+      "NEW_FILE_NAME": "Nombre del nuevo archivo",
+      "FILE_CONTENT": "Contenido del archivo",
+      "CREATE_FILE_COMMIT": "Crear Archivo y Commit"
+    }
+  }
+}

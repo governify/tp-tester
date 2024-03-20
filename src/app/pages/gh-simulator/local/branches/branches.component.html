@@ -1,18 +1,18 @@
 <div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">Back</button>
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 <body>
 
 <div class="container">
   <div class="row justify-content-center">
-    <h2>{{ repoName }}</h2>
+    <h2>{{ 'GH_SIMULATOR.BRANCHES_PAGE.REPO_NAME' | translate:{repoName: repoName} }}</h2>
   </div>
   <div class="row justify-content-center">
     <div class="col-md-12">
       <table class="table table-striped">
         <thead>
         <tr>
-          <th class="text-center">Branches Repository</th>
+          <th class="text-center">{{ 'GH_SIMULATOR.BRANCHES_PAGE.BRANCHES_REPOSITORY' | translate }}</th>
         </tr>
         </thead>
         <tbody>
@@ -27,9 +27,9 @@
   <div class="row justify-content-center">
     <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="col-md-12 mb-3">
       <div class="input-group">
-        <input type="text" formControlName="branchName" class="form-control" placeholder="New branch name">
+        <input type="text" formControlName="branchName" class="form-control" placeholder="{{ 'GH_SIMULATOR.BRANCHES_PAGE.NEW_BRANCH_NAME' | translate }}">
         <div class="input-group-append">
-          <button type="submit" class="btn btn-outline-secondary">Create Branch</button>
+          <button type="submit" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.BRANCHES_PAGE.CREATE_BRANCH' | translate }}</button>
         </div>
       </div>
     </form>
@@ -41,7 +41,7 @@
         <option *ngFor="let branch of branches">{{ branch }}</option>
       </select>
       <div class="input-group-append">
-        <button (click)="deleteBranch()" class="btn btn-outline-danger">Delete Branch</button>
+        <button (click)="deleteBranch()" class="btn btn-outline-danger">{{ 'GH_SIMULATOR.BRANCHES_PAGE.DELETE_BRANCH' | translate }}</button>
       </div>
     </div>
 
@@ -50,7 +50,7 @@
         <option *ngFor="let branch of branches">{{ branch }}</option>
       </select>
       <div class="input-group-append">
-        <button (click)="changeBranch()" class="btn btn-outline-secondary">Change Branch</button>
+        <button (click)="changeBranch()" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.BRANCHES_PAGE.CHANGE_BRANCH' | translate }}</button>
       </div>
     </div>
   </div>

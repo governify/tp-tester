@@ -1,0 +1,205 @@
+{
+  "COMMON": {
+    "BACK": "Back",
+    "SEARCH": "Search",
+    "SEARCH_PLACEHOLDER": "Search..."
+  },
+  "HOME": {
+    "TPA_TITLE": "Team Practices Agreements (TPA)",
+    "TPA_OVERVIEW": "Overview",
+    "TPA_DESCRIPTION_1": "Bluejay use Team Practice Agreements (TPAs) instead of Service Level Agreements (SLAs) since the purpose of TPAs is auditing agile teams. Nevertheless, they are the same concept and thus, TPAs must follow iAgree Syntax just like SLAs in Governify Infrastructure.",
+    "TPA_DESCRIPTION_2": "TPAs are defined as a JSON or YAML documents that contain all the information to model, measure and audit one or more proccesses or information related with online services. The goal of this file is to provide enough information to retrieve data from the services and measure that the guarantees specified in the agreement are being followed.",
+    "METRICS_TITLE": "Metrics",
+    "METRICS_OVERVIEW": "Overview",
+    "METRICS_DESCRIPTION_1": "The Agreement conformed from several Guarantees contain all the information needed to compute them. Each guarantee contains an objective, which can involve one or more metrics. The metric is the instrument used to fetch the required information and extract a value for the system to verify the fulfilment of the objective.",
+    "COLLECTORS_TITLE": "Collectors",
+    "COLLECTORS_DESCRIPTION_1": "The collectors are the component which receiving a metric as input, are able to connect to the different data sources to extract the information needed for it, and compute the final result.",
+    "COLLECTORS_DESCRIPTION_2": "Actually, there are 3 different collectors available. The metrics are modeled as a JSON object following the iAgree specification. Each collector has his own syntax and they are similar in order to be consistent but there are some differences in order to extend the features.",
+    "EVENT_COLLECTOR_TITLE": "Event Collector",
+    "EVENT_COLLECTOR_DESCRIPTION": "The Event Collector is capable of using different data sources as input and join the information in order to correlate different payloads composing more complex metrics. Actually it can fetch information from Github, Pivotal Tracker, Travis CI, CodeClimate and Heroku.",
+    "GITHUB_COLLECTOR_TITLE": "GitHub Collector",
+    "GITHUB_COLLECTOR_DESCRIPTION_1": "Using GitHub API v4, it can access to the information from GitHub Projects Kanbans in order to keep track of the different cards and the changes.",
+    "GITHUB_COLLECTOR_DESCRIPTION_2": "More information could be found in the oficial Github GraphQL documentation here."
+
+  },
+  "TPA": {
+    "EXISTING_TPAS": "Existings TPAs",
+    "ID": "ID",
+    "PROJECT": "Project",
+    "CLASS": "Class",
+    "OPTIONS": "Options",
+    "VIEW": "View",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "CREATE_TPA": "Create TPA",
+    "COPY_DEFAULT_TPA": "Copy Default TPA",
+    "SUCCESS": "Success",
+    "ERROR": "Error",
+    "VIEW": {
+      "BACK": "Back",
+      "TPA_JSON": "TPA JSON:",
+      "CONTEXT_SECTION": "Context Section",
+      "CONTEXT_SECTION_DESCRIPTION": "In this section, you can found the most importants parts of the TPA, the metrics and guarantees.",
+      "METRICS": "METRICS",
+      "GUARANTEES": "GUARANTEES"
+    },
+    "EDIT": {
+      "WARNING": "You are about to enter the TPA editing screen. Once edited, you cannot go back. For more information, visit:",
+      "LINK": "https://docs.bluejay.governify.io/customization/agreement-modeling/team-practices-agreements",
+      "EDIT_COMPLETE_TPA": "Edit Complete TPA",
+      "EDIT_METRICS_GUARANTEES": "Edit Metrics and Guarantees Only",
+      "SECTIONS": {
+        "BACK": "Back",
+        "WORK_IN_PROGRESS": "Work in Progress",
+        "TPA_JSON": "TPA JSON:",
+        "CONTEXT_SECTION": "Context Section",
+        "CONTEXT_SECTION_DESCRIPTION": "In this section, you can found the most importants parts of the TPA, the metrics and guarantees.",
+        "METRICS": "METRICS",
+        "GUARANTEES": "GUARANTEES"
+      },
+      "ALL": {
+        "BACK": "Back",
+        "TPA_UPDATE": "TPA Update",
+        "TPA_JSON": "TPA JSON:"
+      }
+    },
+    "DELETE": {
+      "BACK": "Back",
+      "CONFIRM_DELETE": "Confirm Delete",
+      "CONFIRM_DELETE_QUESTION": "Are you sure to delete this TPA?",
+      "CONFIRM": "Confirm",
+      "TPA_DATA": "TPA DATA"
+    }
+
+  },
+  "METRICS_TESTER": {
+
+    "ENTER_FILE_NAME": "Enter file name",
+    "SAVE_AS_JSON": "Save as JSON",
+    "POST": "Post",
+    "COLLECTING_RESOURCES": "Collecting resources from Bluejay",
+    "GET_COMPUTATION": "Get Computation",
+    "SEARCH_IN_RESPONSE": "Search in Response",
+    "SEARCH_IN_RESPONSE_PLACEHOLDER": "Search in response..."
+  },
+  "METRICS_LOADER": {
+    "MESSAGE_TEXT": "{{messageText}}",
+    "FILE_NAME": "File Name",
+    "VIEW_FILE": "View File",
+    "EXECUTE_EDIT_FILE": "Execute / Edit File",
+    "DELETE_FILE": "Delete File",
+    "VIEWER": {
+      "VIEWING": "You are viewing {{fileName}}."
+    },
+    "EXECUTOR": {
+      "EXECUTING": "You are executing {{fileName}}.",
+      "SAVE_AS_JSON": "Save as json",
+      "CONTEXT_SECTION": "Context Section",
+      "SCOPE_INFORMATION": "Scope Information",
+      "PROJECT": "Project",
+      "CLASS": "Class",
+      "MEMBER": "Member",
+      "COMPUTATION_SEARCH": "Computation Search",
+      "TYPE": "Type",
+      "PERIOD": "Period",
+      "INITIAL": "Initial",
+      "FROM": "From",
+      "END": "End",
+      "TIMEZONE": "Timezone",
+      "ACTUAL_HOUR_COMPUTATION": "Actual hour computation",
+      "EXECUTION_SECTION": "Execution Section",
+      "POST": "Post",
+      "COLLECTING_RESOURCES": "Collecting resources from Bluejay",
+      "GET_COMPUTATION": "Get Computation",
+      "SEARCH_IN_RESPONSE": "Search in response",
+      "SEARCH_IN_RESPONSE_PLACEHOLDER": "Search in response..."
+    }
+  },
+  "GH_SIMULATOR": {
+    "ADVER_INFO_1": "To clone a new repository you will need a valid token with access to that repository. For more information, visit:",
+    "ADVER_INFO_2": "The token must be introduced in the clone new repository page.",
+    "NEW_REPO": "Clone new repository",
+    "NEW_REPO_INFO": "Here you can see all the repositories in which you have access and clone them to test metrics.",
+    "CLONED_REPO": "Cloned repositories",
+    "CLONED_REPO_INFO": "All the repositories that you have previously cloned.",
+    "REPO_NAME": "Repository name",
+    "BRANCHES": "Branches",
+    "PR": "Pull Requests",
+    "ACTIONS": "Actions",
+    "DELETE": "Delete",
+    "ACTIONS_PAGE": {
+      "REPO_ACTIONS": "{{repoName}} | Actions",
+      "VIEW_GITHUB": "View in GitHub",
+      "AVAILABLE_BRANCHES": "Available Branches",
+      "BRANCH_NAME": "Branch Name",
+      "CURRENT_BRANCH": "Current Branch: {{currentBranch}}",
+      "CHANGE_BRANCH": "Change Branch",
+      "CREATE_NEW_FILE": "Create New File",
+      "NEW_FILE_NAME": "New file name",
+      "NEW_FILE_CONTENT": "New file content",
+      "CREATE_FILE": "Create File",
+      "CREATE_NEW_COMMIT": "Create New Commit",
+      "COMMIT_MESSAGE": "Commit message",
+      "CREATE_COMMIT": "Create Commit",
+      "PUSH_CHANGES": "Push",
+      "FILES_IN_REPO": "Files in Repository",
+      "FILE_NAME": "File Name"
+    },
+    "BRANCHES_PAGE": {
+      "REPO_NAME": "{{repoName}}",
+      "BRANCHES_REPOSITORY": "Branches Repository",
+      "NEW_BRANCH_NAME": "New branch name",
+      "CREATE_BRANCH": "Create Branch",
+      "DELETE_BRANCH": "Delete Branch",
+      "CHANGE_BRANCH": "Change Branch"
+    },
+    "PR_PAGE": {
+      "REPO_NAME": "{{repo}}",
+      "CREATE_PR": "Create Pull Request",
+      "PR_INFO": "Base is the repository that will be updated. Changes will be added to this repository via the pull request. Head: Head is the repository containing the changes that will be added to the base.",
+      "TITLE": "Title:",
+      "HEAD": "Head:",
+      "BASE": "Base:",
+      "BODY": "Body:",
+      "CREATE_PR_BUTTON": "Create Pull Request",
+      "OPEN_PR": "Open Pull Requests",
+      "NO_PR": "There is not any pull request open.",
+      "MERGE_PR": "Merge Pull Request",
+      "PR_NUMBER": "Pull Request Number:",
+      "COMMIT_MESSAGE": "Commit Message:",
+      "MERGE_PR_BUTTON": "Merge Pull Request",
+      "PR_NUMBER": "Number: {{prNumber}}",
+      "PR_STATE": "State: {{prState}}",
+      "PR_CREATED_AT": "Created at: {{prCreatedAt}}",
+      "PR_UPDATED_AT": "Updated at: {{prUpdatedAt}}"
+    },
+    "CLONE_PAGE": {
+      "TOKEN_FOUND": "Token found",
+      "VIEW_TOKEN": "View Token",
+      "TOKEN": "Token: {{token}}",
+      "EDIT_TOKEN": "Edit Token",
+      "ENTER_NEW_TOKEN": "Enter new token",
+      "UPDATE_TOKEN": "Update Token",
+      "SAVE_TOKEN": "Save Token",
+      "ERROR_GETTING_REPOS": "Error getting repositories. Please check your token and try again.",
+      "RATE_LIMIT_ERROR": "Error getting repositories. Please check wait 1h, you overpass the Github rate limit.",
+      "REPO_NAME": "Repository Name",
+      "NUM_BRANCHES": "Number of Branches",
+      "LAST_UPDATE": "Last Update",
+      "VIEW": "View",
+      "EDIT": "Edit",
+      "REPOSITORY": {
+        "REPO_NAME": "{{repoName}}",
+        "REPO_DESCRIPTION": "{{repoDescription}}",
+        "BRANCHES_TITLE": "Branches",
+        "NEW_BRANCH_NAME": "New branch name",
+        "CREATE_BRANCH": "Create Branch",
+        "CLONE_REPOSITORY": "Clone Repository",
+        "NEW_FILE_NAME": "New file name",
+        "FILE_CONTENT": "File content",
+        "CREATE_FILE_COMMIT": "Create File and Commit"
+      }
+    }
+  }
+
+}
