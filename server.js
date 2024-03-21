@@ -19,7 +19,7 @@ const swaggerOptions = {
       contact: {
         name: 'github.com/antoniiosc7'
       },
-      servers: ['http://localhost:4202']
+      servers: ['http://localhost:6012']
     }
   },
   // ['.routes/*.js']
@@ -732,5 +732,11 @@ app.post(apiName + '/github/push/:repoName', async (req, res) => {
     res.status(500).send('Error executing git command: ' + err.message);
   }
 });
+app.get('/api', (req, res) => {
+  res.redirect('/api-docs');
+});
 
-app.listen(4202, () => console.log('Server is running on port 4202'));
+app.get('/docs', (req, res) => {
+  res.redirect('/api-docs');
+});
+app.listen(6012, () => console.log('Server is running on port 6012'));

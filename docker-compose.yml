@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  bluejay-tester:
+    container_name: bluejay-tester
+    image: alexsuch/angular-cli:13.0.3
+    ports:
+      - "6011:4200"
+      - "6012:6012"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: ["/bin/sh", "start.sh"]
