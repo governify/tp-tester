@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GlassmatrixService {
-  private url = 'http://localhost:4202/glassmatrix/api/v1';
+  private url = 'http://localhost:6012/glassmatrix/api/v1';
   constructor(private http: HttpClient) { }
 
   saveToJson(fileName: string, data: any): Observable<any> {
