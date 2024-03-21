@@ -12,25 +12,7 @@ table.file-list th, table.file-list td {
   width: 25%;
   text-align: center;
 }
-.success {
-  background-color: #32c232;
-  margin-top: 8px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-radius: 15px;
-  color: white;
-  text-align: center;
-}
 
-.error {
-  background-color: #c51f1f;
-  margin-top: 8px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-radius: 15px;
-  color: white;
-  text-align: center;
-}
 table.file-list td button.icon {
   background: none;
   border: none;
@@ -46,4 +28,148 @@ table.file-list td button.icon {
   width: 100px;
   height: 50px;
   margin-bottom:25px;
+}
+textarea {
+  flex-grow: 1;
+  width: 100%;
+  height: 600px;
+  resize: none;
+}
+button:enabled {
+  background-color: green;
+  color: white;
+  margin: 5px;
+}
+button:disabled {
+  background-color: gray;
+  margin: 5px;
+}
+.search-bar {
+  float: right;
+  border-radius: 25px;
+}
+.btn-right {
+  float: right;
+  height: 40px!important;
+  margin-top: -5px!important;
+  background-color: #3e64dc!important;
+}
+
+
+button, pre {
+  flex-shrink: 0;
+}
+.fullwidth{
+  width: 100%;
+}
+
+textarea::-webkit-scrollbar {
+  width: 10px;
+
+}
+
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #888;
+}
+#volver {
+  margin-left: auto;
+  float: right;
+  clear: both;
+  margin-right: 15%;
+  padding: 10px 20px;
+  font-size: 20px;
+  width: 100px;
+  height: 50px;
+  margin-top: 20px;
+  background-color: white;
+  color: #007BFF;
+  border: 2px solid #007BFF;
+}
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.busquedaRespuesta{
+  margin-top: -30px;
+}
+
+.loading-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.5);
+  z-index: 9999;
+}
+.loading-text {
+  margin-top: 20px;
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+}
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+.success {
+  background-color: #25af25;
+  margin-top: 20px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+
+}
+
+.error {
+  background-color: #c51f1f;
+  margin-top: 20px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.mat-spinner circle, .mat-progress-spinner circle {
+  stroke: #000;
+}
+button.btn-danger:enabled {
+  background-color: #c70a0a;
+}
+
+.createMetric, hr {
+  margin-top: 30px;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+#titulo {
+  margin-left: 15%;
+}
+
+
+#filename2 {
+  height: 40px;
+  margin-bottom: 10px;
+}
+#filename{
+  margin-bottom: 10px;
+  height: 36px;
 }

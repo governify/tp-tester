@@ -80,6 +80,8 @@
     "SEARCH_IN_RESPONSE_PLACEHOLDER": "Buscar en la respuesta..."
   },
   "METRICS_LOADER": {
+    "TITULO1": "Métricas guardadas",
+    "TITULO2": "Crear nueva métrica",
     "MESSAGE_TEXT": "{{messageText}}",
     "FILE_NAME": "Nombre del archivo",
     "VIEW_FILE": "Ver archivo",
