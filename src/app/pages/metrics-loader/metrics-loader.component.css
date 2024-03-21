@@ -161,7 +161,7 @@ button.btn-danger:enabled {
 }
 
 #titulo {
-  margin-left: 15%;
+  margin-left: calc(15% + 10px);
 }
 
 
@@ -173,3 +173,4 @@ button.btn-danger:enabled {
   margin-bottom: 10px;
   height: 36px;
 }
+
