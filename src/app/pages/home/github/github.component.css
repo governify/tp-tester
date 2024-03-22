@@ -1,0 +1,22 @@
+p {
+  text-align: justify;
+}
+.responsive-img1 {
+  width: 50%;
+  max-width: 25%; /* Reducir el ancho máximo */
+  max-height: 15%; /* Reducir la altura máxima */
+  height: auto;
+
+}
+.responsive-img2 {
+  width: 50%;
+  max-width: 90%;
+  height: auto;
+}
+.responsive-img1, .responsive-img2 {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  margin-top: 15px;
+}

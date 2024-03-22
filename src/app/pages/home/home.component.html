@@ -1,25 +1,23 @@
-<body>
-<div class="section">
-  <h1>{{ 'HOME.TPA_TITLE' | translate }}</h1>
-  <h2>{{ 'HOME.TPA_OVERVIEW' | translate }}</h2>
-  <p>{{ 'HOME.TPA_DESCRIPTION_1' | translate }}</p>
-  <p>{{ 'HOME.TPA_DESCRIPTION_2' | translate }}</p>
-</div>
+<div class="container">
+  <div class="menu">
+    <a (click)="currentComponent = 'home'">Home</a>
+    <a (click)="currentComponent = 'tpatests'">Testear TPAs</a>
+    <a (click)="currentComponent = 'metricstests'">Testear Metricas</a>
+    <a (click)="currentComponent = 'repositorytester'">Testeo de repositorios</a>
+    <a (click)="currentComponent = 'github'">Github API</a>
+    <a (click)="currentComponent = 'bluejayapi'">Bluejay API</a>
+    <a (click)="currentComponent = 'glassmatrix'">GlassMatrix API</a>
+    <a (click)="currentComponent = 'langs'">Idiomas</a>
+  </div>
 
-<div class="section">
-  <h1>{{ 'HOME.METRICS_TITLE' | translate }}</h1>
-  <h2>{{ 'HOME.METRICS_OVERVIEW' | translate }}</h2>
-  <p>{{ 'HOME.METRICS_DESCRIPTION_1' | translate }}</p>
-  <h2>{{ 'HOME.COLLECTORS_TITLE' | translate }}</h2>
-  <p>{{ 'HOME.COLLECTORS_DESCRIPTION_1' | translate }}</p>
-  <p>{{ 'HOME.COLLECTORS_DESCRIPTION_2' | translate }}</p>
-  <h2>{{ 'HOME.EVENT_COLLECTOR_TITLE' | translate }}</h2>
-  <p>{{ 'HOME.EVENT_COLLECTOR_DESCRIPTION' | translate }}</p>
+  <div class="content">
+    <app-homepage *ngIf="currentComponent === 'home'"></app-homepage>
+    <app-tpatests *ngIf="currentComponent === 'tpatests'"></app-tpatests>
+    <app-metricstests *ngIf="currentComponent === 'metricstests'"></app-metricstests>
+    <app-repositorytester *ngIf="currentComponent === 'repositorytester'"></app-repositorytester>
+    <app-github *ngIf="currentComponent === 'github'"></app-github>
+    <app-bluejayapi *ngIf="currentComponent === 'bluejayapi'"></app-bluejayapi>
+    <app-langs *ngIf="currentComponent === 'langs'"></app-langs>
+    <app-glassmatrix *ngIf="currentComponent === 'glassmatrix'"></app-glassmatrix>
+  </div>
 </div>
-
-<div class="section">
-  <h1>{{ 'HOME.GITHUB_COLLECTOR_TITLE' | translate }}</h1>
-  <p>{{ 'HOME.GITHUB_COLLECTOR_DESCRIPTION_1' | translate }}</p>
-  <p>{{ 'HOME.GITHUB_COLLECTOR_DESCRIPTION_2' | translate }} <a href="https://docs.github.com/en/graphql" target="_blank">here</a>.</p>
-</div>
-</body>
