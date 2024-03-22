@@ -1,0 +1,20 @@
+<h1> Bluejay - TP  Tester </h1>
+<p> Gracias a la libreria ngx-translate (<a href="https://github.com/ngx-translate/core" target="_blank">github.com/ngx-translate/core</a>). Por defecto, TP Tester, estará en el idioma del navegador. Esta libreria permite además añadir traducciones de una forma sencilla ya que bastaría con traducir el Json de un idioma a otro y no habría que modificar ningún otro tipo de fichero.</p>
+
+<p> Este es un fragmento de cómo funciona el .json de lenguaje:</p>
+<pre ngNonBindable>
+"METRICS_LOADER": &#123;
+  "TITULO1": "Métricas guardadas",
+  "TITULO2": "Crear nueva métrica",
+  "MESSAGE_TEXT": "No hay métricas guardadas",
+  "FILE_NAME": "Nombre del archivo",
+  "VIEW_FILE": "Ver archivo",
+  "EXECUTE_EDIT_FILE": "Ejecutar / Editar archivo",
+  "DELETE_FILE": "Eliminar archivo",
+  "VIEWER": &#123;
+    "VIEWING": "fileName."
+  }
+}
+</pre>
+<p> En este fragmento, cada clave representa una cadena de texto que se mostrará en la aplicación. Por tanto, únicamente se tendría que cambiar el contenido de las cadenas de texto y dejar tal cual las claves para traducir a otros idiomas. </p>
+<p> Además, si no se quiero usar el idioma por defecto del navegador, en la esquina superior de la pantalla se permite cambiar entre los dos idiomas actuales, español o inglés. </p>

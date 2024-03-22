@@ -1,0 +1,20 @@
+<h1> GlassMatrix API</h1>
+<p>Este proyecto tiene su propia API. Esta api se usa tanto para interactuar con la infraestrctura de Bluejay, que permite crear TPAs, probar métricas como para realizar acciones de github en local como clonar repositorios, crear ramas, moverte de ramas, hacer commits o pushes. </p>
+
+<h3>Funcionalidades de la API</h3>
+<ul>
+  <li><strong>Interacción con Bluejay:</strong> Permite crear TPAs y probar métricas.</li>
+  <li><strong>Acciones de GitHub en local:</strong> Permite clonar repositorios, crear ramas, cambiar de ramas, hacer commits y pushes.</li>
+  <li><strong>Guardado Token Github:</strong> Para que tanto las acciones de github en local, como las llamadas a la propia API de github funcione correctamente, es necesario tener un token válido de github. Por tanto, Glassmatrix API tiene un método por almacenar este token en el repositorio local (está en un .gitignore) y además permite añadirlo, modificarlo y borrarlo gráficamente. Esta opcion se encuentra disponible en GH Tester -> Clonar nuevo repositorio.</li>
+  <img class="center" src="assets/images/tokengh.png" alt="Github token">
+
+</ul>
+
+<h3>Documentación de la API con Swagger</h3>
+<p>Esta API implementa Swagger para tener siempre de una forma todos los endpoints de la API junto con una pequeña documentación del funcionamiento de cada Endpoint. Gracias a Swagger se pueden visualizar todos los endpoints y probarlos en su interfaz gráfica que está disponible en: <a href="http://localhost:6012/api-docs/" target="_blank">http://localhost:6012/api-docs/</a></p>
+
+<h3>Ejemplos de uso</h3>
+<p>A continuación, se presentan algunos ejemplos de como se ve API a través de swagger en donde se pueden ejecutar directamente las llamadas:</p>
+
+
+<img class="center" src="assets/images/swagger.png" alt="Swagger">

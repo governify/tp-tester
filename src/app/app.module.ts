@@ -29,6 +29,14 @@ import { BranchesComponent } from './pages/gh-simulator/local/branches/branches.
 import { PullRequestComponent } from './pages/gh-simulator/local/pull-request/pull-request.component';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import { HomepageComponent } from './pages/home/homepage/homepage.component';
+import { GlassmatrixComponent } from './pages/home/glassmatrix/glassmatrix.component';
+import { GithubComponent } from './pages/home/github/github.component';
+import { LangsComponent } from './pages/home/langs/langs.component';
+import { BluejayapiComponent } from './pages/home/bluejayapi/bluejayapi.component';
+import { MetricstestsComponent } from './pages/home/metricstests/metricstests.component';
+import { TpatestsComponent } from './pages/home/tpatests/tpatests.component';
+import { RepositorytesterComponent } from './pages/home/repositorytester/repositorytester.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -54,6 +62,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     ActionsComponent,
     BranchesComponent,
     PullRequestComponent,
+    HomepageComponent,
+    GlassmatrixComponent,
+    GithubComponent,
+    LangsComponent,
+    BluejayapiComponent,
+    MetricstestsComponent,
+    TpatestsComponent,
+    RepositorytesterComponent,
 
   ],
   imports: [

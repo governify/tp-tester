@@ -1,0 +1,25 @@
+<h1> Bluejay - TP  Tester </h1>
+<p> Este proyecto es una extensión de Bluejay. La documentación oficial de Bluejay se puede encontrar en: <a href="https://docs.bluejay.governify.io/" target="_blank">docs.bluejay.governify.io</a>. Al ser una extensión de Bluejay, es imprescindible para el completo funcionamiento de Bluejay-Tester.</p>
+<h2> Introducción</h2>
+<h3> ¿Qué es Bluejay?</h3>
+<p> Bluejay Infrastructure es una infraestructura basada en Governify que permite auditar equipos ágiles de manera sencilla. Está compuesta por un subconjunto de microservicios de Governify que pueden ser desplegados ya sea en una sola máquina o en un clúster. Bluejay accede a múltiples fuentes para recopilar información sobre los equipos de desarrollo, como GitLab, Jira, Slack, etc., y utiliza esta información para verificar si esos equipos cumplen con un Acuerdo de Prácticas de Equipo (TPA) que incluye métricas y garantías relacionadas con la metodología ágil.</p>
+<h3>¿Para qué sirve Bluejay-TP Tester?</h3>
+<p> El objetivo de este TP-Tester es, como dice su nombre, poder probar en primer lugar las métricas que componen los TPs (Team Practices). Una vez comprobadas que estas métricas funcionan correctamente, TP-Tester te permite comprobar que todo el TPA (Team Practice Agreement) funcione correctamente. Para ello, se pueden añadir, eliminar, o modificar TPAs que se encuentran directmanente en Bluejay desde este TP Tester.</p>
+
+<h2> Puesta en marcha </h2>
+<h3> Modo desarrollo </h3>
+<p> Para levantar Bluejay-TP Tester en modo desarrollo, sigue los siguientes pasos: </p>
+<ol>
+  <li>Clona el repositorio de Bluejay-TP Tester.</li>
+  <li>Instala las dependencias con `npm install`.</li>
+  <li>Levanta el proyecto con `ng start`.</li>
+</ol>
+<p> Con esto bastaría ya que el proyecto utiliza concurrently y levanta a la vez el servidor express y angular. El servidor Express (GlassMatrix API) se levanta en el puerto 6012 y la aplicación Angular en el puerto 4200. </p>
+
+<h3> Con docker </h3>
+<p> Para levantar Bluejay-TP Tester con docker, sigue los siguientes pasos: </p>
+<ol>
+  <li>Clona el repositorio de Bluejay-TP Tester.</li>
+  <li>Ejecuta `docker-compose up --build`.</li>
+</ol>
+<p> Con esto ya tendríamos el proyecto levantado en el puerto 6011 la web angular, y el servidor express en el puerto 6012. </p>
