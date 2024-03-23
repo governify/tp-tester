@@ -1,38 +1,32 @@
-<h1>Interacción con la API de GitHub</h1>
+<h1>{{ 'HOME.GITHUB.TITLE' | translate }}</h1>
 
 <div class="alert alert-warning" role="alert">
-  <h4 class="alert-heading">¡Atención!</h4>
-  <p>Para que esta API funcione correctamente, es necesario introducir el token de GitHub mediante la GlassMatrix API. Solo podrás ver los repositorios a los que tu usuario tenga acceso con ese token.</p>
+  <h4 class="alert-heading">{{ 'HOME.GITHUB.WARNING.TITLE' | translate }}</h4>
+  <p>{{ 'HOME.GITHUB.WARNING.PARAGRAPH1' | translate }}</p>
   <hr>
-  <p class="mb-0">Puedes encontrar más información sobre cómo hacer esto en la página de la GlassMatrix API.</p>
+  <p class="mb-0">{{ 'HOME.GITHUB.WARNING.PARAGRAPH2' | translate }}</p>
 </div>
 
-<p>Este proyecto utiliza la API de GitHub para interactuar con repositorios de GitHub. Esto se hace a través de un servicio Angular llamado GithubService. Aquí hay una descripción de cómo se utilizan algunas de las funciones en este servicio:</p>
+<p>{{ 'HOME.GITHUB.PARAGRAPH1' | translate }}</p>
 <ul>
-  <li><strong>listBranchesForRepo:</strong> Obtiene una lista de todas las ramas de un repositorio específico en GitHub.</li>
-  <li><strong>getUserName:</strong> Obtiene el nombre de usuario de la persona que está autenticada con el token proporcionado.</li>
-  <li><strong>listRepos:</strong> Obtiene una lista de todos los repositorios del usuario autenticado.</li>
-  <li><strong>getLatestCommitSha:</strong> Obtiene el SHA del último commit en un repositorio específico.</li>
-  <li><strong>getRepoInfo:</strong> Obtiene información sobre un repositorio específico.</li>
-  <li><strong>createBranch:</strong> Crea una nueva rama en un repositorio específico.</li>
-  <li><strong>createFile:</strong> Crea un nuevo archivo en un repositorio específico.</li>
-  <li><strong>createPullRequest:</strong> Crea una nueva solicitud de extracción en un repositorio específico.</li>
-  <li><strong>getOpenPullRequests:</strong> Obtiene una lista de todas las solicitudes de extracción abiertas en un repositorio específico.</li>
-  <li><strong>mergePullRequest:</strong> Fusiona una solicitud de extracción específica en un repositorio específico.</li>
-  <li><strong>getBranches:</strong> Obtiene una lista de todas las ramas en un repositorio específico.</li>
+  <li><strong>listBranchesForRepo:</strong> {{ 'HOME.GITHUB.FUNCTIONS.listBranchesForRepo' | translate }}</li>
+  <li><strong>getUserName:</strong> {{ 'HOME.GITHUB.FUNCTIONS.getUserName' | translate }}</li>
+  <li><strong>listRepos:</strong> {{ 'HOME.GITHUB.FUNCTIONS.listRepos' | translate }}</li>
+  <li><strong>getLatestCommitSha:</strong> {{ 'HOME.GITHUB.FUNCTIONS.getLatestCommitSha' | translate }}</li>
+  <li><strong>getRepoInfo:</strong> {{ 'HOME.GITHUB.FUNCTIONS.getRepoInfo' | translate }}</li>
+  <li><strong>createBranch:</strong> {{ 'HOME.GITHUB.FUNCTIONS.createBranch' | translate }}</li>
+  <li><strong>createFile:</strong> {{ 'HOME.GITHUB.FUNCTIONS.createFile' | translate }}</li>
+  <li><strong>createPullRequest:</strong> {{ 'HOME.GITHUB.FUNCTIONS.createPullRequest' | translate }}</li>
+  <li><strong>getOpenPullRequests:</strong> {{ 'HOME.GITHUB.FUNCTIONS.getOpenPullRequests' | translate }}</li>
+  <li><strong>mergePullRequest:</strong> {{ 'HOME.GITHUB.FUNCTIONS.mergePullRequest' | translate }}</li>
+  <li><strong>getBranches:</strong> {{ 'HOME.GITHUB.FUNCTIONS.getBranches' | translate }}</li>
 </ul>
 
-<h3> Crear un token de acceso personal </h3>
+<h3>{{ 'HOME.GITHUB.TOKEN_CREATION' | translate }}</h3>
 <p>
-  1. En la esquina superior derecha de cualquier página, haz clic en la foto de tu perfil, luego haz clic en Configuración.
-  <img class="responsive-img1" src="https://docs.github.com/assets/cb-65929/mw-1440/images/help/settings/userbar-account-settings.webp" alt="Configuración de cuenta"><br>
-  2. En la barra lateral izquierda, haz clic en Configuración del desarrollador.<br>
-  3. En la barra lateral izquierda, haz clic en Tokens de acceso personal.<br>
-  4. Haz clic en Generar nuevo token.<br>
-  5. En el campo "Nota", dale a tu token un nombre descriptivo.<br>
-  6. Para darle una caducidad a tu token, selecciona Expiración, luego elige una opción predeterminada o haz clic en Personalizado para ingresar una fecha.<br>
-  7. Selecciona los ámbitos que te gustaría otorgar a este token. Para usar tu token para acceder a repositorios desde la línea de comandos, selecciona repo. Un token sin ámbitos asignados solo puede acceder a información pública. Para más información, consulta "Ámbitos para aplicaciones OAuth".<br>
-  8. Haz clic en Generar token.<br>
-  9. Opcionalmente, para copiar el nuevo token a tu portapapeles, haz clic en el icono de dos cuadrados superpuestos.<br>
-  <img class="responsive-img2" src="https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp" alt="Tokens de acceso personal"></p>
-<p>Para más información, visita <a href="https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">la documentación oficial de GitHub</a>.</p>
+  <ng-container *ngFor="let step of 'HOME.GITHUB.TOKEN_CREATION_STEPS' | translate; index as i">
+    {{i + 1}}. {{ step }}<br>
+  </ng-container>
+  <img class="responsive-img2" src="https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp" alt="Tokens de acceso personal">
+</p>
+<p>{{ 'HOME.GITHUB.MORE_INFO' | translate }} <a href="https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">la documentación oficial de GitHub</a>.</p>

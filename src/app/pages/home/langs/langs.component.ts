@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-langs',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LangsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private translate: TranslateService) { }
+  jsonExampleContent!: string;
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.translate.get('HOME.LANGS.JSON_EXAMPLE_CONTENT').subscribe((res: string) => {
+      this.jsonExampleContent = res.replace(/\\n/g, '\n').replace(/\\"/g, '"');
+    });
   }
 
 }
