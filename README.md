@@ -39,7 +39,8 @@ Con esto bastaría ya que el proyecto utiliza concurrently y levanta a la vez el
 ### Con docker
 Para levantar Bluejay-TP Tester con docker, sigue los siguientes pasos:
 1. Clona el repositorio de Bluejay-TP Tester.
-2. Ejecuta `docker-compose up --build`.
+2. Instala las dependencias con `npm install`.
+3. Ejecuta `npm run docker`.
 
 Con esto ya tendríamos el proyecto levantado en el puerto 6011 la web angular, y el servidor express en el puerto 6012.
 
