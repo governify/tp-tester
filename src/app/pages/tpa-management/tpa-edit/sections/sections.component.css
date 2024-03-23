@@ -5,8 +5,22 @@
   margin-top: 10px;
   margin-bottom: 15px!important;
 }
-.alert alert-warning {
-  margin-top: 20px
+.alert.alert-warning {
+
+  color: #333;
+
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.alert.alert-warning i {
+  margin-right: 5px;
+}
+
+.alert.alert-warning p {
+  margin: 0;
+  padding: 0;
 }
 pre {
   height: 600px;
@@ -20,4 +34,76 @@ h4 {
 textarea {
   height: 500px;
   margin-bottom: 10px;
+}
+
+.form-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.section-title {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.input-field,
+.textarea-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-save {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #0069d9;
+}
+
+.btn-save:hover {
+  background-color: #218838;
+}
+
+.btn.btn-save, .btn.btn-add {
+  margin-bottom: 20px;
+  margin-right: 5px;
+}
+form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#volver {
+  margin-left: auto;
+  float: right;
+  clear: both;
+  margin-right: 40px;
+  padding: 10px 20px;
+  font-size: 20px;
+  width: 100px;
+  height: 50px;
+  margin-top: 20px;
+  background-color: white;
+  color: #007BFF;
+  border: 2px solid #007BFF;
 }

@@ -138,7 +138,6 @@
     "SUCCESS": "Success",
     "ERROR": "Error",
     "VIEW": {
-      "BACK": "Back",
       "TPA_JSON": "TPA JSON:",
       "CONTEXT_SECTION": "Context Section",
       "CONTEXT_SECTION_DESCRIPTION": "In this section, you can found the most importants parts of the TPA, the metrics and guarantees.",
@@ -151,22 +150,30 @@
       "EDIT_COMPLETE_TPA": "Edit Complete TPA",
       "EDIT_METRICS_GUARANTEES": "Edit Metrics and Guarantees Only",
       "SECTIONS": {
-        "BACK": "Back",
         "WORK_IN_PROGRESS": "Work in Progress",
         "TPA_JSON": "TPA JSON:",
         "CONTEXT_SECTION": "Context Section",
         "CONTEXT_SECTION_DESCRIPTION": "In this section, you can found the most importants parts of the TPA, the metrics and guarantees.",
         "METRICS": "METRICS",
-        "GUARANTEES": "GUARANTEES"
+        "GUARANTEES": "GUARANTEES",
+        "WARNING": "It is important that the name of the metric or guarantee is exactly the same as the id of the metric or guarantee.",
+        "METRICS2": "Metrics",
+        "NEW_METRIC_NAME": "Name of the new metric",
+        "NEW_METRIC_CONTENT": "Content of the new metric",
+        "CREATE_NEW_METRIC": "Create new metric",
+        "COPY_EXAMPLE_METRIC": "Copy example metric",
+        "GUARANTEES2": "Guarantees",
+        "NEW_GUARANTEE_NAME": "Name of the new guarantee",
+        "NEW_GUARANTEE_CONTENT": "Content of the new guarantee",
+        "CREATE_NEW_GUARANTEE": "Create new guarantee",
+        "COPY_EXAMPLE_GUARANTEE": "Copy example guarantee"
       },
       "ALL": {
-        "BACK": "Back",
         "TPA_UPDATE": "TPA Update",
         "TPA_JSON": "TPA JSON:"
       }
     },
     "DELETE": {
-      "BACK": "Back",
       "CONFIRM_DELETE": "Confirm Delete",
       "CONFIRM_DELETE_QUESTION": "Are you sure to delete this TPA?",
       "CONFIRM": "Confirm",

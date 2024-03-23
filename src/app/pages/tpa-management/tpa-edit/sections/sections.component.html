@@ -1,17 +1,33 @@
 <div class="container">
   <div class="row">
-    <div class="col-12 d-flex justify-content-end mt-3">
-      <button class="btn btn-back" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
-    </div>
+    <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
   </div>
-  <div class="alert alert-warning">
-    {{ 'TPA.EDIT.SECTIONS.WORK_IN_PROGRESS' | translate }}
-  </div>
-  <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.EDIT.SECTIONS.TPA_JSON' | translate }}</h2>
+  <h2 style="display: flex; justify-content: center; align-items: center;">{{ this.tpaId }}</h2>
+
+  <h3 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.EDIT.SECTIONS.TPA_JSON' | translate }}</h3>
   <div class="row">
     <div class="col-md-12">
       <pre class="form-control" readonly>{{ tpaData | json }}</pre>
     </div>
+  </div>
+  <div class="container form-container">
+    <div class="alert alert-warning">
+      <div style="display: flex; align-items: center;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>{{ 'TPA.EDIT.SECTIONS.WARNING' | translate }}</p>
+      </div>
+    </div>
+    <h4 class="section-title">{{ 'TPA.EDIT.SECTIONS.METRICS2' | translate }}</h4>
+    <input class="input-field" type="text" [(ngModel)]="newMetricName" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_METRIC_NAME' | translate }}">
+    <textarea class="textarea-field" [(ngModel)]="newMetricContent" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_METRIC_CONTENT' | translate }}"></textarea>
+    <button class="btn btn-add" (click)="addMetric()">{{ 'TPA.EDIT.SECTIONS.CREATE_NEW_METRIC' | translate }}</button>
+    <button class="btn btn-save" (click)="copyExampleMetric()">{{ 'TPA.EDIT.SECTIONS.COPY_EXAMPLE_METRIC' | translate }}</button>
+
+    <h4 class="section-title">{{ 'TPA.EDIT.SECTIONS.GUARANTEES2' | translate }}</h4>
+    <input class="input-field" type="text" [(ngModel)]="newGuaranteeName" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_GUARANTEE_NAME' | translate }}">
+    <textarea class="textarea-field" [(ngModel)]="newGuaranteeContent" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_GUARANTEE_CONTENT' | translate }}"></textarea>
+    <button class="btn btn-add" (click)="addGuarantee()">{{ 'TPA.EDIT.SECTIONS.CREATE_NEW_GUARANTEE' | translate }}</button>
+    <button class="btn btn-save" (click)="copyExampleGuarantee()">{{ 'TPA.EDIT.SECTIONS.COPY_EXAMPLE_GUARANTEE' | translate }}</button>
   </div>
   <form>
     <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.EDIT.SECTIONS.CONTEXT_SECTION' | translate }}</h2>
@@ -36,4 +52,5 @@
       </div>
     </div>
   </form>
+
 </div>

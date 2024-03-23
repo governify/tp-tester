@@ -1,0 +1,36 @@
+{
+  "id": "CORRELATION_INPROGRESSISSUES_NEWBRANCH",
+  "notes": "#### Description\r\n```\r\nTP-1: At least 75% of 'In Progress' issues must match creation of a branch.",
+  "description": "When an issue is started, it should usually get its own branch",
+  "scope": {
+    "project": {
+      "name": "Project",
+      "description": "Project",
+      "type": "string",
+      "default": "class01-GH-cs169_fa23-TPA-5"
+    },
+    "class": {
+      "name": "Class",
+      "description": "Group some Projects",
+      "type": "string",
+      "default": "class01"
+    }
+  },
+  "of": [
+    {
+      "scope": {
+        "project": "class01-GH-cs169_fa23-TPA-5"
+      },
+      "objective": "(COUNT_INPROGRESSISSUES_NEWBRANCH/NUMBER_GH_NEWBRANCH*100) >= 75",
+      "with": {
+        "COUNT_INPROGRESSISSUES_NEWBRANCH": {},
+        "NUMBER_GH_NEWBRANCH": {}
+      },
+      "window": {
+        "type": "static",
+        "period": "hourly",
+        "initial": "2023-01-01"
+      }
+    }
+  ]
+}
