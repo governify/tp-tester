@@ -32,7 +32,7 @@ El objetivo de este TP-Tester es, como dice su nombre, poder probar en primer lu
 Para levantar Bluejay-TP Tester en modo desarrollo, sigue los siguientes pasos:
 1. Clona el repositorio de Bluejay-TP Tester.
 2. Instala las dependencias con `npm install`.
-3. Levanta el proyecto con `ng start`.
+3. Levanta el proyecto con `npm start`.
 
 Con esto bastaría ya que el proyecto utiliza concurrently y levanta a la vez el servidor express y angular. El servidor Express (GlassMatrix API) se levanta en el puerto 6012 y la aplicación Angular en el puerto 4200.
 
