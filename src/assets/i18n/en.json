@@ -5,22 +5,124 @@
     "SEARCH_PLACEHOLDER": "Search..."
   },
   "HOME": {
-    "TPA_TITLE": "Team Practices Agreements (TPA)",
-    "TPA_OVERVIEW": "Overview",
-    "TPA_DESCRIPTION_1": "Bluejay use Team Practice Agreements (TPAs) instead of Service Level Agreements (SLAs) since the purpose of TPAs is auditing agile teams. Nevertheless, they are the same concept and thus, TPAs must follow iAgree Syntax just like SLAs in Governify Infrastructure.",
-    "TPA_DESCRIPTION_2": "TPAs are defined as a JSON or YAML documents that contain all the information to model, measure and audit one or more proccesses or information related with online services. The goal of this file is to provide enough information to retrieve data from the services and measure that the guarantees specified in the agreement are being followed.",
-    "METRICS_TITLE": "Metrics",
-    "METRICS_OVERVIEW": "Overview",
-    "METRICS_DESCRIPTION_1": "The Agreement conformed from several Guarantees contain all the information needed to compute them. Each guarantee contains an objective, which can involve one or more metrics. The metric is the instrument used to fetch the required information and extract a value for the system to verify the fulfilment of the objective.",
-    "COLLECTORS_TITLE": "Collectors",
-    "COLLECTORS_DESCRIPTION_1": "The collectors are the component which receiving a metric as input, are able to connect to the different data sources to extract the information needed for it, and compute the final result.",
-    "COLLECTORS_DESCRIPTION_2": "Actually, there are 3 different collectors available. The metrics are modeled as a JSON object following the iAgree specification. Each collector has his own syntax and they are similar in order to be consistent but there are some differences in order to extend the features.",
-    "EVENT_COLLECTOR_TITLE": "Event Collector",
-    "EVENT_COLLECTOR_DESCRIPTION": "The Event Collector is capable of using different data sources as input and join the information in order to correlate different payloads composing more complex metrics. Actually it can fetch information from Github, Pivotal Tracker, Travis CI, CodeClimate and Heroku.",
-    "GITHUB_COLLECTOR_TITLE": "GitHub Collector",
-    "GITHUB_COLLECTOR_DESCRIPTION_1": "Using GitHub API v4, it can access to the information from GitHub Projects Kanbans in order to keep track of the different cards and the changes.",
-    "GITHUB_COLLECTOR_DESCRIPTION_2": "More information could be found in the oficial Github GraphQL documentation here."
-
+    "HOMEPAGE": {
+    "TITLE": "Bluejay - TP Tester",
+    "INTRO_PARAGRAPH": "This project is an extension of Bluejay. The official documentation of Bluejay can be found at: <a href='https://docs.bluejay.governify.io/' target='_blank'>docs.bluejay.governify.io</a>. Being an extension of Bluejay, it is essential for the complete operation of Bluejay-Tester.",
+    "INTRODUCTION_TITLE": "Introduction",
+    "WHAT_IS_BLUEJAY_TITLE": "What is Bluejay?",
+    "WHAT_IS_BLUEJAY_DESCRIPTION": "Bluejay Infrastructure is a Governify-based infrastructure that allows auditing agile teams easily. It consists of a subset of Governify microservices that can be deployed either on a single machine or a cluster. Bluejay accesses multiple sources to gather information about development teams, such as GitLab, Jira, Slack, etc., and uses this information to verify if those teams comply with a Team Practice Agreement (TPA) that includes metrics and guarantees related to agile methodology.",
+    "WHAT_IS_TPT_TITLE": "What is Bluejay-TP Tester for?",
+    "WHAT_IS_TPT_DESCRIPTION": "The purpose of this TP-Tester is, as its name suggests, to be able to test the metrics that make up the TPs (Team Practices) first. Once it is confirmed that these metrics work correctly, TP-Tester allows you to verify that the entire TPA (Team Practice Agreement) works correctly. For this, TPAs that are directly in Bluejay can be added, removed, or modified from this TP Tester.",
+    "GETTING_STARTED_TITLE": "Getting Started",
+    "DEVELOPMENT_MODE_TITLE": "Development Mode",
+    "DEVELOPMENT_MODE_STEPS": "To start Bluejay-TP Tester in development mode, follow these steps:",
+    "DEVELOPMENT_MODE_STEP_1": "Clone the Bluejay-TP Tester repository.",
+    "DEVELOPMENT_MODE_STEP_2": "Install dependencies with `npm install`.",
+    "DEVELOPMENT_MODE_STEP_3": "Start the project with `ng start`.",
+    "DEVELOPMENT_MODE_DESCRIPTION": "This should suffice as the project uses concurrently and simultaneously starts the express server and angular. The Express server (GlassMatrix API) is running on port 6012 and the Angular application on port 4200.",
+    "DOCKER_MODE_TITLE": "With Docker",
+    "DOCKER_MODE_STEPS": "To start Bluejay-TP Tester with docker, follow these steps:",
+    "DOCKER_MODE_STEP_1": "Clone the Bluejay-TP Tester repository.",
+    "DOCKER_MODE_STEP_2": "Run `docker-compose up --build`.",
+    "DOCKER_MODE_DESCRIPTION": "With this, we would already have the project running on port 6011 the angular web, and the express server on port 6012."
+  },
+  "LANGS": {
+    "TITLE": "Bluejay - TP Tester",
+    "INTRO_PARAGRAPH": "Thanks to the ngx-translate library (<a href='https://github.com/ngx-translate/core' target='_blank'>github.com/ngx-translate/core</a>). By default, TP Tester will be in the language of the browser. This library also allows adding translations in a simple way since it would be enough to translate the Json from one language to another, and no other type of file would need to be modified.",
+    "JSON_EXAMPLE_TITLE": "Here is a snippet of how the language .json works:",
+    "JSON_EXAMPLE_CONTENT": "\"METRICS_LOADER\": {\\n  \\\"TITLE1\\\": \\\"Saved metrics\\\",\\n  \\\"TITLE2\\\": \\\"Create new metric\\\",\\n  \\\"MESSAGE_TEXT\\\": \\\"No saved metrics\\\",\\n  \\\"FILE_NAME\\\": \\\"File name\\\",\\n  \\\"VIEW_FILE\\\": \\\"View file\\\",\\n  \\\"EXECUTE_EDIT_FILE\\\": \\\"Execute / Edit file\\\",\\n  \\\"DELETE_FILE\\\": \\\"Delete file\\\",\\n  \\\"VIEWER\\\": {\\n    \\\"VIEWING\\\": \\\"fileName.\\\"\\n  }\\n}",
+    "JSON_EXPLANATION": "In this snippet, each key represents a text string that will be displayed in the application. Therefore, you would only need to change the content of the text strings and leave the keys unchanged to translate to other languages.",
+    "LANGUAGE_CHANGE_INFO": "Additionally, if you do not want to use the default language of the browser, you can change between the two current languages, Spanish or English, in the upper corner of the screen."
+  },
+  "METRICSTESTS": {
+    "TITLE": "Testing Metrics",
+    "PARAGRAPH1": "To test metrics, first, you will need to access the metrics tester page. First, there is a section where you can perform actions with the metrics already saved. At the bottom, you can test a new metric.",
+    "PARAGRAPH2": "By default, there will be a metric in the area to create a new metric. This metric is simply an example and is fully editable or can be directly deleted and replaced with a new one.",
+    "PARAGRAPH3": "Once we have entered the metric we want to test, we have to click publish. This will interact with the Bluejay endpoint, and after obtaining the initial computation, the button to get calculation will be unlocked. This will take a few seconds and return the values of the metrics we are testing in that repository.",
+    "PARAGRAPH4": "Once we have checked the metric (or before if you wish), there will also be a button to save the metric and have it always available in the local repository with the name we want. When we have it saved, it can already be accessed from the upper section, and we can re-run, edit, or delete it.",
+    "SUBTITLE": "Metric Edition",
+    "PARAGRAPH5": "If in the first section we access to edit metrics, we will enter a page like the one below. This page has the option to use the current time (it will use the start of the current hour as the start date, if it is 18:27, the start time will be 18:00 and the end time of computation will be 18:59 of the day on which it is performed). If the metric is saved from this section, it will be saved with the calculation period used.",
+    "PARAGRAPH6": "After this editing section, the option to test the metric by interacting with Bluejay will be available again."
+  },
+  "REPOSITORYTESTER": {
+    "TITLE": "Repository Testing",
+    "PARAGRAPH1": "Upon entering the screen, we will be able to choose between two sub-screens.",
+    "PARAGRAPH2": "The first one will be the page to clone a new repository. Here, at the beginning, there is a section to add or edit the GitHub token, and after entering a valid token, all repositories accessible with that token will appear. Additionally, each listed repository will have two options: to view it on GitHub to ensure it is the repository we want to clone, and another option is the edit screen that allows cloning the repository locally.",
+    "PARAGRAPH3": "On the other hand, if we access cloned repositories on the main screen of Repository Tester, it will list all repositories we have already cloned, and for each of them, we will have 3 options: one to create/delete or change branches. Another option to make pull requests, and another option that will allow creating files and making commits and pushes.",
+    "PARAGRAPH4": "Below, you can see what the views of the 3 options are like:"
+  },
+  "TPATESTS": {
+    "TITLE": "Testing TPAs",
+    "PARAGRAPH1": "This section allows visualizing the TPAs that are already loaded into Bluejay.",
+    "PARAGRAPH2": "If we select the edit option, we can edit the entire TPA or use an editor that allows editing metric by metric or adding a new metric to the TPA, thus facilitating TPA editing. In this table, we can also find the option to simply view the TPA or delete it (this would delete it directly from Bluejay)."
+  },
+    "GLASSMATRIX": {
+      "TITLE": "GlassMatrix API",
+      "PARAGRAPH1": "This project has its own API. This API is used both to interact with the Bluejay infrastructure, allowing you to create TPAs and test metrics, and to perform GitHub actions locally, such as cloning repositories, creating branches, switching branches, committing, or pushing.",
+      "APIFUNCTIONS": "API Functions",
+      "BLUEJAYINTERACTION": "Allows creating TPAs and testing metrics.",
+      "GITHUBACTIONS": "Allows cloning repositories, creating branches, switching branches, committing, and pushing.",
+      "GITHUBTOKEN": "For both GitHub actions locally and calls to the GitHub API itself to work correctly, a valid GitHub token is required. Therefore, the GlassMatrix API has a method for storing this token in the local repository (it is in a .gitignore) and also allows adding, modifying, and deleting it graphically. This option is available in GH Tester -> Clone new repository.",
+      "APIDOCS": "API Documentation with Swagger",
+      "APIDOCS_PARAGRAPH": "This API implements Swagger to always have all the API endpoints clearly with a brief documentation of how each endpoint works. Thanks to Swagger, all endpoints can be viewed and tested in its graphical interface, which is available at: http://localhost:6012/api-docs/",
+      "EXAMPLES": "Usage Examples",
+      "EXAMPLES_PARAGRAPH": "Below are some examples of how the API looks through Swagger, where calls can be executed directly:",
+      "BLUEJAYINTERACTION_TITLE": "Interaction with Bluejay",
+      "GITHUBACTIONS_TITLE": "GitHub Actions Locally",
+      "GITHUBTOKEN_TITLE": "GitHub Token Storage",
+      "APIDOCS_TITLE": "API Documentation with Swagger",
+      "EXAMPLES_TITLE": "Usage Examples"
+    },
+  "GITHUB": {
+    "TITLE": "Interaction with GitHub API",
+    "WARNING": {
+      "TITLE": "Attention!",
+      "PARAGRAPH1": "For this API to work correctly, it is necessary to enter the GitHub token through the GlassMatrix API. You will only be able to see the repositories that your user has access to with that token.",
+      "PARAGRAPH2": "You can find more information on how to do this on the GlassMatrix API page."
+    },
+    "PARAGRAPH1": "This project uses the GitHub API to interact with GitHub repositories. This is done through an Angular service called GithubService. Here is a description of how some of the functions in this service are used:",
+    "FUNCTIONS": {
+      "listBranchesForRepo": "Gets a list of all branches of a specific repository on GitHub.",
+      "getUserName": "Gets the username of the person authenticated with the provided token.",
+      "listRepos": "Gets a list of all repositories of the authenticated user.",
+      "getLatestCommitSha": "Gets the SHA of the latest commit in a specific repository.",
+      "getRepoInfo": "Gets information about a specific repository.",
+      "createBranch": "Creates a new branch in a specific repository.",
+      "createFile": "Creates a new file in a specific repository.",
+      "createPullRequest": "Creates a new pull request in a specific repository.",
+      "getOpenPullRequests": "Gets a list of all open pull requests in a specific repository.",
+      "mergePullRequest": "Merges a specific pull request in a specific repository.",
+      "getBranches": "Gets a list of all branches in a specific repository."
+    },
+    "TOKEN_CREATION": "Create a personal access token",
+    "TOKEN_CREATION_STEPS": [
+      "In the top right corner of any page, click on your profile picture, then click on Settings.",
+      "In the left sidebar, click on Developer settings.",
+      "In the left sidebar, click on Personal access tokens.",
+      "Click on Generate new token.",
+      "In the 'Note' field, give your token a descriptive name.",
+      "To give your token an expiration, select Expiration, then choose a default option or click Custom to enter a date.",
+      "Select the scopes you would like to grant to this token. To use your token to access repositories from the command line, select repo. A token without assigned scopes can only access public information. For more information, see 'Scopes for OAuth Apps'.",
+      "Click on Generate token.",
+      "Optionally, to copy the new token to your clipboard, click on the icon of two overlapping squares."
+    ],
+    "MORE_INFO": "For more information, visit the official GitHub documentation."
+  },
+  "BLUEJAY": {
+    "TITLE": "Interaction with Bluejay API",
+    "PARAGRAPH1": "This project uses the Bluejay API to interact with agreements. This is done through an Angular service called BluejayService. Here is a description of how some of the functions in this service are used:",
+    "PARAGRAPH2": "For the operation of all these calls and the TPA-Management and Metrics Tester pages, it is necessary that the entire Bluejay structure is up and running. For more information on this, visit ",
+    "FUNCTIONS": {
+      "createTpa": "Creates a new agreement with the provided content.",
+      "getTps": "Gets a list of all agreements.",
+      "getTpa": "Gets a specific agreement by its ID.",
+      "deleteTpa": "Deletes a specific agreement by its ID.",
+      "postComputation": "Makes a POST request to the calculations API with the provided data.",
+      "getComputation": "Gets the results of a specific calculation through its URL."
+    },
+    "DOCS_LINK": "http://docs.bluejay.governify.io",
+    "DOCS_LINK_TEXT": "the official Bluejay documentation"
+  }
   },
   "TPA": {
     "EXISTING_TPAS": "Existings TPAs",
