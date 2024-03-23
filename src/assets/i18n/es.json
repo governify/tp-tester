@@ -157,16 +157,25 @@
         "CONTEXT_SECTION": "Sección de Contexto",
         "CONTEXT_SECTION_DESCRIPTION": "En esta sección, puedes encontrar las partes más importantes del TPA, las métricas y garantías.",
         "METRICS": "MÉTRICAS",
-        "GUARANTEES": "GARANTÍAS"
+        "GUARANTEES": "GARANTÍAS",
+        "WARNING": "Es importante que el nombre de la métrica o garantía sea exactamente igual que el id de la métrica o garantía.",
+        "METRICS2": "Métricas",
+        "NEW_METRIC_NAME": "Nombre de la nueva métrica",
+        "NEW_METRIC_CONTENT": "Contenido de la nueva métrica",
+        "CREATE_NEW_METRIC": "Crear nueva métrica",
+        "COPY_EXAMPLE_METRIC": "Copiar métrica de ejemplo",
+        "GUARANTEES2": "Garantías",
+        "NEW_GUARANTEE_NAME": "Nombre de la nueva garantía",
+        "NEW_GUARANTEE_CONTENT": "Contenido de la nueva garantía",
+        "CREATE_NEW_GUARANTEE": "Crear nueva garantía",
+        "COPY_EXAMPLE_GUARANTEE": "Copiar garantía de ejemplo"
       },
       "ALL": {
-        "BACK": "Atrás",
         "TPA_UPDATE": "Actualizar TPA",
         "TPA_JSON": "TPA JSON:"
       }
     },
     "DELETE": {
-      "BACK": "Atrás",
       "CONFIRM_DELETE": "Confirmar Eliminación",
       "CONFIRM_DELETE_QUESTION": "¿Estás seguro de que quieres eliminar este TPA?",
       "CONFIRM": "Confirmar",
