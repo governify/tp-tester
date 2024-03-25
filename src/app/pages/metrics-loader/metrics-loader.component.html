@@ -46,6 +46,7 @@
 <hr>
 <div class="createMetric">
   <h3>{{ 'METRICS_LOADER.TITULO2' | translate }}</h3>
+  <p [ngClass]="messageClass">{{ message2 }}</p>
   <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
   <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">
   <input id="filename" type="text" [(ngModel)]="fileName" placeholder="{{ 'METRICS_TESTER.ENTER_FILE_NAME' | translate }}">
@@ -60,6 +61,9 @@
   </div>
   <button class="btn" (click)="getComputation()" [disabled]="!computationUrl">{{ 'METRICS_TESTER.GET_COMPUTATION' | translate }}</button>
   <div class="busquedaRespuesta">
+    <div id="mensaje" *ngIf="message3">
+      <p [ngClass]="messageClass">{{ message3 }}</p>
+    </div>
     <button class="btn btn-secondary btn-right" (click)="searchResponse()" [disabled]="!response">{{ 'METRICS_TESTER.SEARCH_IN_RESPONSE' | translate }}</button>
 
     <input type="text" [(ngModel)]="searchTermResponse" placeholder="{{ 'METRICS_TESTER.SEARCH_IN_RESPONSE_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="searchResponse()">

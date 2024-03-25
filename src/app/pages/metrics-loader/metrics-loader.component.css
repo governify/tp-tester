@@ -174,3 +174,8 @@ button.btn-danger:enabled {
   height: 36px;
 }
 
+#mensaje{
+  margin-top: 40px;
+  margin-left: 15%;
+  margin-right: 15%;
+}

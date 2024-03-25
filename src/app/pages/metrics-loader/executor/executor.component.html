@@ -58,7 +58,7 @@
 </form>
 <div class="row">
   <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.EXECUTION_SECTION' | translate }}</h2>
-
+  <p [ngClass]="messageClass2">{{ message2 }}</p>
   <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
   <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">
 </div>
@@ -72,6 +72,9 @@
 </div>
 <button class="btn" (click)="getComputation()" [disabled]="!computationUrl">{{ 'METRICS_LOADER.EXECUTOR.GET_COMPUTATION' | translate }}</button>
 <div class="busquedaRespuesta">
+  <div id="mensaje3" *ngIf="message3">
+    <p [ngClass]="messageClass3">{{ message3 }}</p>
+  </div>
   <button class="btn btn-secondary btn-right btn-search" (click)="searchResponse()" [disabled]="!response">{{ 'METRICS_LOADER.EXECUTOR.SEARCH_IN_RESPONSE' | translate }}</button>
 
   <input type="text" [(ngModel)]="searchTermResponse" placeholder="{{ 'METRICS_LOADER.EXECUTOR.SEARCH_IN_RESPONSE_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="searchResponse()">

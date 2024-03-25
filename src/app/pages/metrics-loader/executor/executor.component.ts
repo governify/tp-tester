@@ -19,6 +19,10 @@ export class ExecutorComponent implements OnInit {
   fileName!: string;
   message = '';
   messageClass = '';
+  message2 = '';
+  messageClass2 = '';
+  message3 = '';
+  messageClass3 = '';
 
   scope = {
     project: '',
@@ -136,7 +140,8 @@ export class ExecutorComponent implements OnInit {
       const jump = (textarea.value.substr(0, index).match(/\n/g) || []).length;
       textarea.scrollTo(0, jump * lineHeight);
     } else {
-      alert('Word not found!');
+      this.message2 = 'Word not found!';
+      this.messageClass2 = 'error';
     }
   }
 
@@ -151,7 +156,8 @@ export class ExecutorComponent implements OnInit {
       const jump = (textarea.value.substr(0, index).match(/\n/g) || []).length;
       textarea.scrollTo(0, jump * lineHeight);
     } else {
-      alert('Word not found in response!');
+      this.message3 = 'Word not found!';
+      this.messageClass3 = 'error';
     }
   }
 
