@@ -107,11 +107,20 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 
 .row {
-  display: flex; /* Añade esta línea */
-  justify-content: flex-end; /* Añade esta línea */
-  align-items: center; /* Añade esta línea */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 
   margin-right: 20px;margin-bottom: 10px!important;
 }
 
 
+.error {
+  background-color: #c51f1f;
+  margin-top: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}

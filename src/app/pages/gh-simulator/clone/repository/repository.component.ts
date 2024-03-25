@@ -25,7 +25,7 @@ export class RepositoryComponent implements OnInit {
     this.newFileForm = this.formBuilder.group({
       fileName: '',
       fileContent: '',
-      branch: '' // new form control for branch selection
+      branch: ''
     });
   }
 
@@ -62,7 +62,6 @@ export class RepositoryComponent implements OnInit {
           () => {
             this.branches.push(branchName);
             this.newBranchForm.reset();
-            // Reload branches
             this.githubService.listBranchesForRepo(owner, repoName).subscribe(
               branches => {
                 this.branches = branches;
@@ -85,15 +84,14 @@ export class RepositoryComponent implements OnInit {
   createFileAndCommit(): void {
     const fileName = this.newFileForm.get('fileName')?.value;
     const fileContent = this.newFileForm.get('fileContent')?.value;
-    const branch = this.newFileForm.get('branch')?.value; // get the selected branch
+    const branch = this.newFileForm.get('branch')?.value;
 
     if (this.owner && this.repoName && fileName && fileContent && branch) {
       const owner = this.owner as string;
       const repoName = this.repoName as string;
-      const path = `path/to/${fileName}`; // Make sure to provide the correct path
-      const message = 'Commit message'; // Provide the commit message
+      const path = `path/to/${fileName}`;
+      const message = 'Commit message';
 
-      // Use `then` instead of `subscribe`
       this.githubService.createFile(owner, repoName, path, message, btoa(fileContent), branch).then(
         () => {
           this.newFileForm.reset();

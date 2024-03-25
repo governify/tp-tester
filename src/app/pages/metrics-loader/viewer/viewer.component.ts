@@ -13,6 +13,8 @@ export class ViewerComponent implements OnInit {
   response: string | null = null;
   searchTerm!: string;
   fileName!: string;
+  messageClass = '';
+  message = '';
   constructor(private filesService: FilesService, private route: ActivatedRoute, private location: Location) { }
   isLoading = false;
 
@@ -38,7 +40,8 @@ export class ViewerComponent implements OnInit {
       const jump = (textarea.value.substr(0, index).match(/\n/g) || []).length;
       textarea.scrollTo(0, jump * lineHeight);
     } else {
-      alert('Word not found!');
+      this.message = 'Word not found in response!';
+      this.messageClass = 'error';
     }
   }
 

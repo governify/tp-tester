@@ -6,6 +6,7 @@
   <div>{{ 'METRICS_LOADER.VIEWER.VIEWING' | translate:{fileName: fileName} }}</div>
 </div>
 <div class="row">
+  <p [ngClass]="messageClass">{{ message }}</p>
   <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
   <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">
 </div>

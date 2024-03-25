@@ -31,7 +31,7 @@ export class LocalComponent implements OnInit {
   deleteRepo(repo: string): void {
     this.glassmatrixService.deleteRepo(repo).subscribe(
       () => {
-        this.getRepos(); // Refresh the list of repositories
+        this.getRepos();
       },
       error => {
         console.error('Error deleting repository:', error);

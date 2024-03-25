@@ -19,6 +19,7 @@ export class MetricsLoaderComponent implements OnInit {
   searchTermResponse!: string;
   fileName!: string;
   message2 = '';
+  message3 = '';
   messageClass = '';
   isLoading = false;
 
@@ -115,7 +116,8 @@ export class MetricsLoaderComponent implements OnInit {
       const jump = (textarea.value.substr(0, index).match(/\n/g) || []).length;
       textarea.scrollTo(0, jump * lineHeight);
     } else {
-      alert('Word not found!');
+      this.message2 = 'Word not found in response!';
+      this.messageClass = 'error';
     }
   }
   searchResponse() {
@@ -129,7 +131,8 @@ export class MetricsLoaderComponent implements OnInit {
       const jump = (textarea.value.substr(0, index).match(/\n/g) || []).length;
       textarea.scrollTo(0, jump * lineHeight);
     } else {
-      alert('Word not found in response!');
+      this.message3 = 'Word not found in response!';
+      this.messageClass = 'error';
     }
   }
 
