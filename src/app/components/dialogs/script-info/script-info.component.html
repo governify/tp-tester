@@ -1,10 +1,268 @@
 <div class="mat-dialog-container">
+  <div class="header-row">
+    <h2>Funcionamiento de las métricas</h2>
+    <button class="btn btn-danger close-button" (click)="close()">Cerrar</button>
+  </div>
+<hr>
   <form>
-    <p>
-      El franquismo fue la dictadura que gobernó España entre 1939 y 1975, liderada por el General Francisco Franco. Esta dictadura se caracterizó por un régimen autoritario que suprimió los derechos civiles y políticos, y estableció una censura estricta. Durante este período, España experimentó un aislamiento internacional, una economía autárquica y una represión política y social.
-
-      (Aquí puedes continuar con tu texto explicativo sobre el franquismo)
-    </p>
-    <button (click)="close()">Cerrar</button>
+    <h2>Formato y funcionamiento de la métrica</h2>
+    <ul>
+      <li><strong>config:</strong> Contiene la configuración de la métrica. En este caso, `scopeManager` es la URL de bluejay y esto nunca deberá editarse.</li>
+      <li><strong>metric:</strong> Contiene la definición de la métrica.</li>
+      <li><strong>computing:</strong> Define cómo se calcula la métrica. En este caso, `actual` significa que se calcula en tiempo real.</li>
+      <li><strong>element:</strong> Define el tipo de elemento que se mide. En este caso, `number` significa que se mide un número.</li>
+      <li><strong>event:</strong> Define el evento que dispara el cálculo de la métrica. En este caso, se utiliza una consulta personalizada de GraphQL a la API de GitHub. Esto puede ser modificable como se ve en el apartado inferior de GraphQL custom query</li>
+      <li><strong>scope:</strong> Define el alcance de la métrica. En este caso, se mide a nivel de tpa, y para todos los miembros (`*`).</li>
+      <li><strong>window:</strong> Define el período de tiempo para el cual se calcula la métrica. En este caso, se calcula por hora para un día específico.</li>
+    </ul>
+    <strong>Metrica de ejemplo:</strong>
+    <br>
+    <textarea id="spcialone" readonly>
+      {
+        "config": {
+          "scopeManager": "http://host.docker.internal:5700/api/v1/scopes/development"
+        },
+        "metric": {
+          "computing": "actual",
+          "element": "number",
+          "event": {
+            "githubGQL": {
+              "custom": {
+                "type": "graphQL",
+                "title": "Get pull requests with at least one comment by member",
+                "steps": {}
+              }
+            }
+          },
+          "scope": {
+            "project": "TFG-GH-JaviFdez7_ISPP-G1-Talent",
+            "class": "TFG",
+            "member": "*"
+          },
+          "window": {
+            "type": "static",
+            "period": "hourly",
+            "initial": "2024-03-14T00:00:00.000Z",
+            "from": "2024-03-14T00:00:00.000Z",
+            "end": "2024-03-14T23:59:59.999Z",
+            "timeZone": "America/Los_Angeles"
+          }
+        }
+      }
+    </textarea>
+    <h2>Ejemplo de configuración de métrica del collector</h2>
+    <p>Tomando esta métrica simplificada de bluejay:</p>
+    <textarea readonly>
+      {
+        "element": {
+          "percentage": {
+            "related": {
+              "github": {
+                "events": {
+                  "type": "PullRequestEvent",
+                  "payload": {
+                    "action": "closed",
+                    "pull_request": {
+                      "base": {
+                        "label": "%GITHUB.REPO_OWNER%:master"
+                      }
+                    }
+                  }
+                }
+              },
+              "window": 86400
+            }
+          }
+        },
+        "event": {
+          "pivotal": {
+            "activity": {
+              "highlight": "accepted"
+            }
+          }
+        }
+      }
+    </textarea>
+    <p>El colector obtendrá información de 2 fuentes. Mirando la solicitud de GitHub:</p>
+    <textarea readonly>
+      {
+        "github": {
+          "events": {
+            "type": "PullRequestEvent",
+            "payload": {
+              "action": "closed",
+              "pull_request": {
+                "base": {
+                  "label": "%GITHUB.REPO_OWNER%:master"
+                }
+              }
+            }
+          }
+        }
+      }
+    </textarea>
+    <p>El sistema obtendrá la información de los eventos. Yendo a la configuración de los endpoints:</p>
+    <textarea class="textareasmall" readonly>
+      {
+        "github": {
+          "events": "/repos/{github.repoOwner}/{github.repository}/events"
+        }
+      }
+    </textarea>
+    <p>La información de los eventos corresponde al endpoint /repos/&#123;github.repoOwner}/&#123;github.repository}/events. El sistema sustituirá &#123;github.repoOwner} y &#123;github.repository} con la información extraída del Scope Manager para el proyecto.</p>
+    <p>Mirando la parte más anidada de la métrica podemos ver un elemento %:</p>
+    <textarea class="textareasmall2" readonly>
+      {
+        "label": "%GITHUB.REPO_OWNER%:master"
+      }
+    </textarea>
+    <p>Yendo a la configuración de las sustituciones:</p>
+    <textarea class="textareasmall2" readonly>
+      {
+        "GITHUB.REPO_OWNER->github.repoOwner"
+      }
+    </textarea>
+    <p>El sistema reemplazará %GITHUB.REPO_OWNER% con la información extraída del Scope Manager para el proyecto.</p>
+    <h2>Consulta personalizada de GraphQL</h2>
+    <p>Este método se creó debido a la complejidad de los objetos anidados de GraphQL. Es un método personalizado en el que se ejecutan secuencialmente diferentes pasos para obtener, transformar y devolver datos.</p>
+    <p>Esta es una métrica para obtener el número de issues asignadas, en una columna llamada "Doing" dentro de un proyecto de GitHub, para cada miembro:</p>
+    <textarea #textarea readonly>
+      {
+        "metric": {
+          "computing": "string",
+          "element": "number",
+          "event": {
+            "githubGQL": {
+              "custom": {
+                "type": "graphQL",
+                "steps": {
+                  "0": {
+                    "type": "queryGetObject",
+                    "query":  "{repository(name: \"%PROJECT.github.repository%\", owner: \"%PROJECT.github.repoOwner%\") {projects(first: 1) {nodes {name,columns(first: 10) {nodes {name,cards(first: 100) {totalCount,nodes {column {name},content {... on Issue {url,number,title,createdAt,updatedAt,assignees(first: 10) {nodes {login}}}}}}}}}}}}"
+                  },
+                  "1": {
+                    "type": "objectGetSubObjects",
+                    "location": "data.repository.projects.nodes.0.columns.nodes"
+                  },
+                  "2": {
+                    "type": "objectsFilterObject",
+                    "filters": [
+                      "name == 'Doing'"
+                    ],
+                    "keep": "first"
+                  },
+                  "3": {
+                    "type": "objectGetSubObjects",
+                    "location": "cards.nodes"
+                  },
+                  "4": {
+                    "type": "objectsFilterObjects",
+                    "filters": [
+                      "content.assignees.nodes.*any*.login == '%MEMBER.github.username%'"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "scope": {
+            "project": "testing-GH-governifyauditor_testing-goldenflow",
+            "class": "testing",
+            "member": "*"
+          },
+          "window": {
+            "initial": "2021-01-20T00:00:00Z",
+            "period": "annually",
+            "type": "static",
+            "end": "2021-02-19T00:00:00Z"
+          }
+        },
+        "config": {
+          "scopeManager": "SCOPEURL"
+        }
+      }
+    </textarea>
+    <p>Como se puede ver, está compuesto por 5 etapas diferentes. Estas etapas son altamente configurables y es fácil agregar nuevas etapas.</p>
+    <h2>Querys</h2>
+    <p>Las diferentes etapas se dan dentro de la clave steps dentro del objeto custom. Cada etapas tiene que estar dentro de un objeto numerado ya que se realizarán en orden creciente.</p>
+    <p>Las etapas se diferencian por su tipo. Estos tipos de etapas siguen un patrón simple para una mejor concatenación de etapas.</p>
+    <p>Sus tipos pueden comenzar con "object", "objects" o nada, refiriéndose a si esperan un solo objeto, un array de objetos o nada en la ejecución.</p>
+    <p>Sus tipos tienen que terminar con "object" o "objects", refiriéndose a si después de la ejecución, queda un solo objeto o un array de objetos.</p>
+    <h4>Tipo de etapa: queryGetObject y queryGetObjects</h4>
+    <p>Estas etapas no esperan nada y devuelven un objeto o un array de objetos. Hacen lo mismo, pero ambos tipos son correctos para una mejor lectura del DSL.</p>
+    <textarea readonly>
+      {
+        "type": "queryGetObject",
+        "query":  "{repository(name: \"%PROJECT.github.repository%\", owner: \"%PROJECT.github.repoOwner%\") {projects(first: 1) {nodes {name,columns(first: 10) {nodes {name,cards(first: 100) {totalCount,nodes {column {name},content {... on Issue {url,number,title,createdAt,updatedAt,assignees(first: 10) {nodes {login}}}}}}}}}}}}"
+      }
+    </textarea>
+    <p>Necesita un parámetro "query" para ser pasado conteniendo la consulta de GraphQL en formato string y usando comas entre las claves al mismo nivel. Hay un simple .js para transformar las consultas de GraphQL en el formato de string en utils/queryToString.js para simplificar el proceso. %PROJECT.github.repository% y %PROJECT.github.repoOwner% se utilizan para insertar las identidades de los scopes dentro de la consulta y hacerla genérica para todos los diferentes equipos.</p>
+    <h4>Tipo de etapas: objectGetSubObject y objectGetSubObjects</h4>
+    <p>Estas etapas esperan un solo objeto y devuelven un objeto o un array de objetos. Hacen lo mismo, pero ambos tipos son correctos para una mejor lectura del DSL.</p>
+    <textarea class="textareasmall" readonly>
+    {
+      "type": "objectGetSubObjects",
+      "location": "data.repository.projects.nodes.0.columns.nodes"
+    }
+  </textarea>
+    <p>Obtiene el/los objeto/s dentro de un objeto. La ubicación del/los objeto/s se especifica como si se navegara a través de javascript.</p>
+    <h4>Tipo de etapas: objectsFilterObject y objectsFilterObjects</h4>
+    <p>Estas etapas esperan un array de cero o más objetos y devuelven un objeto o un array de objetos.</p>
+    <p>Se requiere un array de filtros con una o más cadenas. Estas cadenas son ecuaciones. La parte izquierda contiene la ubicación del atributo en los diferentes objetos para comparar y la parte derecha el valor que se espera que tenga el atributo obtenido.</p>
+    <p>Si el filtro es objectsFilterObject, se espera un parámetro "keep" ya que varios objetos pueden ser recuperados del filtro y solo uno puede permanecer. first, last, min, max, sum, avg son las opciones válidas.</p>
+    <textarea readonly>
+    {
+      "type": "objectsFilterObject",
+      "filters": [
+        "name == 'Doing'"
+      ],
+      "keep": "first"
+    }
+  </textarea>
+    <p>Si el filtro es objectsFilterObjects, ya no se necesita el parámetro keep.</p>
+    <textarea readonly>
+    {
+      "type": "objectsFilterObjects",
+      "filters": [
+        "content.assignees.nodes.*any*.login == '%MEMBER.github.username%'"
+      ]
+    }
+  </textarea>
+    <p>Aquí, se puede incluir información sobre los miembros para comparar, por ejemplo, el contenido de una clave de objeto para que sea el nombre de usuario de un usuario de github, como se puede ver en el ejemplo.</p>
+    <h4>Tipo de etapas: runScript</h4>
+    <p>Esta etapas espera cualquier cosa y se pasa a una función exportada como genérica. Se espera que devuelva una respuesta en forma de un objeto/array u otro tipo en caso de que sea compatible con la métrica.</p>
+    <p>A la fecha puede recibir dos parámetros:</p>
+    <p>script: Es una función exportada como genérica y recibe dos entradas: los datos que se filtran/obtienen de las etapas ejecutados antes de ella y un objeto que contiene variables para generalizar el script y modificar diferentes filtros/condiciones dentro del script. Debe devolver los datos procesados para pasar al siguiente pipeline o para ser devueltos. Este script tiene que ser escapado para caber en el TPA como un JSON.</p>
+    <p>variables: Este es el objeto que se pasa al script que contiene la variabilización. El colector también añadirá al objeto dos claves (from, to) que contienen la ventana para filtrar la información.</p>
+    <p>Este es un ejemplo de un script sin ser escapado:</p>
+    <textarea readonly>
+    module.exports.generic = function generic(inputData, variables) {
+      function transitionAndDateFilter(timelineItem) {
+        return timelineItem.projectColumnName &&
+          timelineItem.projectColumnName === variables.actualProjectColumnName &&
+          timelineItem.previousProjectColumnName === variables.previousProjectColumnName &&
+          new Date(timelineItem.createdAt) > new Date(variables.from) &&
+          new Date(timelineItem.createdAt) < new Date(variables.to);
+      }
+      function hasTimelineItems(issue) {
+        return issue.timelineItems.length !== 0;
+      }
+      return inputData.map(issue => {
+        return { ...issue, timelineItems: issue.timelineItems.nodes.filter(transitionAndDateFilter) }
+      }).filter(hasTimelineItems);
+    }
+  </textarea>
+    <p>Toma datos de la API de GitHub GQL que contiene información sobre las tarjetas (movimientos de tarjetas de proyecto - columna antigua y nueva columna) y aplica filtros basados en las variables que se le pasan. La etapa se vería así:</p>
+    <textarea readonly>
+    {
+      "type": "runScript",
+      "variables": {
+        "previousProjectColumnName": "In progress",
+        "actualProjectColumnName": "In review"
+      },
+      "script": "module.exports.generic = function filterIssuesByTimelineItems(inputData, variables) {\r\n    function transitionAndDateFilter(timelineItem) {\r\n        return timelineItem.projectColumnName &&\r\n            timelineItem.projectColumnName === variables.actualProjectColumnName &&\r\n            timelineItem.previousProjectColumnName === variables.previousProjectColumnName &&\r\n            new Date(timelineItem.createdAt) > new Date(variables.from) &&\r\n            new Date(timelineItem.createdAt) < new Date(variables.to);\r\n    }\r\n    function hasTimelineItems(issue) {\r\n        return issue.timelineItems.length !== 0;\r\n    }\r\n    return inputData.map(issue => {\r\n        return { ...issue, timelineItems: issue.timelineItems.nodes.filter(transitionAndDateFilter) }\r\n    }).filter(hasTimelineItems);\r\n}"
+    }
+  </textarea>
+    <p>Como se puede ver, filtrará y mantendrá los issues cuyas tarjetas se hayan movido de una columna llamada "In progress" a una columna llamada "In review". También utilizará el from y el to para filtrar los datos.</p>
   </form>
 </div>
