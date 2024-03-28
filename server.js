@@ -32,6 +32,17 @@ app.use(bodyParser.json());
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 const apiName = '/glassmatrix/api/v1';
+
+app.use((req, res, next) => {
+  console.log(`Inicio de petición: ${req.method} ${req.path}`);
+  next();
+});
+
+app.use((err, req, res, next) => {
+  console.error(`Error en petición: ${req.method} ${req.path}`);
+  console.error(err.stack);
+  res.status(500).send('¡Algo salió mal!');
+});
 /**
  * @swagger
  * tags:
