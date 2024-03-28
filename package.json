@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "docker": "docker-compose up --build",
-    "electron": "concurrently \"ng build\" \"node server.js\" \"electron .\""
+    "electron": "concurrently \"ng build --base-href ./ && electron .\" \"node server.js\""
   },
   "private": true,
   "dependencies": {
