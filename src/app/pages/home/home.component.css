@@ -17,7 +17,6 @@ body {
   width: 20%;
   background-color: #f8f9fa;
   padding: 20px;
-  //border-right: 1px solid #dee2e6;
   border-right: 2px solid #3e64dc;
   overflow-y: auto;
 }

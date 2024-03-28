@@ -40,7 +40,8 @@ import { RepositorytesterComponent } from './pages/home/repositorytester/reposit
 import { ScriptInfoComponent } from './components/dialogs/script-info/script-info.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  // Use a relative path to the assets directory
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 @NgModule({
   declarations: [

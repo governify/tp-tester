@@ -7,12 +7,10 @@ p {
   margin-right: auto;
   max-width: 100%;
   height: auto;
-  margin-botton: 35px!important;
 }
 
 @media screen and (max-width: 600px) {
   .center {
     width: 100%;
-    margin-botton: 35px!important;
   }
 }
