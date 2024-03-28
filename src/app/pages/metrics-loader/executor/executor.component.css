@@ -121,8 +121,12 @@ textarea::-webkit-scrollbar-thumb:hover {
   display: inline-block;
 }
 .btn-yellow {
-  background-color: #b49800 !important; /* Cambia este valor al color exacto que desees */
+  background-color: #b49800 !important;
 }
+.btn-blue {
+  background-color: #3e64dc !important;
+}
+
 .success {
   background-color: #25af25;
   margin-top: 8px;

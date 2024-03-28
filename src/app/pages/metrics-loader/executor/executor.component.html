@@ -5,8 +5,6 @@
 <div class="row" id="context">
   <div>{{ 'METRICS_LOADER.EXECUTOR.EXECUTING' | translate:{fileName: fileName} }}</div>
 </div>
-<button class="btn btn-secondary" (click)="saveToJson()">{{ 'METRICS_LOADER.EXECUTOR.SAVE_AS_JSON' | translate }}</button>
-<p [ngClass]="messageClass">{{message}}</p>
 
 <form>
   <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.CONTEXT_SECTION' | translate }}</h2>
@@ -25,6 +23,7 @@
       <input type="text" id="member" [(ngModel)]="scope.member" name="member" class="form-control">
     </div>
   </div>
+
   <div class="row">
     <h4>{{ 'METRICS_LOADER.EXECUTOR.COMPUTATION_SEARCH' | translate }}</h4>
     <div class="col">
@@ -55,9 +54,15 @@
     </div>
   </div>
   <button class="btn btn-yellow" (click)="setToCurrentHour()">{{ 'METRICS_LOADER.EXECUTOR.ACTUAL_HOUR_COMPUTATION' | translate }}</button>
+  <button class="btn btn-secondary" (click)="saveToJson()">{{ 'METRICS_LOADER.EXECUTOR.SAVE_AS_JSON' | translate }}</button>
+  <button class="btn btn-blue" (click)="openGuideDialog($event)">Tutorial</button>
+  <p [ngClass]="messageClass">{{message}}</p>
 </form>
+
 <div class="row">
+
   <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.EXECUTION_SECTION' | translate }}</h2>
+
   <p [ngClass]="messageClass2">{{ message2 }}</p>
   <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
   <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">

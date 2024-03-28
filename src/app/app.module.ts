@@ -37,6 +37,8 @@ import { BluejayapiComponent } from './pages/home/bluejayapi/bluejayapi.componen
 import { MetricstestsComponent } from './pages/home/metricstests/metricstests.component';
 import { TpatestsComponent } from './pages/home/tpatests/tpatests.component';
 import { RepositorytesterComponent } from './pages/home/repositorytester/repositorytester.component';
+import { ScriptInfoComponent } from './components/dialogs/script-info/script-info.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -70,6 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MetricstestsComponent,
     TpatestsComponent,
     RepositorytesterComponent,
+    ScriptInfoComponent,
 
   ],
   imports: [
@@ -82,6 +85,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatProgressSpinnerModule,
     MatDialogModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
