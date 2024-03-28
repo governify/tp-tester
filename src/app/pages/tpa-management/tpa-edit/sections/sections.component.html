@@ -37,14 +37,22 @@
         <h4>{{ 'TPA.EDIT.SECTIONS.METRICS' | translate }}</h4>
         <div class="row" *ngFor="let metric of metrics | keyvalue; let i = index">
           <div class="col-md-12">
-            <h5>{{ metric.key }}</h5>
+            <h5>{{ metric.key }}
+              <button class="btn btn-danger small-button" (click)="deleteMetric(metric.key)">
+                <i class="fas fa-trash small-icon"></i>
+              </button>
+            </h5>
             <textarea class="form-control" [(ngModel)]="metricsJson[getKeyAsString(metric.key)]" name="metric{{i}}"></textarea>
           </div>
         </div>
         <h4>{{ 'TPA.EDIT.SECTIONS.GUARANTEES' | translate }}</h4>
         <div class="row" *ngFor="let guarantee of guarantees; let i = index">
           <div class="col-md-12">
-            <h5>{{ guarantee.id }}</h5>
+            <h5>{{ guarantee.id }}
+              <button class="btn btn-danger small-button" (click)="deleteGuarantee(i)">
+                <i class="fas fa-trash small-icon"></i>
+              </button>
+            </h5>
             <textarea class="form-control" [(ngModel)]="guaranteesJson[i]" name="guarantee{{i}}"></textarea>
           </div>
         </div>

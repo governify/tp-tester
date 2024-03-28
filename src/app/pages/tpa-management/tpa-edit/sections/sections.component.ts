@@ -116,6 +116,18 @@ export class SectionsComponent implements OnInit {
     });
   }
 
+  deleteMetric(key: any) {
+    const keyAsString = key as string;
+    delete this.metricsJson[keyAsString];
+    delete this.tpaData.terms.metrics[keyAsString];
+    this.saveChanges();
+  }
+
+  deleteGuarantee(index: number) {
+    this.guaranteesJson.splice(index, 1);
+    this.tpaData.terms.guarantees.splice(index, 1);
+    this.saveChanges();
+  }
 
   copyExampleGuarantee() {
     this.filesService.getExampleGuarantee().subscribe((exampleGuarantee) => {
