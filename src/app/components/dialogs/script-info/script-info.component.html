@@ -1,0 +1,270 @@
+<div class="mat-dialog-container">
+  <div class="header-row">
+    <h2>{{ 'POPUP_METRICS.title' | translate }}</h2>
+    <button class="btn btn-danger close-button" (click)="close()">{{ 'POPUP_METRICS.CLOSE' | translate }}</button>
+  </div>
+<hr>
+  <form>
+    <h2>{{ 'POPUP_METRICS.formato_y_funcionamiento' | translate }}</h2>
+    <ul>
+      <li><strong>{{ 'POPUP_METRICS.config' | translate }}</strong>: {{ 'POPUP_METRICS.config_desc' | translate }}</li>
+      <li><strong>{{ 'POPUP_METRICS.metric' | translate }}</strong>: {{ 'POPUP_METRICS.metric_desc' | translate }}</li>
+      <li><strong>{{ 'POPUP_METRICS.computing' | translate }}</strong>: {{ 'POPUP_METRICS.computing_desc' | translate }}</li>
+      <li><strong>{{ 'POPUP_METRICS.element' | translate }}</strong>: {{ 'POPUP_METRICS.element_desc' | translate }}</li>
+      <li><strong>{{ 'POPUP_METRICS.event' | translate }}</strong>: {{ 'POPUP_METRICS.event_desc' | translate }}</li>
+      <li><strong>{{ 'POPUP_METRICS.scope' | translate }}</strong>: {{ 'POPUP_METRICS.scope_desc' | translate }}</li>
+      <li><strong>{{ 'POPUP_METRICS.window' | translate }}</strong>: {{ 'POPUP_METRICS.window_desc' | translate }}</li>
+    </ul>
+    <strong>{{ 'POPUP_METRICS.metrica_de_ejemplo' | translate }}</strong>
+    <br>
+    <textarea id="spcialone" readonly>
+      {
+        "config": {
+          "scopeManager": "http://host.docker.internal:5700/api/v1/scopes/development"
+        },
+        "metric": {
+          "computing": "actual",
+          "element": "number",
+          "event": {
+            "githubGQL": {
+              "custom": {
+                "type": "graphQL",
+                "title": "Get pull requests with at least one comment by member",
+                "steps": {}
+              }
+            }
+          },
+          "scope": {
+            "project": "TFG-GH-JaviFdez7_ISPP-G1-Talent",
+            "class": "TFG",
+            "member": "*"
+          },
+          "window": {
+            "type": "static",
+            "period": "hourly",
+            "initial": "2024-03-14T00:00:00.000Z",
+            "from": "2024-03-14T00:00:00.000Z",
+            "end": "2024-03-14T23:59:59.999Z",
+            "timeZone": "America/Los_Angeles"
+          }
+        }
+      }
+    </textarea>
+    <h2>{{ 'POPUP_METRICS.ejemplo_de_configuracion' | translate }}</h2>
+    <p>{{ 'POPUP_METRICS.tomando_esta_metrica' | translate }}</p>
+    <textarea readonly>
+      {
+        "element": {
+          "percentage": {
+            "related": {
+              "github": {
+                "events": {
+                  "type": "PullRequestEvent",
+                  "payload": {
+                    "action": "closed",
+                    "pull_request": {
+                      "base": {
+                        "label": "%GITHUB.REPO_OWNER%:master"
+                      }
+                    }
+                  }
+                }
+              },
+              "window": 86400
+            }
+          }
+        },
+        "event": {
+          "pivotal": {
+            "activity": {
+              "highlight": "accepted"
+            }
+          }
+        }
+      }
+    </textarea>
+    <p>{{ 'POPUP_METRICS.colector_obtendra_informacion' | translate }}</p>
+    <textarea readonly>
+      {
+        "github": {
+          "events": {
+            "type": "PullRequestEvent",
+            "payload": {
+              "action": "closed",
+              "pull_request": {
+                "base": {
+                  "label": "%GITHUB.REPO_OWNER%:master"
+                }
+              }
+            }
+          }
+        }
+      }
+    </textarea>
+    <p>{{ 'POPUP_METRICS.sistema_obtendra_informacion' | translate }}</p>
+    <textarea class="textareasmall" readonly>
+      {
+        "github": {
+          "events": "/repos/{github.repoOwner}/{github.repository}/events"
+        }
+      }
+    </textarea>
+    <p>{{ 'POPUP_METRICS.informacion_de_los_eventos' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.elemento_porcentaje' | translate }}</p>
+    <textarea class="textareasmall2" readonly>
+      {
+        "label": "%GITHUB.REPO_OWNER%:master"
+      }
+    </textarea>
+    <p>{{ 'POPUP_METRICS.configuracion_de_las_sustituciones' | translate }}</p>
+    <textarea class="textareasmall2" readonly>
+      {
+        "GITHUB.REPO_OWNER->github.repoOwner"
+      }
+    </textarea>
+    <p>{{ 'POPUP_METRICS.sistema_reemplazara' | translate }}</p>
+    <h2>{{ 'POPUP_METRICS.consulta_personalizada' | translate }}</h2>
+    <p>{{ 'POPUP_METRICS.este_metodo_se_creo' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.esta_es_una_metrica' | translate }}</p>
+    <textarea #textarea readonly>
+      {
+        "metric": {
+          "computing": "string",
+          "element": "number",
+          "event": {
+            "githubGQL": {
+              "custom": {
+                "type": "graphQL",
+                "steps": {
+                  "0": {
+                    "type": "queryGetObject",
+                    "query":  "{repository(name: \"%PROJECT.github.repository%\", owner: \"%PROJECT.github.repoOwner%\") {projects(first: 1) {nodes {name,columns(first: 10) {nodes {name,cards(first: 100) {totalCount,nodes {column {name},content {... on Issue {url,number,title,createdAt,updatedAt,assignees(first: 10) {nodes {login}}}}}}}}}}}}"
+                  },
+                  "1": {
+                    "type": "objectGetSubObjects",
+                    "location": "data.repository.projects.nodes.0.columns.nodes"
+                  },
+                  "2": {
+                    "type": "objectsFilterObject",
+                    "filters": [
+                      "name == 'Doing'"
+                    ],
+                    "keep": "first"
+                  },
+                  "3": {
+                    "type": "objectGetSubObjects",
+                    "location": "cards.nodes"
+                  },
+                  "4": {
+                    "type": "objectsFilterObjects",
+                    "filters": [
+                      "content.assignees.nodes.*any*.login == '%MEMBER.github.username%'"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "scope": {
+            "project": "testing-GH-governifyauditor_testing-goldenflow",
+            "class": "testing",
+            "member": "*"
+          },
+          "window": {
+            "initial": "2021-01-20T00:00:00Z",
+            "period": "annually",
+            "type": "static",
+            "end": "2021-02-19T00:00:00Z"
+          }
+        },
+        "config": {
+          "scopeManager": "SCOPEURL"
+        }
+      }
+    </textarea>
+
+    <p>{{ 'POPUP_METRICS.esta_compuesto_por_etapas' | translate }}</p>
+    <h2>{{ 'POPUP_METRICS.querys' | translate }}</h2>
+    <p>{{ 'POPUP_METRICS.las_diferentes_etapas' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.las_etapas_se_diferencian' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.query3' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.query4' | translate }}</p>
+
+    <h4>{{ 'POPUP_METRICS.tipo_de_etapa_queryGetObject' | translate }}</h4>
+    <p>{{ 'POPUP_METRICS.estas_etapas_no_esperan' | translate }}</p>
+    <textarea readonly>
+      {
+        "type": "queryGetObject",
+        "query":  "{repository(name: \"%PROJECT.github.repository%\", owner: \"%PROJECT.github.repoOwner%\") {projects(first: 1) {nodes {name,columns(first: 10) {nodes {name,cards(first: 100) {totalCount,nodes {column {name},content {... on Issue {url,number,title,createdAt,updatedAt,assignees(first: 10) {nodes {login}}}}}}}}}}}}"
+      }
+    </textarea>
+    <p>Necesita un parámetro "query" para ser pasado conteniendo la consulta de GraphQL en formato string y usando comas entre las claves al mismo nivel. Hay un simple .js para transformar las consultas de GraphQL en el formato de string en utils/queryToString.js para simplificar el proceso. %PROJECT.github.repository% y %PROJECT.github.repoOwner% se utilizan para insertar las identidades de los scopes dentro de la consulta y hacerla genérica para todos los diferentes equipos.</p>
+    <h4>Tipo de etapas: objectGetSubObject y objectGetSubObjects</h4>
+    <p>Estas etapas esperan un solo objeto y devuelven un objeto o un array de objetos. Hacen lo mismo, pero ambos tipos son correctos para una mejor lectura del DSL.</p>
+    <textarea class="textareasmall" readonly>
+    {
+      "type": "objectGetSubObjects",
+      "location": "data.repository.projects.nodes.0.columns.nodes"
+    }
+  </textarea>
+    <p>{{ 'POPUP_METRICS.obtiene_el_los_objeto_s' | translate }}</p>
+    <h4>{{ 'POPUP_METRICS.tipo_de_etapas_objectsFilterObject' | translate }}</h4>
+    <p>{{ 'POPUP_METRICS.estas_etapas_esperan_un_array' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.se_requiere_un_array' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.si_el_filtro_es_objectsFilterObject' | translate }}</p>
+    <textarea readonly>
+    {
+      "type": "objectsFilterObject",
+      "filters": [
+        "name == 'Doing'"
+      ],
+      "keep": "first"
+    }
+  </textarea>
+    <p>{{ 'POPUP_METRICS.si_el_filtro_es_objectsFilterObjects' | translate }}</p>
+    <textarea readonly>
+    {
+      "type": "objectsFilterObjects",
+      "filters": [
+        "content.assignees.nodes.*any*.login == '%MEMBER.github.username%'"
+      ]
+    }
+  </textarea>
+    <p>{{ 'POPUP_METRICS.aqui_se_puede_incluir' | translate }}</p>
+    <h4>{{ 'POPUP_METRICS.tipo_de_etapas_runScript' | translate }}</h4>
+    <p>{{ 'POPUP_METRICS.esta_etapas_espera_cualquier_cosa' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.a_la_fecha_puede_recibir' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.script_es_una_funcion' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.variables_este_es_el_objeto' | translate }}</p>
+    <p>{{ 'POPUP_METRICS.este_es_un_ejemplo' | translate }}</p>
+    <textarea readonly>
+    module.exports.generic = function generic(inputData, variables) {
+      function transitionAndDateFilter(timelineItem) {
+        return timelineItem.projectColumnName &&
+          timelineItem.projectColumnName === variables.actualProjectColumnName &&
+          timelineItem.previousProjectColumnName === variables.previousProjectColumnName &&
+          new Date(timelineItem.createdAt) > new Date(variables.from) &&
+          new Date(timelineItem.createdAt) < new Date(variables.to);
+      }
+      function hasTimelineItems(issue) {
+        return issue.timelineItems.length !== 0;
+      }
+      return inputData.map(issue => {
+        return { ...issue, timelineItems: issue.timelineItems.nodes.filter(transitionAndDateFilter) }
+      }).filter(hasTimelineItems);
+    }
+  </textarea>
+    <p>{{ 'POPUP_METRICS.toma_datos_de_la_API' | translate }}</p>
+    <textarea readonly>
+    {
+      "type": "runScript",
+      "variables": {
+        "previousProjectColumnName": "In progress",
+        "actualProjectColumnName": "In review"
+      },
+      "script": "module.exports.generic = function filterIssuesByTimelineItems(inputData, variables) {\r\n    function transitionAndDateFilter(timelineItem) {\r\n        return timelineItem.projectColumnName &&\r\n            timelineItem.projectColumnName === variables.actualProjectColumnName &&\r\n            timelineItem.previousProjectColumnName === variables.previousProjectColumnName &&\r\n            new Date(timelineItem.createdAt) > new Date(variables.from) &&\r\n            new Date(timelineItem.createdAt) < new Date(variables.to);\r\n    }\r\n    function hasTimelineItems(issue) {\r\n        return issue.timelineItems.length !== 0;\r\n    }\r\n    return inputData.map(issue => {\r\n        return { ...issue, timelineItems: issue.timelineItems.nodes.filter(transitionAndDateFilter) }\r\n    }).filter(hasTimelineItems);\r\n}"
+    }
+  </textarea>
+    <p>{{ 'POPUP_METRICS.como_se_puede_ver_2' | translate }}</p>
+  </form>
+</div>

@@ -3,8 +3,8 @@ p {
 }
 .responsive-img1 {
   width: 50%;
-  max-width: 25%; /* Reducir el ancho máximo */
-  max-height: 15%; /* Reducir la altura máxima */
+  max-width: 25%;
+  max-height: 15%;
   height: auto;
 
 }

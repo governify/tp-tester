@@ -4,6 +4,8 @@ import {Location} from "@angular/common";
 import {FilesService} from "../../../services/files.service";
 import {BluejayService} from "../../../services/bluejay.service";
 import {GlassmatrixService} from "../../../services/glass-matrix.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ScriptInfoComponent} from "../../../components/dialogs/script-info/script-info.component";
 
 @Component({
   selector: 'app-executor',
@@ -44,7 +46,8 @@ export class ExecutorComponent implements OnInit {
     private bluejayService: BluejayService,
     private glassmatrixService: GlassmatrixService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    public dialog: MatDialog
   ) { }
   isLoading = false;
 
@@ -77,7 +80,23 @@ export class ExecutorComponent implements OnInit {
       }
     });
   }
+  openGuideDialog(event: Event): void {
+    event.preventDefault();
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
+    const dialogRef = this.dialog.open(ScriptInfoComponent, {
+      width: '90%',
+      height: '90%',
+      panelClass: 'mat-dialog-container',
+      autoFocus: false
+    });
+    dialogRef.afterOpened().subscribe(() => {
+      window.scrollTo({ top: scrollPosition });
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Guía añadida: ${result}`);
+    });
+  }
   postContent(): void {
     this.isLoading = true;
     const dataCopy = JSON.parse(this.data);

@@ -15,7 +15,7 @@ button:enabled {
   margin: 5px;
 }
 #volver:enabled {
-  background-color: inherit; /* Cambia esto al color que prefieras */
+  background-color: inherit;
   color:dodgerblue;
 }
 button:disabled {
@@ -75,8 +75,8 @@ textarea::-webkit-scrollbar-thumb:hover {
   text-align: center;
 }
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -88,7 +88,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   100% { transform: rotate(360deg); }
 }
 .mat-spinner circle, .mat-progress-spinner circle {
-  stroke: #000; /* Cambia esto al color que prefieras */
+  stroke: #000;
 }
 
 .btn-right {
@@ -121,8 +121,12 @@ textarea::-webkit-scrollbar-thumb:hover {
   display: inline-block;
 }
 .btn-yellow {
-  background-color: #b49800 !important; /* Cambia este valor al color exacto que desees */
+  background-color: #b49800 !important;
 }
+.btn-blue {
+  background-color: #3e64dc !important;
+}
+
 .success {
   background-color: #25af25;
   margin-top: 8px;
@@ -145,9 +149,9 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 .row {
-  display: flex; /* Añade esta línea */
-  justify-content: flex-end; /* Añade esta línea */
-  align-items: center; /* Añade esta línea */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 
   margin-right: 20px;margin-bottom: 10px!important;
 }
