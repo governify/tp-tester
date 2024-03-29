@@ -1,0 +1,21 @@
+.mat-dialog-container {
+  position: fixed;
+  top: 7%;
+  left: 10%;
+  width: 85%;
+  height: 85%;
+  background-color: white;
+  border: 5px solid #3650a2;
+  overflow-y: hidden;
+}
+.close-button {
+  position: relative;
+}
+.header-row {
+  position: sticky;
+  top: -23px;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  z-index: 1000;
+}
