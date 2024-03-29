@@ -48,13 +48,12 @@
   top: -23px;
   display: flex;
   justify-content: space-between;
-  background-color: white; /* Asegúrate de que el fondo no sea transparente */
-  z-index: 1000; /* Asegúrate de que la fila esté por encima de los otros elementos */
+  background-color: white;
+  z-index: 1000;
 }
 
 .close-button {
   position: relative;
-
 }
 li {
   padding-left: 30px
