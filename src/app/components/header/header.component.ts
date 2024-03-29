@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
+import {MatDialog} from "@angular/material/dialog";
+import {BluejayUiComponent} from "../dialogs/bluejay-ui/bluejay-ui.component";
+
 
 @Component({
   selector: 'app-header',
@@ -7,12 +10,21 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  isElectron: boolean;
 
-  constructor(private translate: TranslateService) {}
+  constructor(private translate: TranslateService, public dialog: MatDialog) {
+    // @ts-ignore
+    this.isElectron = window && window.process && window.process.type;
+  }
   changeLanguage(lang: string) {
     this.translate.use(lang);
   }
   ngOnInit(): void {
   }
-
+  openWebDialog() {
+    this.dialog.open(BluejayUiComponent, {
+      height: '80%',
+      width: '80%',
+    });
+  }
 }

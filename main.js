@@ -19,7 +19,18 @@ function createMainWindow() {
   mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
 
   mainWindow.setMenu(null);
+  mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    event.preventDefault();
+    const popup = new BrowserWindow(options);
+    event.newGuest = popup;
 
+    popup.webContents.on('login', (event, request, authInfo, callback) => {
+      event.preventDefault();
+      callback('bluejay', 'bluejay');
+    });
+
+    popup.loadURL(url);
+  });
   // Consola abierta
   //mainWindow.webContents.openDevTools();
 
