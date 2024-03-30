@@ -42,6 +42,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { BluejayUiComponent } from './components/dialogs/bluejay-ui/bluejay-ui.component';
 import { ConfigComponent } from './pages/config/config.component';
 import { TokenComponent } from './components/token/token.component';
+import { GithubhelpComponent } from './components/dialogs/githubhelp/githubhelp.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   // Use a relative path to the assets directory
@@ -81,6 +82,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BluejayUiComponent,
     ConfigComponent,
     TokenComponent,
+    GithubhelpComponent,
   ],
   imports: [
     BrowserModule,

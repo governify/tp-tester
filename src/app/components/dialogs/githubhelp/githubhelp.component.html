@@ -1,0 +1,13 @@
+<div class="mat-dialog-container">
+  <div class="header-row">
+    <button class="btn btn-danger close-button" (click)="close()">{{ 'POPUP_METRICS.CLOSE' | translate }}</button>
+  </div>
+  <h3>{{ 'HOME.GITHUB.TOKEN_CREATION' | translate }}</h3>
+  <p>
+    <ng-container *ngFor="let step of 'HOME.GITHUB.TOKEN_CREATION_STEPS' | translate; index as i">
+      {{i + 1}}. {{ step }}<br>
+    </ng-container>
+    <img class="responsive-img2" src="https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp" alt="Tokens de acceso personal">
+  </p>
+  <p>{{ 'HOME.GITHUB.MORE_INFO' | translate }} <a href="https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">la documentación oficial de GitHub</a>.</p>
+</div>
