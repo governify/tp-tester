@@ -45,6 +45,33 @@ app.use((err, req, res, next) => {
 });
 /**
  * @swagger
+ * /glassmatrix/api/v1/documentation:
+ *  get:
+ *    description: Use to get the documentation PDF
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.get(apiName + '/documentation', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'documentation.pdf');
+  res.sendFile(filePath);
+});
+
+/**
+ * @swagger
+ * /glassmatrix/api/v1/pdf:
+ *  get:
+ *    description: Use to get the documentation PDF
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.get(apiName + '/pdf', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'documentation.pdf');
+  res.sendFile(filePath);
+});
+/**
+ * @swagger
  * tags:
  *   - name: Bluejay
  *     description: Endpoints for the Bluejay section
