@@ -23,9 +23,6 @@ export class CloneComponent implements OnInit {
   token!: string;
   error = false;
   error2 = false;
-  showToken = false;
-  showEdit = false;
-  newToken!: string;
   repoOwner!: string;
   constructor(private githubService: GithubService, private glassmatrixService: GlassmatrixService, private router: Router, private location: Location) { }
 
@@ -43,15 +40,6 @@ export class CloneComponent implements OnInit {
     );
   }
 
-  saveToken(): void {
-    this.glassmatrixService.saveToken(this.newToken).subscribe(
-      () => {
-        this.token = this.newToken;
-        this.newToken = '';
-      },
-      () => this.token = 'Failed to save token'
-    );
-  }
 
   getRepos(): void {
     this.githubService.listRepos(this.token).subscribe(
@@ -102,17 +90,6 @@ export class CloneComponent implements OnInit {
   }
   goBack(): void {
     this.location.back();
-  }
-  updateToken(): void {
-    this.glassmatrixService.deleteToken().subscribe(
-      () => {
-        this.saveToken();
-        this.showEdit = false;
-        this.showToken = false;
-        location.reload();
-      },
-      () => this.token = 'Failed to update token'
-    );
   }
 
   editRepo(repoName: string): void {

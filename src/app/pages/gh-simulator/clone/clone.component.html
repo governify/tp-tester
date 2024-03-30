@@ -1,25 +1,7 @@
 <div class="row">
   <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
-<div class="token-section">
-  <div>
-    <p *ngIf="token !== 'Token not found'">{{ 'GH_SIMULATOR.CLONE_PAGE.TOKEN_FOUND' | translate }}</p>
-    <button *ngIf="token !== 'Token not found' && !showToken" (click)="showToken = true">{{ 'GH_SIMULATOR.CLONE_PAGE.VIEW_TOKEN' | translate }}</button>
-    <div *ngIf="showToken">
-      <p>{{ 'GH_SIMULATOR.CLONE_PAGE.TOKEN' | translate:{token: token} }}</p>
-      <button (click)="showEdit = true">{{ 'GH_SIMULATOR.CLONE_PAGE.EDIT_TOKEN' | translate }}</button>
-    </div>
-    <div *ngIf="showEdit">
-      <input [(ngModel)]="newToken" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.ENTER_NEW_TOKEN' | translate }}">
-      <button (click)="updateToken()">{{ 'GH_SIMULATOR.CLONE_PAGE.UPDATE_TOKEN' | translate }}</button>
-    </div>
-    <div *ngIf="token === 'Token not found'">
-      <input [(ngModel)]="newToken" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.ENTER_NEW_TOKEN' | translate }}">
-      <button (click)="saveToken()">{{ 'GH_SIMULATOR.CLONE_PAGE.SAVE_TOKEN' | translate }}</button>
-    </div>
-  </div>
-</div>
-
+<app-token></app-token>
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
@@ -33,7 +15,6 @@
         {{ errorMessage }}
       </div>
       <table class="table table-striped">
-
         <thead>
         <tr>
           <th>{{ 'GH_SIMULATOR.CLONE_PAGE.REPO_NAME' | translate }}</th>
