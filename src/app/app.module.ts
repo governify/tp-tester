@@ -40,6 +40,7 @@ import { RepositorytesterComponent } from './pages/home/repositorytester/reposit
 import { ScriptInfoComponent } from './components/dialogs/script-info/script-info.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { BluejayUiComponent } from './components/dialogs/bluejay-ui/bluejay-ui.component';
+import { ConfigComponent } from './pages/config/config.component';
 export function HttpLoaderFactory(http: HttpClient) {
   // Use a relative path to the assets directory
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -76,6 +77,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RepositorytesterComponent,
     ScriptInfoComponent,
     BluejayUiComponent,
+    ConfigComponent,
 
   ],
   imports: [
