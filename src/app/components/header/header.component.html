@@ -1,9 +1,9 @@
 <header>
-  <a class="home-button" *ngIf="isElectron" href="http://localhost:5100/">
-    <i class="fa fa-home"></i>
-  </a>
   <button class="home-button" *ngIf="!isElectron" (click)="openWebDialog()">
     <i class="fa fa-home"></i>
+  </button>
+  <button class="config-button" routerLink="/config">
+    <i class="fa fa-cog"></i>
   </button>
   <div class="language-buttons">
     <button (click)="changeLanguage('en')">

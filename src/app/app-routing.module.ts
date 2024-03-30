@@ -17,6 +17,7 @@ import {LocalComponent} from "./pages/gh-simulator/local/local.component";
 import {PullRequestComponent} from "./pages/gh-simulator/local/pull-request/pull-request.component";
 import {BranchesComponent} from "./pages/gh-simulator/local/branches/branches.component";
 import {ActionsComponent} from "./pages/gh-simulator/local/actions/actions.component";
+import {ConfigComponent} from "./pages/config/config.component";
 const routes: Routes = [
   {
     path: '',
@@ -85,6 +86,10 @@ const routes: Routes = [
   {
     path: 'gh-simulator/repository/:owner/:repoName',
     component: RepositoryComponent
+  },
+  {
+    path: 'config',
+    component: ConfigComponent
   }
 ];
 

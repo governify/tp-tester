@@ -11,6 +11,8 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const Docker = require('dockerode');
+const docker = new Docker();
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -78,6 +80,18 @@ app.get(apiName + '/pdf', (req, res) => {
  *   - name: Github
  *     description: Endpoints for the Github section
  */
+app.get('/api/containers', (req, res) => {
+  docker.listContainers({all: false}, (err, containers) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      const containerData = containers.map(containerInfo => docker.getContainer(containerInfo.Id).inspect());
+      Promise.all(containerData)
+        .then(data => res.send(data))
+        .catch(err => res.status(500).send(err));
+    }
+  });
+});
 /**
  * @swagger
  * /glassmatrix/api/v1/tpa/save:

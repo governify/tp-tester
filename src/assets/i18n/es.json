@@ -96,7 +96,7 @@
       },
       "TOKEN_CREATION": "Crear un token de acceso personal",
       "TOKEN_CREATION_STEPS": [
-        "En la esquina superior derecha de cualquier página, haz clic en la foto de tu perfil, luego haz clic en Configuración.",
+        "En la esquina superior derecha de cualquier página de github, haz clic en la foto de tu perfil, luego haz clic en Configuración.",
         "En la barra lateral izquierda, haz clic en Configuración del desarrollador.",
         "En la barra lateral izquierda, haz clic en Tokens de acceso personal.",
         "Haz clic en Generar nuevo token.",
