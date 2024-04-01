@@ -3,6 +3,8 @@ import { Location } from '@angular/common';
 import { GlassmatrixService } from '../../services/glass-matrix.service';
 import {FilesService} from "../../services/files.service";
 import {BluejayService} from "../../services/bluejay.service";
+import {ScriptInfoComponent} from "../../components/dialogs/script-info/script-info.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-metrics-loader',
@@ -27,7 +29,8 @@ export class MetricsLoaderComponent implements OnInit {
     private glassmatrixService: GlassmatrixService,
     private location: Location,
     private filesService: FilesService,
-    private bluejayService: BluejayService
+    private bluejayService: BluejayService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -156,5 +159,21 @@ export class MetricsLoaderComponent implements OnInit {
     );
   }
 
+  openGuideDialog(event: Event): void {
+    event.preventDefault();
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
+    const dialogRef = this.dialog.open(ScriptInfoComponent, {
+      width: '90%',
+      height: '90%',
+      panelClass: 'mat-dialog-container',
+      autoFocus: false
+    });
+    dialogRef.afterOpened().subscribe(() => {
+      window.scrollTo({ top: scrollPosition });
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Guía añadida: ${result}`);
+    });
+  }
 }
