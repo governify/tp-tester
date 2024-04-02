@@ -43,6 +43,6 @@ Thumbs.db
 
 # Json Guardados
 /src/assets/savedMetrics/*.json
-
+/src/assets/token/*.json
 /assets/repositories/*
 assets/repositories/
