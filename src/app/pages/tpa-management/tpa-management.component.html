@@ -23,6 +23,9 @@
             {{ tpa.context.definitions.scopes.development.class.default }}
           </td>
           <td class="text-center">
+            <button class="btn btn-info" (click)="copyTpaContent(tpa)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
             <button class="btn btn-primary" [routerLink]="['/tpa-management/view', tpa.id]">
               <i class="fa-solid fa-eye"></i>
             </button>
