@@ -27,7 +27,8 @@ export class TestsComponent implements OnInit {
   executeYaml(): void {
     this.http.post<YamlData>('http://localhost:6012/api/convertYaml', { yaml: this.yamlContent }).subscribe(data => {
       for (const step of data.steps) {
-        const url = `http://localhost:6012/${step.uses}`;
+        const repoName = step.with['repoName'];
+        const url = `http://localhost:6012/${step.uses}/${repoName}`;
         const body = step.with;
         const method = step.method;
         if (method === 'GET') {
