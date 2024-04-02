@@ -23,7 +23,9 @@ export class TpaManagementComponent implements OnInit {
       this.tps = data;
     });
   }
-
+  copyTpaContent(tpa: any) {
+    this.tpaContent = JSON.stringify(tpa, null, 2);
+  }
   createTpa() {
     this.bluejayService.createTpa(this.tpaContent).subscribe(
       () => {
