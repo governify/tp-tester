@@ -12,7 +12,9 @@ const swaggerUi = require('swagger-ui-express');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const Docker = require('dockerode');
+const axios = require('axios');
 const docker = new Docker();
+const yaml = require('js-yaml');
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -908,6 +910,29 @@ app.post(apiName + '/github/push/:repoName', async (req, res) => {
     console.error('Error executing git command:', err);
     res.status(500).send('Error executing git command: ' + err.message);
   }
+});
+
+app.post('/api/convertYaml', async (req, res) => {
+  const data = yaml.load(req.body.yaml);
+  for (const step of data.steps) {
+    const url = `http://localhost:6012/${step.uses}`;
+    const body = step.with;
+    const method = step.method;
+    try {
+      let response;
+      if (method === 'GET') {
+        response = await axios.get(url, { params: body });
+      } else if (method === 'POST') {
+        response = await axios.post(url, body);
+      }
+      // Aquí puedes manejar la respuesta como necesites
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      // Aquí puedes manejar el error como necesites
+    }
+  }
+  res.json(data);
 });
 app.get('/api', (req, res) => {
   res.redirect('/api-docs');

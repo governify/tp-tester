@@ -45,6 +45,7 @@ import { TokenComponent } from './components/token/token.component';
 import { GithubhelpComponent } from './components/dialogs/githubhelp/githubhelp.component';
 import { TpaViewerComponent } from './pages/metrics-loader/tpa-viewer/tpa-viewer.component';
 import { TpaExecutorComponent } from './pages/metrics-loader/tpa-executor/tpa-executor.component';
+import { TestsComponent } from './pages/tests/tests.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -86,6 +87,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     GithubhelpComponent,
     TpaViewerComponent,
     TpaExecutorComponent,
+    TestsComponent,
   ],
   imports: [
     BrowserModule,
