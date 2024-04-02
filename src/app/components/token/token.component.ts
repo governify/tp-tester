@@ -32,7 +32,7 @@ export class TokenComponent implements OnInit {
       () => {
         this.token = this.newToken;
         this.newToken = '';
-        window.location.reload();  // Recarga la página
+        window.location.reload();
       },
       () => this.token = 'Failed to save token'
     );

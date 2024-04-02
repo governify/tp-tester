@@ -47,7 +47,6 @@ import { TpaViewerComponent } from './pages/metrics-loader/tpa-viewer/tpa-viewer
 import { TpaExecutorComponent } from './pages/metrics-loader/tpa-executor/tpa-executor.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  // Use a relative path to the assets directory
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 @NgModule({

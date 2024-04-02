@@ -279,7 +279,7 @@
       "PR_NUMBER": "Pull Request Number:",
       "COMMIT_MESSAGE": "Commit Message:",
       "MERGE_PR_BUTTON": "Merge Pull Request",
-      "PR_NUMBER": "Number: {{prNumber}}",
+      "PR_NUMBER": "Number:",
       "PR_STATE": "State: {{prState}}",
       "PR_CREATED_AT": "Created at: {{prCreatedAt}}",
       "PR_UPDATED_AT": "Updated at: {{prUpdatedAt}}"

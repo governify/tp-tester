@@ -156,7 +156,6 @@ export class SectionsComponent implements OnInit {
     let parts = this.tpaId.split('-');
     let restOfParts = parts.slice(1);
     let restOfString = restOfParts.join('-');
-// Accede al segundo elemento del array (índice 1)
     let className = parts[1];
     // Crear un nuevo objeto JSON con la plantilla proporcionada
     const newMetricContent = {
@@ -193,7 +192,7 @@ export class SectionsComponent implements OnInit {
     this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, newMetricContentString).subscribe(() => {
       console.log('Metric exported successfully');
       this.router.navigate(['/metrics-loader']).then(() => {
-        window.scrollTo(0, 0); // Desplaza la ventana hasta la parte superior de la página
+        window.scrollTo(0, 0);
       });
     }, error => {
       console.error('Error exporting metric:', error);
