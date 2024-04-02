@@ -41,6 +41,12 @@
               <button class="btn btn-danger small-button" (click)="deleteMetric(metric.key)">
                 <i class="fas fa-trash small-icon"></i>
               </button>
+              <button class="btn btn-success small-button" (click)="saveChanges()">
+                <i class="fas fa-check-square small-icon"></i>
+              </button>
+              <button class="btn btn-info small-button" (click)="exportMetric(metric.key)">
+                <i class="fas fa-download small-icon"></i>
+              </button>
             </h5>
             <textarea class="form-control" [(ngModel)]="metricsJson[getKeyAsString(metric.key)]" name="metric{{i}}"></textarea>
           </div>

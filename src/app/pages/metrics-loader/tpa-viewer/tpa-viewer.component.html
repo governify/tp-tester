@@ -1,0 +1,15 @@
+<body>
+<div class="row">
+  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+</div>
+<div class="row" id="context">
+  <div>{{ 'METRICS_LOADER.VIEWER.VIEWING' | translate:{fileName: fileName} }}</div>
+</div>
+<div class="row">
+  <p [ngClass]="messageClass">{{ message }}</p>
+  <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
+  <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">
+</div>
+
+
+<textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data" readonly></textarea></body>

@@ -12,19 +12,38 @@ export class GlassmatrixService {
   saveToJson(fileName: string, data: any): Observable<any> {
     return this.http.post(`${this.url}/tpa/save`, { fileName: fileName, content: data });
   }
-
+  saveTPAMetricToJson(fileName: string, folderName: string, data: any): Observable<any> {
+    return this.http.post(`${this.url}/tpa/saveTPAMetric`, { fileName: fileName, folderName: folderName, content: data });
+  }
   deleteFile(fileName: string): Observable<any> {
     return this.http.delete(`${this.url}/tpa/files/${fileName}`);
   }
-
-  loadFiles(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.url}/tpa/files`);
+  deleteTPAFile(subdirectory: string, fileName: string): Observable<any> {
+    return this.http.delete(`${this.url}/tpa/files/tpaFile/${subdirectory}/${fileName}`);
   }
-
+  loadTPAFiles(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/tpa/TPAfiles`);
+  }
+  loadIndividualFiles(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/tpa/indifivualFiles`);
+  }
   updateFile(fileName: string, data: any): Observable<any> {
     return this.http.post(`${this.url}/tpa/update`, { fileName: fileName, content: data });
   }
+  updateTPAFile(folderName: string, fileName: string, data: any): Observable<any> {
+    return this.http.post(`${this.url}/tpa/updateTPAMetric`, { folderName: folderName, fileName: fileName, content: data });
+  }
+  loadFolders(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/tpa/loadFolders`);
+  }
 
+  loadSubdirectoryFiles(subdirectory: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/tpa/loadFolders/${subdirectory}`);
+  }
+
+  loadFileContent(subdirectory: string, file: string): Observable<any> {
+    return this.http.get<any>(`${this.url}/tpa/loadFolders/${subdirectory}/${file}`);
+  }
   //TOKENS DE GITHUB
   getToken(): Observable<{ token: string }> {
     return this.http.get<{ token: string }>(`${this.url}/github/token/get`);

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Location } from '@angular/common';
 import { BluejayService } from '../../../../services/bluejay.service';
 import {FilesService} from "../../../../services/files.service";
+import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 
 @Component({
   selector: 'app-sections',
@@ -26,7 +27,10 @@ export class SectionsComponent implements OnInit {
     private bluejayService: BluejayService,
     private route: ActivatedRoute,
     private location: Location,
-    private filesService: FilesService) { }
+    private filesService: FilesService,
+    private glassmatrixService: GlassmatrixService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -134,5 +138,25 @@ export class SectionsComponent implements OnInit {
       this.newGuaranteeName = exampleGuarantee.id;
       this.newGuaranteeContent = JSON.stringify(exampleGuarantee, null, 2);
     });
+  }
+
+  exportMetric(metricKey: unknown): void {
+    if (typeof metricKey !== 'string') {
+      console.error('Error: metricKey is not a string');
+      return;
+    }
+    const metricContent = this.metricsJson[metricKey];
+
+    this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, metricContent).subscribe(() => {
+      console.log('Metric exported successfully');
+      this.router.navigate(['/metrics-loader']).then(() => {
+        window.scrollTo(0, 0); // Desplaza la ventana hasta la parte superior de la página
+      });
+    }, error => {
+      console.error('Error exporting metric:', error);
+    });
+  }
+  updateMetricContent(metricKey: string, newContent: string): void {
+    this.metricsJson[metricKey] = newContent;
   }
 }

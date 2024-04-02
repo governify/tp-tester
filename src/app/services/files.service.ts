@@ -18,7 +18,7 @@ export class FilesService {
   }
 
   getSavedMetric(fileName: string): Observable<any> {
-    return this.http.get(`assets/savedMetrics/${fileName}`);
+    return this.http.get(`assets/savedMetrics/individualMetrics/${fileName}`);
   }
 
   getExampleMetric(): Observable<any> {
@@ -28,4 +28,6 @@ export class FilesService {
   getExampleGuarantee(): Observable<any> {
     return this.http.get('assets/examples/exampleGuarantee.json');
   }
+
+  
 }

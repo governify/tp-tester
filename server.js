@@ -115,8 +115,28 @@ app.get('/api/containers', (req, res) => {
  */
 app.post(apiName + '/tpa/save', (req, res) => {
   const data = req.body;
-  const filePath = path.join(__dirname, '/src/assets/savedMetrics', `${data.fileName}.json`);
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}.json`);
   fs.writeFile(filePath, JSON.stringify(data.content, null, 2), (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while saving the file.' });
+    } else {
+      res.json({ message: 'File saved successfully.' });
+    }
+  });
+});
+
+app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
+  const data = req.body;
+  const dirPath = path.join(__dirname, `/src/assets/savedMetrics/tpaMetrics/${data.folderName}`);
+  const filePath = path.join(dirPath, `${data.fileName}.json`);
+
+  // Crear la carpeta si no existe
+  if (!fs.existsSync(dirPath)){
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+
+  fs.writeFile(filePath, data.content, (err) => {
     if (err) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while saving the file.' });
@@ -148,7 +168,30 @@ app.post(apiName + '/tpa/save', (req, res) => {
  */
 app.post(apiName + '/tpa/update', (req, res) => {
   const data = req.body;
-  const filePath = path.join(__dirname, '/src/assets/savedMetrics', `${data.fileName}`);
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}`);
+
+  // Verifica si el archivo ya existe
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      // Si el archivo existe, lo borra
+      fs.unlinkSync(filePath);
+    }
+
+    // Crea el nuevo archivo
+    fs.writeFile(filePath, JSON.stringify(data.content, null, 2), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while saving the file.' });
+      } else {
+        res.json({ message: 'File updated successfully.' });
+      }
+    });
+  });
+});
+
+app.post(apiName + '/tpa/updateTPAMetric', (req, res) => {
+  const data = req.body;
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', data.folderName, `${data.fileName}`);
 
   // Verifica si el archivo ya existe
   fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -179,8 +222,8 @@ app.post(apiName + '/tpa/update', (req, res) => {
  *        description: A successful response
  */
 // Método GET para obtener todos los archivos .json en la carpeta de assets
-app.get(apiName + '/tpa/files', (req, res) => {
-  const dirPath = path.join(__dirname, '/src/assets/savedMetrics');
+app.get(apiName + '/tpa/indifivualFiles', (req, res) => {
+  const dirPath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics');
   fs.readdir(dirPath, (err, files) => {
     if (err) {
       console.error(err);
@@ -188,6 +231,69 @@ app.get(apiName + '/tpa/files', (req, res) => {
     } else {
       const jsonFiles = files.filter(file => path.extname(file) === '.json');
       res.json(jsonFiles);
+    }
+  });
+});
+/*
+app.get(apiName + '/tpa/TPAfiles', (req, res) => {
+  const dirPath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics');
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the directory.' });
+    } else {
+      const jsonFiles = files.filter(file => path.extname(file) === '.json');
+      res.json(jsonFiles);
+    }
+  });
+});
+sustituido por loadFolders
+*/
+app.get(apiName + '/tpa/loadFolders', (req, res) => {
+  const dirPath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics');
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the directory.' });
+    } else {
+      const directories = files.filter(file => {
+        const filePath = path.join(dirPath, file);
+        return fs.statSync(filePath).isDirectory();
+      });
+      res.json(directories);
+    }
+  });
+});
+
+app.get(apiName + '/tpa/loadFolders/:subdirectory', (req, res) => {
+  const subdirectory = req.params.subdirectory;
+  const dirPath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory);
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the directory.' });
+    } else {
+      res.json(files);
+    }
+  });
+});
+
+app.get(apiName + '/tpa/loadFolders/:subdirectory/:file', (req, res) => {
+  const subdirectory = req.params.subdirectory;
+  const file = req.params.file;
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory, file);
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the file.' });
+    } else {
+      try {
+        const jsonData = JSON.parse(data);
+        res.json(jsonData);
+      } catch (e) {
+        res.status(500).json({ message: 'An error occurred while parsing the JSON file.' });
+      }
     }
   });
 });
@@ -209,7 +315,7 @@ app.get(apiName + '/tpa/files', (req, res) => {
  */
 // Método GET para obtener el contenido de un archivo .json específico
 app.get(apiName + '/tpa/files/:fileName', (req, res) => {
-  const filePath = path.join(__dirname, '/src/assets/savedMetrics', `${req.params.fileName}.json`);
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${req.params.fileName}.json`);
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
@@ -240,7 +346,26 @@ app.use((req, res, next) => {
  *        description: A successful response
  */
 app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
-  const filePath = path.join(__dirname, '/src/assets/savedMetrics', `${req.params.fileName}`);
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${req.params.fileName}`);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File does not exist:', err);
+      res.status(404).json({ message: 'File does not exist.' });
+    } else {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('An error occurred while deleting the file:', err);
+          res.status(500).json({ message: 'An error occurred while deleting the file.' });
+        } else {
+          res.json({ message: 'File deleted successfully.' });
+        }
+      });
+    }
+  });
+});
+
+app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', req.params.subdirectory, `${req.params.fileName}`);
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
       console.error('File does not exist:', err);
