@@ -52,11 +52,11 @@ export class MetricsLoaderComponent implements OnInit {
     this.glassmatrixService.deleteFile(fileName).subscribe(
       () => {
         this.loadIndividualFiles();
-        this.message = { text: 'File deleted successfully', style: 'success' }; // Usar 'style' en lugar de 'type'
+        this.message = { text: 'File deleted successfully', style: 'success' };
       },
       (error) => {
         console.error('An error occurred:', error);
-        this.message = { text: 'An error occurred while deleting the file', style: 'error' }; // Usar 'style' en lugar de 'type'
+        this.message = { text: 'An error occurred while deleting the file', style: 'error' };
       }
     );
   }
@@ -64,12 +64,12 @@ export class MetricsLoaderComponent implements OnInit {
   deleteTPAFile(folder: string, fileName: string): void {
     this.glassmatrixService.deleteTPAFile(folder, fileName).subscribe(
       () => {
-        this.message = { text: 'File deleted successfully', style: 'success' }; // Usar 'style' en lugar de 'type'
+        this.message = { text: 'File deleted successfully', style: 'success' };
         location.reload();
       },
       (error) => {
         console.error('An error occurred:', error);
-        this.message = { text: 'An error occurred while deleting the file', style: 'error' }; // Usar 'style' en lugar de 'type'
+        this.message = { text: 'An error occurred while deleting the file', style: 'error' };
       }
     );
   }
@@ -88,7 +88,7 @@ export class MetricsLoaderComponent implements OnInit {
       },
       (error) => {
         console.error('An error occurred:', error);
-        this.message = { text: 'An error occurred while loading the files', style: 'error' }; // Asignar un objeto a this.message
+        this.message = { text: 'An error occurred while loading the files', style: 'error' };
       }
     );
   }

@@ -1,25 +1,21 @@
 <body>
 <div *ngIf="repoInfo" class="repo-info">
-  <h2 class="repo-name">{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.REPO_NAME' | translate:{repoName: repoInfo.name} }}</h2>
-  <p class="repo-description">{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.REPO_DESCRIPTION' | translate:{repoDescription: repoInfo.description} }}</p>
+  <h2 class="repo-name">{{ repoInfo.name }}</h2>
+  <p class="repo-description">{{ repoInfo.description }}</p>
 
-  <h3 class="branches-title">{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.BRANCHES_TITLE' | translate }}</h3>
+  <!-- Add more fields here -->
+  <p class="repo-owner">Owner: {{ repoInfo.owner.login }}</p>
+  <p class="repo-created-at">Created at: {{ repoInfo.created_at }}</p>
+  <p class="repo-updated-at">Updated at: {{ repoInfo.updated_at }}</p>
+  <p class="repo-language">Language: {{ repoInfo.language }}</p>
+  <p class="repo-language">Visibility: {{ repoInfo.visibility }}</p>
+
+  <h3 class="branches-title">Branches</h3>
   <ul class="branches-list">
     <li *ngFor="let branch of branches" class="branch-item">{{ branch.name }}</li>
   </ul>
 
-  <form [formGroup]="newBranchForm" (ngSubmit)="createBranch()" class="form-new-branch">
-    <input formControlName="branchName" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.NEW_BRANCH_NAME' | translate }}" class="input-branch-name">
-    <button type="submit" class="btn-submit">{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.CREATE_BRANCH' | translate }}</button>
-  </form>
-  <button type="submit" class="btn-submit" (click)="cloneRepo()">{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.CLONE_REPOSITORY' | translate }}</button>
-  <form [formGroup]="newFileForm" (ngSubmit)="createFileAndCommit()" class="form-new-file">
-    <input formControlName="fileName" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.NEW_FILE_NAME' | translate }}" class="input-file-name">
-    <textarea formControlName="fileContent" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.FILE_CONTENT' | translate }}" class="textarea-file-content"></textarea>
-    <select formControlName="branch" class="select-branch">
-      <option *ngFor="let branch of branches" [value]="branch.name">{{ branch.name }}</option>
-    </select>
-    <button type="submit" class="btn-submit">{{ 'GH_SIMULATOR.CLONE_PAGE.REPOSITORY.CREATE_FILE_COMMIT' | translate }}</button>
-  </form>
+  <button type="submit" class="btn-submit" (click)="cloneRepo()">Clone Repository</button>
+
 </div>
 </body>

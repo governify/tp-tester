@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { GithubService } from "../../../../services/github.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { from } from 'rxjs';
 import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 @Component({
   selector: 'app-repository',
@@ -17,7 +16,12 @@ export class RepositoryComponent implements OnInit {
   newBranchForm: FormGroup;
   newFileForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private githubService: GithubService, private glassmatrixService: GlassmatrixService, private formBuilder: FormBuilder) {
+  constructor(
+    private route: ActivatedRoute,
+    private githubService: GithubService,
+    private glassmatrixService: GlassmatrixService,
+    private formBuilder: FormBuilder,
+    private router: Router) {
     this.newBranchForm = this.formBuilder.group({
       branchName: ''
     });
@@ -50,53 +54,16 @@ export class RepositoryComponent implements OnInit {
     }
   }
 
-  createBranch(): void {
-    const branchName = this.newBranchForm.get('branchName')?.value;
-
-    if (this.owner && this.repoName && branchName) {
-      const owner = this.owner as string;
-      const repoName = this.repoName as string;
-
-      from(this.githubService.getLatestCommitSha(owner, repoName)).subscribe(sha => {
-        from(this.githubService.createBranch(owner, repoName, branchName, sha)).subscribe(
-          () => {
-            this.branches.push(branchName);
-            this.newBranchForm.reset();
-            this.githubService.listBranchesForRepo(owner, repoName).subscribe(
-              branches => {
-                this.branches = branches;
-              }
-            );
-          }
-        );
-      });
-    }
-  }
   cloneRepo(): void {
     if (this.owner && this.repoName) {
       this.glassmatrixService.cloneRepo(this.owner, this.repoName)
         .subscribe(
-          () => console.log('Repository cloned successfully'),
+          () => {
+            console.log('Repository cloned successfully');
+            this.router.navigate(['/gh-simulator/local']);
+          },
           error => console.error('Error cloning repository', error)
         );
-    }
-  }
-  createFileAndCommit(): void {
-    const fileName = this.newFileForm.get('fileName')?.value;
-    const fileContent = this.newFileForm.get('fileContent')?.value;
-    const branch = this.newFileForm.get('branch')?.value;
-
-    if (this.owner && this.repoName && fileName && fileContent && branch) {
-      const owner = this.owner as string;
-      const repoName = this.repoName as string;
-      const path = `path/to/${fileName}`;
-      const message = 'Commit message';
-
-      this.githubService.createFile(owner, repoName, path, message, btoa(fileContent), branch).then(
-        () => {
-          this.newFileForm.reset();
-        }
-      );
     }
   }
 }

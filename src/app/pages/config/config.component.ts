@@ -61,7 +61,7 @@ export class ConfigComponent implements OnInit {
       top: `${scrollTop}px`,
       left: `${scrollLeft}px`
     };
-    dialogConfig.autoFocus = false;  // Evita que Angular Material mueva el enfoque al primer elemento enfocable dentro del diálogo
+    dialogConfig.autoFocus = false;
 
     this.dialog.open(GithubhelpComponent, dialogConfig);
   }
