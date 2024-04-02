@@ -12,7 +12,8 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrls: ['./metrics-loader.component.css']
 })
 export class MetricsLoaderComponent implements OnInit {
-  files: string[] = [];
+  TPAfiles: string[] = [];
+  individualFiles: string[] = [];
   message: { text: string; style: string; } | null = null;
   data!: string;
   response: string | null = null;
@@ -24,6 +25,8 @@ export class MetricsLoaderComponent implements OnInit {
   message3 = '';
   messageClass = '';
   isLoading = false;
+  folders: string[] = [];
+  filesByFolder: { [key: string]: string[] } = {};
 
   constructor(
     private glassmatrixService: GlassmatrixService,
@@ -34,7 +37,8 @@ export class MetricsLoaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadFiles();
+    this.loadIndividualFiles();
+    this.loadFolders();
     this.filesService.getBasicMetric().subscribe(data => {
       this.data = JSON.stringify(data, null, 2); // Convierte el objeto a una cadena JSON
     });
@@ -47,8 +51,8 @@ export class MetricsLoaderComponent implements OnInit {
   deleteFile(fileName: string): void {
     this.glassmatrixService.deleteFile(fileName).subscribe(
       () => {
+        this.loadIndividualFiles();
         this.message = { text: 'File deleted successfully', style: 'success' }; // Usar 'style' en lugar de 'type'
-        this.loadFiles();
       },
       (error) => {
         console.error('An error occurred:', error);
@@ -57,10 +61,30 @@ export class MetricsLoaderComponent implements OnInit {
     );
   }
 
-  private loadFiles(): void {
-    this.glassmatrixService.loadFiles().subscribe(
+  deleteTPAFile(folder: string, fileName: string): void {
+    this.glassmatrixService.deleteTPAFile(folder, fileName).subscribe(
+      () => {
+        this.message = { text: 'File deleted successfully', style: 'success' }; // Usar 'style' en lugar de 'type'
+        location.reload();
+      },
+      (error) => {
+        console.error('An error occurred:', error);
+        this.message = { text: 'An error occurred while deleting the file', style: 'error' }; // Usar 'style' en lugar de 'type'
+      }
+    );
+  }
+  allFoldersEmpty(): boolean {
+    for (let folder of this.folders) {
+      if (this.loadSubdirectoryFiles(folder).length > 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+  private loadIndividualFiles(): void {
+    this.glassmatrixService.loadIndividualFiles().subscribe(
       (files) => {
-        this.files = files;
+        this.individualFiles = files;
       },
       (error) => {
         console.error('An error occurred:', error);
@@ -145,12 +169,12 @@ export class MetricsLoaderComponent implements OnInit {
       this.messageClass = 'error';
       return;
     }
-
     const data = JSON.parse(this.data);
     this.glassmatrixService.saveToJson(this.fileName, data).subscribe(
       () => {
         this.message2 = 'File saved successfully';
         this.messageClass = 'success';
+        this.loadIndividualFiles();
       },
       (error) => {
         this.message2 = 'An error occurred: ' + error;
@@ -175,5 +199,32 @@ export class MetricsLoaderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Guía añadida: ${result}`);
     });
+  }
+
+  private loadFolders(): void {
+    this.glassmatrixService.loadFolders().subscribe(
+      (folders) => {
+        this.folders = folders;
+      },
+      (error) => {
+        console.error('An error occurred:', error);
+        this.message = { text: 'An error occurred while loading the folders', style: 'error' };
+      }
+    );
+  }
+
+  loadSubdirectoryFiles(subdirectory: string): string[] {
+    if (!this.filesByFolder[subdirectory]) {
+      this.glassmatrixService.loadSubdirectoryFiles(subdirectory).subscribe(
+        (files) => {
+          this.filesByFolder[subdirectory] = files;
+        },
+        (error) => {
+          console.error('An error occurred:', error);
+          this.message = { text: 'An error occurred while loading the files', style: 'error' };
+        }
+      );
+    }
+    return this.filesByFolder[subdirectory] || [];
   }
 }

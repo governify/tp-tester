@@ -4,9 +4,54 @@
   <button class="btn btn-outline-primary btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
 <h3 id="titulo" >{{ 'METRICS_LOADER.TITULO1' | translate }}</h3>
+<hr>
 <div class="row">
   <p *ngIf="message" [ngClass]="message.style">{{ 'METRICS_LOADER.MESSAGE_TEXT' | translate:{messageText: message.text} }}</p>
 </div>
+<h4> Métricas de TPA </h4>
+<div class="container">
+  <div class="row justify-content-center">
+    <div *ngIf="allFoldersEmpty()">
+      <p>No se ha guardado ninguna métrica de un tpa</p>
+    </div>
+    <div *ngFor="let folder of folders">
+      <ng-container *ngIf="loadSubdirectoryFiles(folder).length > 0">
+        <h4> {{ folder }} </h4>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>{{ 'METRICS_LOADER.FILE_NAME' | translate }}</th>
+            <th class="text-center">{{ 'METRICS_LOADER.VIEW_FILE' | translate }}</th>
+            <th class="text-center">{{ 'METRICS_LOADER.EXECUTE_EDIT_FILE' | translate }}</th>
+            <th class="text-center">{{ 'METRICS_LOADER.DELETE_FILE' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let file of loadSubdirectoryFiles(folder)">
+            <td>{{ file }}</td>
+            <td class="text-center">
+              <a [routerLink]="['/metrics-loader/tpa/viewer', folder, file]" class="btn btn-primary">
+                <i class="fa-regular fa-file"></i>
+              </a>
+            </td>
+            <td class="text-center">
+              <a [routerLink]="['/metrics-loader/tpa/executor', folder, file]" class="btn btn-warning">
+                <i class="fa-solid fa-pen"></i>
+              </a>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-danger" (click)="deleteTPAFile(folder, file)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<h4> Métricas individuales </h4>
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
@@ -20,7 +65,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let file of files">
+        <tr *ngFor="let file of individualFiles">
           <td>{{ file }}</td>
           <td class="text-center">
             <a [routerLink]="['/metrics-loader/viewer', file]" class="btn btn-primary">

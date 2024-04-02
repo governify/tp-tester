@@ -18,6 +18,8 @@ import {PullRequestComponent} from "./pages/gh-simulator/local/pull-request/pull
 import {BranchesComponent} from "./pages/gh-simulator/local/branches/branches.component";
 import {ActionsComponent} from "./pages/gh-simulator/local/actions/actions.component";
 import {ConfigComponent} from "./pages/config/config.component";
+import {TpaExecutorComponent} from "./pages/metrics-loader/tpa-executor/tpa-executor.component";
+import {TpaViewerComponent} from "./pages/metrics-loader/tpa-viewer/tpa-viewer.component";
 const routes: Routes = [
   {
     path: '',
@@ -58,6 +60,14 @@ const routes: Routes = [
   {
     path: 'metrics-loader/viewer/:fileName',
     component: ViewerComponent
+  },
+  {
+    path: 'metrics-loader/tpa/executor/:tpa/:fileName',
+    component: TpaExecutorComponent
+  },
+  {
+    path: 'metrics-loader/tpa/viewer/:tpa/:fileName',
+    component: TpaViewerComponent
   },
   {
     path: 'gh-simulator',

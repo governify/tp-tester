@@ -43,6 +43,8 @@ import { BluejayUiComponent } from './components/dialogs/bluejay-ui/bluejay-ui.c
 import { ConfigComponent } from './pages/config/config.component';
 import { TokenComponent } from './components/token/token.component';
 import { GithubhelpComponent } from './components/dialogs/githubhelp/githubhelp.component';
+import { TpaViewerComponent } from './pages/metrics-loader/tpa-viewer/tpa-viewer.component';
+import { TpaExecutorComponent } from './pages/metrics-loader/tpa-executor/tpa-executor.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   // Use a relative path to the assets directory
@@ -83,6 +85,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfigComponent,
     TokenComponent,
     GithubhelpComponent,
+    TpaViewerComponent,
+    TpaExecutorComponent,
   ],
   imports: [
     BrowserModule,
