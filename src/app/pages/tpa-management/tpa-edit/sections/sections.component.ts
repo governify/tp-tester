@@ -147,7 +147,50 @@ export class SectionsComponent implements OnInit {
     }
     const metricContent = this.metricsJson[metricKey];
 
-    this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, metricContent).subscribe(() => {
+    // Parsear el contenido del textarea a un objeto JSON
+    const parsedMetricContent = JSON.parse(metricContent);
+
+    // Extraer el contenido de githubGQL
+    const githubGQL = parsedMetricContent.measure.event.githubGQL;
+
+    let parts = this.tpaId.split('-');
+    let restOfParts = parts.slice(1);
+    let restOfString = restOfParts.join('-');
+// Accede al segundo elemento del array (índice 1)
+    let className = parts[1];
+    // Crear un nuevo objeto JSON con la plantilla proporcionada
+    const newMetricContent = {
+      "config": {
+        "scopeManager": "http://host.docker.internal:5700/api/v1/scopes/development"
+      },
+      "metric": {
+        "computing": "actual",
+        "element": "number",
+        "event": {
+
+          githubGQL
+
+        },
+        "scope": {
+          "project": `${restOfString}`,
+          "class": `${className}`,
+          "member": "*"
+        },
+        "window": {
+          "type": "static",
+          "period": "hourly",
+          "initial": "2024-04-01T00:00:00.000Z",
+          "from": "2024-04-01T00:00:00.000Z",
+          "end": "2024-04-01T23:59:59.999Z",
+          "timeZone": "America/Los_Angeles"
+        }
+      }
+    }
+
+    // Convertir el nuevo objeto JSON a una cadena JSON
+    const newMetricContentString = JSON.stringify(newMetricContent, null, 2);
+
+    this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, newMetricContentString).subscribe(() => {
       console.log('Metric exported successfully');
       this.router.navigate(['/metrics-loader']).then(() => {
         window.scrollTo(0, 0); // Desplaza la ventana hasta la parte superior de la página

@@ -46,3 +46,4 @@ Thumbs.db
 /src/assets/token/*.json
 /assets/repositories/*
 assets/repositories/
+/src/assets/savedMetrics/tpaMetrics/*
