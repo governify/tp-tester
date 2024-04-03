@@ -1,0 +1,50 @@
+table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.textarea-container {
+  display: flex;
+  align-items: center;
+}
+
+.save-container {
+  margin-left: 10px;
+}
+
+input, textarea {
+  margin-bottom: 10px;
+}
+body {
+  padding: 20px 0;
+  border-radius: 15px;
+  margin: 0 20px;
+  padding-bottom: 100px!important;
+}
+table.file-list {
+  width: 100%;
+}
+
+table.file-list th, table.file-list td {
+  width: 25%;
+  text-align: center;
+}
+
+table.file-list td button.icon {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+textarea {
+  flex-grow: 1;
+  width: 100%;
+  height: 600px;
+  resize: none;
+}

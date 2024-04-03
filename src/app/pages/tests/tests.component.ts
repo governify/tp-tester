@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import {Component, OnInit} from "@angular/core";
+import {GlassmatrixService} from "../../services/glass-matrix.service";
 interface Step {
   method: string;
   uses: string;
@@ -18,12 +19,34 @@ interface YamlData {
 })
 export class TestsComponent implements OnInit {
   yamlContent!: string;
+  yamlFiles: string[] = [];
+  fileName!: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private glassmatrixService: GlassmatrixService
+) { }
 
   ngOnInit(): void {
+    this.loadYamlFiles();
+  }
+  loadYamlFiles() {
+    this.glassmatrixService.getAllYAMLFiles().subscribe(files => {
+      this.yamlFiles = files;
+    });
   }
 
+  saveYaml() {
+    this.glassmatrixService.saveYAMLFile(this.fileName, this.yamlContent).subscribe(() => {
+      this.loadYamlFiles();
+    });
+  }
+
+  deleteYamlFile(fileName: string) {
+    this.glassmatrixService.deleteYAMLFile(fileName).subscribe(() => {
+      this.loadYamlFiles();
+    });
+  }
   executeYaml(): void {
     this.http.post<YamlData>('http://localhost:6012/api/convertYaml', { yaml: this.yamlContent }).subscribe(data => {
       for (const step of data.steps) {

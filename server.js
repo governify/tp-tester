@@ -128,6 +128,77 @@ app.post(apiName + '/tpa/save', (req, res) => {
   });
 });
 
+
+app.post(apiName + '/tests/saveYAMLFile', (req, res) => {
+  const data = req.body;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${data.fileName}.yaml`);
+  fs.writeFile(filePath, data.content, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while saving the file.' });
+    } else {
+      res.json({ message: 'File saved successfully.' });
+    }
+  });
+});
+
+app.get(apiName + '/tests/getAllYAMLFiles', (req, res) => {
+  const dirPath = path.join(__dirname, '/src/assets/savedYAML');
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the directory.' });
+    } else {
+      const yamlFiles = files.filter(file => path.extname(file) === '.yaml');
+      res.json(yamlFiles);
+    }
+  });
+});
+
+app.get(apiName + '/tests/loadYAMLFile/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}.yaml`);
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the file.' });
+    } else {
+      try {
+        const yamlData = yaml.load(data);
+        res.json(yamlData);
+      } catch (e) {
+        res.status(500).json({ message: 'An error occurred while parsing the YAML file.' });
+      }
+    }
+  });
+});
+
+app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const newContent = req.body.content;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}.yaml`);
+  fs.writeFile(filePath, newContent, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while updating the file.' });
+    } else {
+      res.json({ message: 'File updated successfully.' });
+    }
+  });
+});
+app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}.yaml`);
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while deleting the file.' });
+    } else {
+      res.json({ message: 'File deleted successfully.' });
+    }
+  });
+});
+
 app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
   const data = req.body;
   const dirPath = path.join(__dirname, `/src/assets/savedMetrics/tpaMetrics/${data.folderName}`);

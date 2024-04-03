@@ -1,2 +1,43 @@
-<textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
+<body>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <table class="table table-striped">
+        <tr>
+          <th>{{ 'METRICS_LOADER.FILE_NAME' | translate }}</th>
+          <th class="text-center">{{ 'METRICS_LOADER.VIEW_FILE' | translate }}</th>
+          <th class="text-center">{{ 'METRICS_LOADER.EXECUTE_EDIT_FILE' | translate }}</th>
+          <th class="text-center">{{ 'METRICS_LOADER.DELETE_FILE' | translate }}</th>
+        </tr>
+        <tr *ngFor="let file of yamlFiles">
+          <td>{{file}}</td>
+          <td class="text-center">
+            <a [routerLink]="['/tester/yamlView/', file]" class="btn btn-primary">
+              <i class="fa-regular fa-file"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a [routerLink]="['/tester/yamlEdit', file]" class="btn btn-warning">
+              <i class="fa-solid fa-pen"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-danger" (click)="deleteYamlFile(file)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="textarea-container">
+  <textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
+  <div class="save-container">
+    <input [(ngModel)]="fileName" placeholder="Nombre del archivo" />
+    <button (click)="saveYaml()">Guardar</button>
+  </div>
+</div>
+
 <button (click)="executeYaml()">Ejecutar YAML</button>
+</body>
