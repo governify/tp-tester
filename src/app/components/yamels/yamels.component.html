@@ -1,0 +1,44 @@
+<section>
+  <h4> Ramas del repositorio</h4>
+  <div class="example-container">
+  <textarea id="example1" class="example-textarea">
+  - uses: "glassmatrix/api/v1/github/branches"
+    with:
+      repoName: "tp-testbench"
+    method: "GET"
+  </textarea>
+    <button class="copy-button" (click)="copyContent('example1')">
+      <i class="fa-solid fa-copy"></i>
+    </button>
+  </div>
+</section>
+<section>
+  <h4> Crear rama </h4>
+  <div class="example-container">
+  <textarea id="example2" class="example-textarea">
+  - uses: "glassmatrix/api/v1/github/createBranch"
+    with:
+      repoName: "tp-testbench"
+      branchName: "nombreDeLaRama"
+    method: "POST"
+  </textarea>
+    <button class="copy-button" (click)="copyContent('example2')">
+      <i class="fa-solid fa-copy"></i>
+    </button>
+  </div>
+</section>
+<section>
+  <h4> Delete rama </h4>
+  <div class="example-container">
+  <textarea id="example3" class="example-textarea">
+  - uses: "glassmatrix/api/v1/github/deleteBranch"
+    with:
+      repoName: "tp-testbench"
+      branchName: "nombreDeLaRama"
+    method: "DELETE"
+  </textarea>
+    <button class="copy-button" (click)="copyContent('example3')">
+      <i class="fa-solid fa-copy"></i>
+    </button>
+  </div>
+</section>

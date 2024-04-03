@@ -48,6 +48,7 @@ import { TpaExecutorComponent } from './pages/metrics-loader/tpa-executor/tpa-ex
 import { TestsComponent } from './pages/tests/tests.component';
 import { YamlViewComponent } from './pages/tests/yaml-view/yaml-view.component';
 import { YamlEditComponent } from './pages/tests/yaml-edit/yaml-edit.component';
+import { YamelsComponent } from './components/yamels/yamels.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,6 +93,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TestsComponent,
     YamlViewComponent,
     YamlEditComponent,
+    YamelsComponent,
   ],
   imports: [
     BrowserModule,

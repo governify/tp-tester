@@ -157,7 +157,7 @@ app.get(apiName + '/tests/getAllYAMLFiles', (req, res) => {
 
 app.get(apiName + '/tests/loadYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
-  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}.yaml`);
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}`);
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
@@ -176,7 +176,7 @@ app.get(apiName + '/tests/loadYAMLFile/:fileName', (req, res) => {
 app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
   const newContent = req.body.content;
-  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}.yaml`);
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}`);
   fs.writeFile(filePath, newContent, (err) => {
     if (err) {
       console.error(err);
@@ -188,7 +188,7 @@ app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
 });
 app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
-  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}.yaml`);
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName} `);
   fs.unlink(filePath, (err) => {
     if (err) {
       console.error(err);
@@ -781,6 +781,9 @@ app.delete(apiName + '/github/deleteBranch/:repoName/:branchName', async (req, r
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
   try {
+    // Cambia a la rama 'main' antes de intentar eliminar la rama
+    await exec(`git checkout main`, { cwd: repoPath });
+
     const { stdout, stderr } = await exec(`git branch -d ${branchName}`, { cwd: repoPath });
     if (stderr) {
       console.error('Error deleting branch:', stderr);
@@ -995,6 +998,8 @@ app.post('/api/convertYaml', async (req, res) => {
         response = await axios.get(url, { params: body });
       } else if (method === 'POST') {
         response = await axios.post(url, body);
+      } else if (method === 'DELETE') {
+        response = await axios.delete(url, { params: body });
       }
       // Aquí puedes manejar la respuesta como necesites
       console.log(response.data);

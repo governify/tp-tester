@@ -1,8 +1,3 @@
-table {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
 th, td {
   padding: 10px;
   text-align: left;
@@ -14,37 +9,109 @@ th, td {
   align-items: center;
 }
 
-.save-container {
-  margin-left: 10px;
-}
-
 input, textarea {
   margin-bottom: 10px;
 }
+
 body {
   padding: 20px 0;
   border-radius: 15px;
   margin: 0 20px;
   padding-bottom: 100px!important;
 }
-table.file-list {
-  width: 100%;
-}
 
-table.file-list th, table.file-list td {
-  width: 25%;
-  text-align: center;
-}
 
-table.file-list td button.icon {
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-}
 textarea {
-  flex-grow: 1;
   width: 100%;
   height: 600px;
   resize: none;
+}
+
+
+.textarea-container textarea {
+  flex-grow: 1;
+  margin-bottom: 10px;
+}
+
+.save-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+table.table-striped td a.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+table.table-striped td a.btn-warning {
+  background-color: #ffc107;
+  color: white;
+}
+
+table.table-striped td button.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+table.table-striped td button.btn-info {
+  background-color: #17a2b8;
+  color: white;
+}
+table.table-striped th, table.table-striped td {
+  width: 20%;
+}
+table.table-striped td a.btn, table.table-striped td button.btn {
+  width: 40px;
+}
+table.table-striped td a.btn {
+  border: none;
+  cursor: pointer;
+}
+table.table-striped tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table.table-striped tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+#ejecucion{
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+button.save-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 2px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+button.format {
+  background-color: #3e64dc;
+  border: none;
+  color: white;
+  padding: 2px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+button.execute-button {
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
