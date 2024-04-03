@@ -20,6 +20,9 @@ import {ActionsComponent} from "./pages/gh-simulator/local/actions/actions.compo
 import {ConfigComponent} from "./pages/config/config.component";
 import {TpaExecutorComponent} from "./pages/metrics-loader/tpa-executor/tpa-executor.component";
 import {TpaViewerComponent} from "./pages/metrics-loader/tpa-viewer/tpa-viewer.component";
+import {TestsComponent} from "./pages/tests/tests.component";
+import {YamlViewComponent} from "./pages/tests/yaml-view/yaml-view.component";
+import {YamlEditComponent} from "./pages/tests/yaml-edit/yaml-edit.component";
 const routes: Routes = [
   {
     path: '',
@@ -100,6 +103,18 @@ const routes: Routes = [
   {
     path: 'config',
     component: ConfigComponent
+  },
+  {
+    path: 'tester',
+    component: TestsComponent
+  },
+  {
+    path: 'tester/yamlView/:fileName',
+    component: YamlViewComponent
+  },
+  {
+    path: 'tester/yamlEdit/:fileName',
+    component: YamlEditComponent
   }
 ];
 

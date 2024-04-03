@@ -45,6 +45,10 @@ import { TokenComponent } from './components/token/token.component';
 import { GithubhelpComponent } from './components/dialogs/githubhelp/githubhelp.component';
 import { TpaViewerComponent } from './pages/metrics-loader/tpa-viewer/tpa-viewer.component';
 import { TpaExecutorComponent } from './pages/metrics-loader/tpa-executor/tpa-executor.component';
+import { TestsComponent } from './pages/tests/tests.component';
+import { YamlViewComponent } from './pages/tests/yaml-view/yaml-view.component';
+import { YamlEditComponent } from './pages/tests/yaml-edit/yaml-edit.component';
+import { YamelsComponent } from './components/yamels/yamels.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -86,6 +90,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     GithubhelpComponent,
     TpaViewerComponent,
     TpaExecutorComponent,
+    TestsComponent,
+    YamlViewComponent,
+    YamlEditComponent,
+    YamelsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,25 @@
+.example-container {
+  display: flex;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.example-textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical; /* Permite al usuario ajustar la altura del textarea */
+}
+
+.copy-button {
+  margin-left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.copy-button:hover {
+  background-color: #0056b3;
+}

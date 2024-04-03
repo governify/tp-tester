@@ -12,7 +12,9 @@ const swaggerUi = require('swagger-ui-express');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const Docker = require('dockerode');
+const axios = require('axios');
 const docker = new Docker();
+const yaml = require('js-yaml');
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -122,6 +124,77 @@ app.post(apiName + '/tpa/save', (req, res) => {
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
       res.json({ message: 'File saved successfully.' });
+    }
+  });
+});
+
+
+app.post(apiName + '/tests/saveYAMLFile', (req, res) => {
+  const data = req.body;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${data.fileName}.yaml`);
+  fs.writeFile(filePath, data.content, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while saving the file.' });
+    } else {
+      res.json({ message: 'File saved successfully.' });
+    }
+  });
+});
+
+app.get(apiName + '/tests/getAllYAMLFiles', (req, res) => {
+  const dirPath = path.join(__dirname, '/src/assets/savedYAML');
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the directory.' });
+    } else {
+      const yamlFiles = files.filter(file => path.extname(file) === '.yaml');
+      res.json(yamlFiles);
+    }
+  });
+});
+
+app.get(apiName + '/tests/loadYAMLFile/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}`);
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the file.' });
+    } else {
+      try {
+        const yamlData = yaml.load(data);
+        res.json(yamlData);
+      } catch (e) {
+        res.status(500).json({ message: 'An error occurred while parsing the YAML file.' });
+      }
+    }
+  });
+});
+
+app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const newContent = req.body.content;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}`);
+  fs.writeFile(filePath, newContent, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while updating the file.' });
+    } else {
+      res.json({ message: 'File updated successfully.' });
+    }
+  });
+});
+app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName} `);
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while deleting the file.' });
+    } else {
+      res.json({ message: 'File deleted successfully.' });
     }
   });
 });
@@ -708,6 +781,9 @@ app.delete(apiName + '/github/deleteBranch/:repoName/:branchName', async (req, r
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
   try {
+    // Cambia a la rama 'main' antes de intentar eliminar la rama
+    await exec(`git checkout main`, { cwd: repoPath });
+
     const { stdout, stderr } = await exec(`git branch -d ${branchName}`, { cwd: repoPath });
     if (stderr) {
       console.error('Error deleting branch:', stderr);
@@ -908,6 +984,31 @@ app.post(apiName + '/github/push/:repoName', async (req, res) => {
     console.error('Error executing git command:', err);
     res.status(500).send('Error executing git command: ' + err.message);
   }
+});
+
+app.post('/api/convertYaml', async (req, res) => {
+  const data = yaml.load(req.body.yaml);
+  for (const step of data.steps) {
+    const url = `http://localhost:6012/${step.uses}`;
+    const body = step.with;
+    const method = step.method;
+    try {
+      let response;
+      if (method === 'GET') {
+        response = await axios.get(url, { params: body });
+      } else if (method === 'POST') {
+        response = await axios.post(url, body);
+      } else if (method === 'DELETE') {
+        response = await axios.delete(url, { params: body });
+      }
+      // Aquí puedes manejar la respuesta como necesites
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      // Aquí puedes manejar el error como necesites
+    }
+  }
+  res.json(data);
 });
 app.get('/api', (req, res) => {
   res.redirect('/api-docs');

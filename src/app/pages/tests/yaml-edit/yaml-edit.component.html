@@ -1,0 +1,18 @@
+<body>
+<div class="row justify-content-end">
+  <button class="btn btn-outline-primary btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+</div>
+<h3> Estas viendo el archivo: {{fileName}}</h3>
+<div class="row">
+  <div class="col-8">
+    <button class="btn btn-outline-primary" (click)="updateYaml()">Actualizar archivo</button>
+    <div class="textarea1">
+      <textarea [(ngModel)]="yamlContent" class="yaml-content"></textarea>
+    </div>
+  </div>
+  <div class="col-4">
+    <h3> Ejemplos </h3>
+    <app-yamels></app-yamels>
+  </div>
+</div>
+</body>

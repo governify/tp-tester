@@ -1,0 +1,21 @@
+steps:
+  - uses: "glassmatrix/api/v1/github/branches"
+    with:
+      repoName: "tp-testbench"
+    method: "GET"
+  - uses: "glassmatrix/api/v1/github/createBranch"
+    with:
+      repoName: "tp-testbench"
+      branchName: "nombreDeLaRama_adios"
+    method: "POST"
+  - uses: "glassmatrix/api/v1/github/deleteBranch"
+    with:
+      repoName: "tp-testbench"
+      branchName: "nombreDeLaRama_adios"
+    method: "DELETE"
+  - uses: "glassmatrix/api/v1/github/branches"
+    with:
+      repoName: "tp-testbench"
+    method: "GET"
+  
+  

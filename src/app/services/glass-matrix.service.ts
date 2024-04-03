@@ -107,4 +107,25 @@ export class GlassmatrixService {
   createCommit(repoName: string, fileContent: string, commitMessage: string): Observable<any> {
     return this.http.post(`${this.url}/github/commit/${repoName}`, { fileContent, commitMessage });
   }
+
+  // ARCHIVOS YAML
+  saveYAMLFile(fileName: string, content: string): Observable<any> {
+    return this.http.post(`${this.url}/tests/saveYAMLFile`, { fileName, content });
+  }
+
+  getAllYAMLFiles(): Observable<any> {
+    return this.http.get(`${this.url}/tests/getAllYAMLFiles`);
+  }
+
+  loadYAMLFile(fileName: string): Observable<any> {
+    return this.http.get(`${this.url}/tests/loadYAMLFile/` + fileName);
+  }
+
+  updateYAMLFile(fileName: string, newContent: string): Observable<any> {
+    return this.http.put(`${this.url}/tests/updateYAMLFile/` + fileName, { content: newContent });
+  }
+
+  deleteYAMLFile(fileName: string): Observable<any> {
+    return this.http.delete(`${this.url}/tests/deleteYAMLFile/` + fileName);
+  }
 }
