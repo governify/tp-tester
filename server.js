@@ -51,6 +51,7 @@ app.use((err, req, res, next) => {
  * @swagger
  * /glassmatrix/api/v1/documentation:
  *  get:
+ *    tags: [documentation]
  *    description: Use to get the documentation PDF
  *    responses:
  *      '200':
@@ -65,6 +66,7 @@ app.get(apiName + '/documentation', (req, res) => {
  * @swagger
  * /glassmatrix/api/v1/pdf:
  *  get:
+ *    tags: [documentation]
  *    description: Use to get the documentation PDF
  *    responses:
  *      '200':
@@ -128,7 +130,16 @@ app.post(apiName + '/tpa/save', (req, res) => {
   });
 });
 
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tests/saveYAMLFile:
+ *  post:
+ *    tags: [tester]
+ *    description: Use to save a YAML file
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.post(apiName + '/tests/saveYAMLFile', (req, res) => {
   const data = req.body;
   const filePath = path.join(__dirname, '/src/assets/savedYAML', `${data.fileName}.yaml`);
@@ -141,7 +152,16 @@ app.post(apiName + '/tests/saveYAMLFile', (req, res) => {
     }
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tests/getAllYAMLFiles:
+ *  get:
+ *    tags: [tester]
+ *    description: Use to get all YAML files
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.get(apiName + '/tests/getAllYAMLFiles', (req, res) => {
   const dirPath = path.join(__dirname, '/src/assets/savedYAML');
   fs.readdir(dirPath, (err, files) => {
@@ -154,7 +174,22 @@ app.get(apiName + '/tests/getAllYAMLFiles', (req, res) => {
     }
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tests/loadYAMLFile/{fileName}:
+ *  get:
+ *    description: Use to load a specific YAML file
+ *    tags: [tester]
+ *    parameters:
+ *      - name: fileName
+ *        description: Name of the file to be loaded
+ *        in: path
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.get(apiName + '/tests/loadYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
   const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}`);
@@ -172,7 +207,30 @@ app.get(apiName + '/tests/loadYAMLFile/:fileName', (req, res) => {
     }
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tests/updateYAMLFile/{fileName}:
+ *  put:
+ *    tags: [tester]
+ *    description: Use to update a specific YAML file
+ *    parameters:
+ *      - name: fileName
+ *        description: Name of the file to be updated
+ *        in: path
+ *        required: true
+ *        type: string
+ *      - name: content
+ *        description: New content of the file
+ *        in: body
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '500':
+ *        description: An error occurred while updating the file
+ */
 app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
   const newContent = req.body.content;
@@ -186,6 +244,22 @@ app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
     }
   });
 });
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tests/deleteYAMLFile/{fileName}:
+ *  delete:
+ *    tags: [tester]
+ *    description: Use to delete a YAML file
+ *    parameters:
+ *      - name: fileName
+ *        description: Name of the file to be deleted
+ *        in: path
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
   const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName} `);
@@ -198,13 +272,21 @@ app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
     }
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/saveTPAMetric:
+ *  post:
+ *    tags: [Bluejay]
+ *    description: Use to save a TPA metric
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
   const data = req.body;
   const dirPath = path.join(__dirname, `/src/assets/savedMetrics/tpaMetrics/${data.folderName}`);
   const filePath = path.join(dirPath, `${data.fileName}.json`);
 
-  // Crear la carpeta si no existe
   if (!fs.existsSync(dirPath)){
     fs.mkdirSync(dirPath, { recursive: true });
   }
@@ -243,14 +325,10 @@ app.post(apiName + '/tpa/update', (req, res) => {
   const data = req.body;
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}`);
 
-  // Verifica si el archivo ya existe
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (!err) {
-      // Si el archivo existe, lo borra
       fs.unlinkSync(filePath);
     }
-
-    // Crea el nuevo archivo
     fs.writeFile(filePath, JSON.stringify(data.content, null, 2), (err) => {
       if (err) {
         console.error(err);
@@ -261,19 +339,24 @@ app.post(apiName + '/tpa/update', (req, res) => {
     });
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/updateTPAMetric:
+ *  post:
+ *    tags: [Bluejay]
+ *    description: Use to update a TPA metric
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.post(apiName + '/tpa/updateTPAMetric', (req, res) => {
   const data = req.body;
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', data.folderName, `${data.fileName}`);
 
-  // Verifica si el archivo ya existe
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (!err) {
-      // Si el archivo existe, lo borra
       fs.unlinkSync(filePath);
     }
-
-    // Crea el nuevo archivo
     fs.writeFile(filePath, JSON.stringify(data.content, null, 2), (err) => {
       if (err) {
         console.error(err);
@@ -307,21 +390,16 @@ app.get(apiName + '/tpa/indifivualFiles', (req, res) => {
     }
   });
 });
-/*
-app.get(apiName + '/tpa/TPAfiles', (req, res) => {
-  const dirPath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics');
-  fs.readdir(dirPath, (err, files) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred while reading the directory.' });
-    } else {
-      const jsonFiles = files.filter(file => path.extname(file) === '.json');
-      res.json(jsonFiles);
-    }
-  });
-});
-sustituido por loadFolders
-*/
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/loadFolders:
+ *  get:
+ *    tags: [Bluejay]
+ *    description: Use to load all folders
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.get(apiName + '/tpa/loadFolders', (req, res) => {
   const dirPath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics');
   fs.readdir(dirPath, (err, files) => {
@@ -337,7 +415,22 @@ app.get(apiName + '/tpa/loadFolders', (req, res) => {
     }
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/loadFolders/{subdirectory}:
+ *  get:
+ *    tags: [Bluejay]
+ *    description: Use to load a specific subdirectory
+ *    parameters:
+ *      - name: subdirectory
+ *        description: Name of the subdirectory to be loaded
+ *        in: path
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.get(apiName + '/tpa/loadFolders/:subdirectory', (req, res) => {
   const subdirectory = req.params.subdirectory;
   const dirPath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory);
@@ -350,6 +443,27 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory', (req, res) => {
     }
   });
 });
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/loadFolders/{subdirectory}/{file}:
+ *  get:
+ *    tags: [Bluejay]
+ *    description: Use to load a specific file in a specific subdirectory
+ *    parameters:
+ *      - name: subdirectory
+ *        description: Name of the subdirectory
+ *        in: path
+ *        required: true
+ *        type: string
+ *      - name: file
+ *        description: Name of the file to be loaded
+ *        in: path
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 
 app.get(apiName + '/tpa/loadFolders/:subdirectory/:file', (req, res) => {
   const subdirectory = req.params.subdirectory;
@@ -386,7 +500,6 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory/:file', (req, res) => {
  *      '200':
  *        description: A successful response
  */
-// Método GET para obtener el contenido de un archivo .json específico
 app.get(apiName + '/tpa/files/:fileName', (req, res) => {
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${req.params.fileName}.json`);
   fs.readFile(filePath, 'utf8', (err, data) => {
@@ -436,7 +549,27 @@ app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
     }
   });
 });
-
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/files/tpaFile/{subdirectory}/{fileName}:
+ *  delete:
+ *    tags: [Bluejay]
+ *    description: Use to delete a specific file in a specific subdirectory
+ *    parameters:
+ *      - name: subdirectory
+ *        description: Name of the subdirectory
+ *        in: path
+ *        required: true
+ *        type: string
+ *      - name: fileName
+ *        description: Name of the file to be deleted
+ *        in: path
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) => {
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', req.params.subdirectory, `${req.params.fileName}`);
   fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -475,14 +608,10 @@ app.post(apiName + '/github/token/save', (req, res) => {
   const token = req.body.token;
   const filePath = path.join(__dirname, '/src/assets/token', 'code.json');
 
-  // Verifica si el archivo ya existe
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (!err) {
-      // Si el archivo existe, lo borra
       fs.unlinkSync(filePath);
     }
-
-    // Crea el nuevo archivo con el token
     fs.writeFile(filePath, JSON.stringify({ token }, null, 2), (err) => {
       if (err) {
         console.error(err);
@@ -781,7 +910,6 @@ app.delete(apiName + '/github/deleteBranch/:repoName/:branchName', async (req, r
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
   try {
-    // Cambia a la rama 'main' antes de intentar eliminar la rama
     await exec(`git checkout main`, { cwd: repoPath });
 
     const { stdout, stderr } = await exec(`git branch -d ${branchName}`, { cwd: repoPath });
@@ -985,7 +1113,16 @@ app.post(apiName + '/github/push/:repoName', async (req, res) => {
     res.status(500).send('Error executing git command: ' + err.message);
   }
 });
-
+/**
+ * @swagger
+ * /api/convertYaml:
+ *  post:
+ *    tags: [tester]
+ *    description: Use to convert YAML to JSON
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.post('/api/convertYaml', async (req, res) => {
   const data = yaml.load(req.body.yaml);
   for (const step of data.steps) {
@@ -1001,11 +1138,9 @@ app.post('/api/convertYaml', async (req, res) => {
       } else if (method === 'DELETE') {
         response = await axios.delete(url, { params: body });
       }
-      // Aquí puedes manejar la respuesta como necesites
       console.log(response.data);
     } catch (error) {
       console.error(error);
-      // Aquí puedes manejar el error como necesites
     }
   }
   res.json(data);
