@@ -18,5 +18,13 @@ export class ScriptInfoComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  copyContent(id: string) {
+    const text = document.getElementById(id) as HTMLTextAreaElement;
+    navigator.clipboard.writeText(text.value).then(() => {
+      console.log('Copying to clipboard was successful!');
+      this.close();
+    }, err => {
+      console.error('Could not copy text: ', err);
+    });
+  }
 }

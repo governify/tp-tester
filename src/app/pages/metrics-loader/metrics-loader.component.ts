@@ -197,7 +197,6 @@ export class MetricsLoaderComponent implements OnInit {
       window.scrollTo({ top: scrollPosition });
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Guía añadida: ${result}`);
     });
   }
 

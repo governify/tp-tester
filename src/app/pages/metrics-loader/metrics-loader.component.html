@@ -3,21 +3,22 @@
 <div class="row justify-content-end">
   <button class="btn btn-outline-primary btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
-<h3 id="titulo" >{{ 'METRICS_LOADER.TITULO1' | translate }}</h3>
+<h3 id="titulo" class="page-title">{{ 'METRICS_LOADER.TITULO1' | translate }}</h3>
 <hr>
-<div class="row">
+<div class="row message-row">
   <p *ngIf="message" [ngClass]="message.style">{{ 'METRICS_LOADER.MESSAGE_TEXT' | translate:{messageText: message.text} }}</p>
 </div>
-<h4> Métricas de TPA </h4>
-<div class="container">
+<h4 class="metrics-title">{{ 'METRICS_LOADER.TPA_METRICS' | translate }} </h4>
+<hr>
+<div class="container metrics-container">
   <div class="row justify-content-center">
-    <div *ngIf="allFoldersEmpty()">
-      <p>No se ha guardado ninguna métrica de un tpa</p>
+    <div *ngIf="allFoldersEmpty()" class="empty-message">
+      <p>{{ 'METRICS_LOADER.NO_METRICS' | translate }}</p>
     </div>
-    <div *ngFor="let folder of folders">
+    <div *ngFor="let folder of folders" class="folder-container">
       <ng-container *ngIf="loadSubdirectoryFiles(folder).length > 0">
-        <h4> {{ folder }} </h4>
-        <table class="table table-striped">
+        <h4 class="folder-title"> {{ folder }} </h4>
+        <table class="table table-striped folder-table">
           <thead>
           <tr>
             <th>{{ 'METRICS_LOADER.FILE_NAME' | translate }}</th>
@@ -51,8 +52,9 @@
     </div>
   </div>
 </div>
-<h4> Métricas individuales </h4>
-<div class="container">
+<h4 class="metrics-title"> {{ 'METRICS_LOADER.INDIVIDUAL_METRICS' | translate }} </h4>
+<hr>
+<div class="container metrics-container">
   <div class="row justify-content-center">
     <div class="col-md-12">
       <table class="table table-striped">
@@ -90,7 +92,7 @@
 </div>
 <hr>
 <div class="createMetric">
-  <h3>{{ 'METRICS_LOADER.TITULO2' | translate }}</h3>
+  <h3 class="page-title">{{ 'METRICS_LOADER.TITULO2' | translate }}</h3>
   <p [ngClass]="messageClass">{{ message2 }}</p>
   <button class="btn btn-secondary btn-right" (click)="search()">{{ 'COMMON.SEARCH' | translate }}</button>
   <input type="text" [(ngModel)]="searchTerm" placeholder="{{ 'COMMON.SEARCH_PLACEHOLDER' | translate }}" class="search-bar" (keyup.enter)="search()">
