@@ -3,12 +3,19 @@
 </div>
 <body>
 
-<div class="container">
-  <div class="row justify-content-center">
-    <h2>{{ 'GH_SIMULATOR.BRANCHES_PAGE.REPO_NAME' | translate:{repoName: repoName} }}</h2>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">{{ 'GH_SIMULATOR.BRANCHES_PAGE.REPO_NAME' | translate:{repoName: repoName} }}</h2>
+  <div class="github-link text-center mb-4">
+    <a href="https://github.com/Antoniiosc7/tp-tester" target="_blank">
+      <p>{{ 'GH_SIMULATOR.ACTIONS_PAGE.VIEW_GITHUB' | translate }}</p>
+    </a>
   </div>
-  <div class="row justify-content-center">
-    <div class="col-md-12">
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.BRANCHES_PAGE.BRANCHES_REPOSITORY' | translate }}</h3>
+    </div>
+    <div class="card-body">
       <table class="table table-striped">
         <thead>
         <tr>
@@ -24,33 +31,50 @@
     </div>
   </div>
 
-  <div class="row justify-content-center">
-    <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="col-md-12 mb-3">
-      <div class="input-group">
-        <input type="text" formControlName="branchName" class="form-control" placeholder="{{ 'GH_SIMULATOR.BRANCHES_PAGE.NEW_BRANCH_NAME' | translate }}">
-        <div class="input-group-append">
-          <button type="submit" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.BRANCHES_PAGE.CREATE_BRANCH' | translate }}</button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.BRANCHES_PAGE.NEW_BRANCH_NAME' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="col-md-12 mb-3">
+        <div class="input-group">
+          <input type="text" formControlName="branchName" class="form-control" placeholder="{{ 'GH_SIMULATOR.BRANCHES_PAGE.NEW_BRANCH_NAME' | translate }}">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">{{ 'GH_SIMULATOR.BRANCHES_PAGE.CREATE_BRANCH' | translate }}</button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="input-group col-md-12 mb-3">
-      <select [(ngModel)]="selectedBranch" class="form-control">
-        <option *ngFor="let branch of branches">{{ branch }}</option>
-      </select>
-      <div class="input-group-append">
-        <button (click)="deleteBranch()" class="btn btn-outline-danger">{{ 'GH_SIMULATOR.BRANCHES_PAGE.DELETE_BRANCH' | translate }}</button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.BRANCHES_PAGE.DELETE_BRANCH' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <div class="input-group col-md-12 mb-3">
+        <select [(ngModel)]="selectedBranch" class="form-control">
+          <option *ngFor="let branch of branches">{{ branch }}</option>
+        </select>
+        <div class="input-group-append">
+          <button (click)="deleteBranch()" class="btn btn-danger">{{ 'GH_SIMULATOR.BRANCHES_PAGE.DELETE_BRANCH' | translate }}</button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="input-group col-md-12 mb-3">
-      <select [(ngModel)]="branchToChangeTo" class="form-control">
-        <option *ngFor="let branch of branches">{{ branch }}</option>
-      </select>
-      <div class="input-group-append">
-        <button (click)="changeBranch()" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.BRANCHES_PAGE.CHANGE_BRANCH' | translate }}</button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.BRANCHES_PAGE.CHANGE_BRANCH' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <div class="input-group col-md-12 mb-3">
+        <select [(ngModel)]="branchToChangeTo" class="form-control">
+          <option *ngFor="let branch of branches">{{ branch }}</option>
+        </select>
+        <div class="input-group-append">
+          <button (click)="changeBranch()" class="btn btn-primary">{{ 'GH_SIMULATOR.BRANCHES_PAGE.CHANGE_BRANCH' | translate }}</button>
+        </div>
       </div>
     </div>
   </div>

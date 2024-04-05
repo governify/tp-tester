@@ -110,7 +110,28 @@ export class GithubService {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/vnd.github+json'
     };
+    return this.http.get<any[]>(url, { headers });
+  }
+
+  // Método para obtener las issues de un repositorio
+  getIssues(token: string, owner: string, repo: string): Observable<any[]> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/issues`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
 
     return this.http.get<any[]>(url, { headers });
+  }
+
+// Método para crear una issue en un repositorio
+  createIssue(token: string, owner: string, repo: string, issue: {title: string, body: string}): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/issues`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+
+    return this.http.post(url, issue, { headers });
   }
 }

@@ -1,62 +1,110 @@
-<div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
-</div>
-<div class="container">
-  <div class="row justify-content-center">
-    <h2>{{ 'GH_SIMULATOR.ACTIONS_PAGE.REPO_ACTIONS' | translate:{repoName: repoName} }}</h2>
-  </div>
-  <div class="github-link">
+<div class="container mt-4">
+  <button class="btn btn-primary mb-4" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+
+  <h2 class="text-center mb-4">{{ 'GH_SIMULATOR.ACTIONS_PAGE.REPO_ACTIONS' | translate:{repoName: repoName} }}</h2>
+
+  <div class="github-link text-center mb-4">
     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" class="github-logo">
     <a href="https://github.com/Antoniiosc7/tp-tester" target="_blank">
       <p>{{ 'GH_SIMULATOR.ACTIONS_PAGE.VIEW_GITHUB' | translate }}</p>
     </a>
   </div>
-  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.AVAILABLE_BRANCHES' | translate }}</h3>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>{{ 'GH_SIMULATOR.ACTIONS_PAGE.BRANCH_NAME' | translate }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let branch of branches">
-      <td>{{ branch }}</td>
-    </tr>
-    </tbody>
-  </table>
 
-  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CURRENT_BRANCH' | translate:{currentBranch: currentBranch} }}</h3>
-  <div class="input-group col-md-12 mb-3">
-    <select [(ngModel)]="branchToChangeTo" class="form-control">
-      <option *ngFor="let branch of branches">{{ branch }}</option>
-    </select>
-    <div class="input-group-append">
-      <button (click)="changeBranch()" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CHANGE_BRANCH' | translate }}</button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.AVAILABLE_BRANCHES' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let branch of branches">{{ branch }}</li>
+      </ul>
     </div>
   </div>
-  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_NEW_FILE' | translate }}</h3>
-  <input [(ngModel)]="fileName" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.NEW_FILE_NAME' | translate }}">
-  <textarea [(ngModel)]="fileContent" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.NEW_FILE_CONTENT' | translate }}"></textarea>
-  <button (click)="createFile()">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_FILE' | translate }}</button>
 
-  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_NEW_COMMIT' | translate }}</h3>
-  <input [(ngModel)]="commitMessage" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.COMMIT_MESSAGE' | translate }}">
-  <button (click)="createCommit()">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_COMMIT' | translate }}</button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CURRENT_BRANCH' | translate:{currentBranch: currentBranch} }}</h3>
+    </div>
+    <div class="card-body">
+      <div class="input-group">
+        <select [(ngModel)]="branchToChangeTo" class="form-control">
+          <option *ngFor="let branch of branches">{{ branch }}</option>
+        </select>
+        <div class="input-group-append">
+          <button (click)="changeBranch()" class="btn btn-outline-secondary">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CHANGE_BRANCH' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.PUSH_CHANGES' | translate }}</h3>
-  <button (click)="pushChanges()">{{ 'GH_SIMULATOR.ACTIONS_PAGE.PUSH_CHANGES' | translate }}</button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_NEW_FILE' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <input [(ngModel)]="fileName" class="form-control mb-2" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.NEW_FILE_NAME' | translate }}">
+      <textarea [(ngModel)]="fileContent" class="form-control mb-2" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.NEW_FILE_CONTENT' | translate }}"></textarea>
+      <button (click)="createFile()" class="btn btn-primary">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_FILE' | translate }}</button>
+    </div>
+  </div>
 
-  <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.FILES_IN_REPO' | translate }}</h3>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>{{ 'GH_SIMULATOR.ACTIONS_PAGE.FILE_NAME' | translate }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let file of files">
-      <td>{{ file }}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_NEW_COMMIT' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <input [(ngModel)]="commitMessage" class="form-control mb-2" placeholder="{{ 'GH_SIMULATOR.ACTIONS_PAGE.COMMIT_MESSAGE' | translate }}">
+      <button (click)="createCommit()" class="btn btn-primary">{{ 'GH_SIMULATOR.ACTIONS_PAGE.CREATE_COMMIT' | translate }}</button>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.PUSH_CHANGES' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <button (click)="pushChanges()" class="btn btn-primary">{{ 'GH_SIMULATOR.ACTIONS_PAGE.PUSH_CHANGES' | translate }}</button>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.ACTIONS_PAGE.FILES_IN_REPO' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let file of files">{{ file }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3 translate>{{ 'GH_SIMULATOR.ISSUES' }}</h3>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let issue of issues">{{ issue.title }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3 translate>{{ 'GH_SIMULATOR.CREATE_ISSUE' }}</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="createIssue(issueTitle.value, issueBody.value)">
+        <div class="form-group">
+          <label translate>{{ 'GH_SIMULATOR.TITLE' }}</label>
+          <input #issueTitle type="text" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label translate>{{ 'GH_SIMULATOR.BODY' }}</label>
+          <textarea #issueBody class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" translate>{{ 'GH_SIMULATOR.CREATE_ISSUE_BUTTON' }}</button>
+      </form>
+    </div>
+  </div>
 </div>
