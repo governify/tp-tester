@@ -37,15 +37,7 @@ export class GithubService {
       )
     );
   }
-  async getLatestCommitSha(owner: string, repo: string): Promise<string> {
-    const { data } = await this.octokit.repos.listCommits({
-      owner,
-      repo,
-      per_page: 1
-    });
 
-    return data[0].sha;
-  }
   getRepoInfo(owner: string, repo: string): Observable<any> {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }

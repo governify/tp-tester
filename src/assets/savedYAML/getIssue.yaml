@@ -1,0 +1,6 @@
+steps:
+  - uses: "github/getIssue"
+    with:
+      repoName: "tp-testbench"
+      owner: "Antoniiosc7"
+    method: "GET"
