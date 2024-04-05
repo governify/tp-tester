@@ -1,58 +1,81 @@
 <div class="row">
   <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
-<body>
-<div class="container">
-  <h1>{{ 'GH_SIMULATOR.PR_PAGE.REPO_NAME' | translate:{repo: repo} }}</h1>
-  <h2>{{ 'GH_SIMULATOR.PR_PAGE.CREATE_PR' | translate }}</h2>
-  <div class="alert alert-warning" role="alert">
-    {{ 'GH_SIMULATOR.PR_PAGE.PR_INFO' | translate }}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">{{ 'GH_SIMULATOR.PR_PAGE.REPO_NAME' | translate:{repo: repo} }}</h2>
+  <div class="github-link text-center mb-4">
+    <a href="https://github.com/Antoniiosc7/tp-tester" target="_blank">
+      <p>{{ 'GH_SIMULATOR.ACTIONS_PAGE.VIEW_GITHUB' | translate }}</p>
+    </a>
   </div>
-  <div class="{{messageType}}" *ngIf="message">{{ message }}</div>
-  <div>
-    <label for="prTitle">{{ 'GH_SIMULATOR.PR_PAGE.TITLE' | translate }}</label>
-    <input type="text" id="prTitle" [(ngModel)]="prTitle">
-  </div>
-  <div>
-    <label for="prHead">{{ 'GH_SIMULATOR.PR_PAGE.HEAD' | translate }}</label>
-    <select id="prHead" [(ngModel)]="prHead">
-      <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
-    </select>
-  </div>
-  <div>
-    <label for="prBase">{{ 'GH_SIMULATOR.PR_PAGE.BASE' | translate }}</label>
-    <select id="prBase" [(ngModel)]="prBase">
-      <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
-    </select>
-  </div>
-  <div>
-    <label for="prBody">{{ 'GH_SIMULATOR.PR_PAGE.BODY' | translate }}</label>
-    <textarea id="prBody" [(ngModel)]="prBody"></textarea>
-  </div>
-  <button (click)="createPullRequest()">{{ 'GH_SIMULATOR.PR_PAGE.CREATE_PR_BUTTON' | translate }}</button>
-  <h2>{{ 'GH_SIMULATOR.PR_PAGE.OPEN_PR' | translate }}</h2>
-  <div class="{{messageType}}" *ngIf="message2">{{ message2 }}</div>
-  <div *ngIf="openPullRequests.length > 0; else noPullRequests">
-    <div *ngFor="let pr of openPullRequests">
-      <h3>{{ pr.title }}</h3>
-      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_NUMBER' | translate:{prNumber: pr.number} }}</p>
-      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_STATE' | translate:{prState: pr.state} }}</p>
-      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_CREATED_AT' | translate:{prCreatedAt: pr.created_at} }}</p>
-      <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_UPDATED_AT' | translate:{prUpdatedAt: pr.updated_at} }}</p>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.PR_PAGE.CREATE_PR' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="createPullRequest()">
+        <div class="form-group">
+          <label>{{ 'GH_SIMULATOR.PR_PAGE.TITLE' | translate }}</label>
+          <input type="text" id="prTitle" [(ngModel)]="prTitle" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>{{ 'GH_SIMULATOR.PR_PAGE.HEAD' | translate }}</label>
+          <select id="prHead" [(ngModel)]="prHead" class="form-control">
+            <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{{ 'GH_SIMULATOR.PR_PAGE.BASE' | translate }}</label>
+          <select id="prBase" [(ngModel)]="prBase" class="form-control">
+            <option *ngFor="let branch of branches" [value]="branch">{{branch}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{{ 'GH_SIMULATOR.PR_PAGE.BODY' | translate }}</label>
+          <textarea id="prBody" [(ngModel)]="prBody" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'GH_SIMULATOR.PR_PAGE.CREATE_PR_BUTTON' | translate }}</button>
+      </form>
     </div>
   </div>
-  <ng-template #noPullRequests>
-    <p>{{ 'GH_SIMULATOR.PR_PAGE.NO_PR' | translate }}</p>
-  </ng-template>
-  <h2>{{ 'GH_SIMULATOR.PR_PAGE.MERGE_PR' | translate }}</h2>
-  <div>
-    <label for="mergePrNumber">{{ 'GH_SIMULATOR.PR_PAGE.PR_NUMBER' | translate }}</label>
-    <input type="number" id="mergePrNumber" [(ngModel)]="mergePrNumber">
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.PR_PAGE.OPEN_PR' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="openPullRequests.length > 0; else noPullRequests">
+        <div *ngFor="let pr of openPullRequests">
+          <h3>{{ pr.title }}</h3>
+          <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_NUMBER' | translate:{prNumber: pr.number} }}</p>
+          <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_STATE' | translate:{prState: pr.state} }}</p>
+          <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_CREATED_AT' | translate:{prCreatedAt: pr.created_at} }}</p>
+          <p>{{ 'GH_SIMULATOR.PR_PAGE.PR_UPDATED_AT' | translate:{prUpdatedAt: pr.updated_at} }}</p>
+        </div>
+      </div>
+      <ng-template #noPullRequests>
+        <p>{{ 'GH_SIMULATOR.PR_PAGE.NO_PR' | translate }}</p>
+      </ng-template>
+    </div>
   </div>
-  <div>
-    <label for="mergeCommitMessage">{{ 'GH_SIMULATOR.PR_PAGE.COMMIT_MESSAGE' | translate }}</label>
-    <input type="text" id="mergeCommitMessage" [(ngModel)]="mergeCommitMessage">
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>{{ 'GH_SIMULATOR.PR_PAGE.MERGE_PR' | translate }}</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="mergePullRequest()">
+        <div class="form-group">
+          <label>{{ 'GH_SIMULATOR.PR_PAGE.PR_NUMBER' | translate }}</label>
+          <input type="number" id="mergePrNumber" [(ngModel)]="mergePrNumber" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>{{ 'GH_SIMULATOR.PR_PAGE.COMMIT_MESSAGE' | translate }}</label>
+          <input type="text" id="mergeCommitMessage" [(ngModel)]="mergeCommitMessage" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'GH_SIMULATOR.PR_PAGE.MERGE_PR_BUTTON' | translate }}</button>
+      </form>
+    </div>
   </div>
-  <button (click)="mergePullRequest()">{{ 'GH_SIMULATOR.PR_PAGE.MERGE_PR_BUTTON' | translate }}</button>
 </div>
-</body>

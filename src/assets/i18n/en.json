@@ -238,6 +238,11 @@
     "PR": "Pull Requests",
     "ACTIONS": "Actions",
     "DELETE": "Delete",
+    "ISSUES": "Issues",
+    "CREATE_ISSUE": "Create Issue",
+    "TITLE": "Title:",
+    "BODY": "Body:",
+    "CREATE_ISSUE_BUTTON": "Create Issue",
     "ACTIONS_PAGE": {
       "REPO_ACTIONS": "{{repoName}} | Actions",
       "VIEW_GITHUB": "View in GitHub",
