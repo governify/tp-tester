@@ -58,3 +58,24 @@
 li {
   padding-left: 30px
 }
+
+.textarea-wrapper {
+  position: relative;
+  margin-bottom: 20px; /* Ajusta este valor según tus necesidades */
+}
+
+.copy-button {
+  position: absolute;
+  top: 20px; /* Ajusta este valor según tus necesidades */
+  right: 20px; /* Ajusta este valor según tus necesidades */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.copy-button:hover {
+  background-color: #0056b3;
+}

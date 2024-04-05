@@ -199,6 +199,9 @@
     "VIEW_FILE": "Ver archivo",
     "EXECUTE_EDIT_FILE": "Ejecutar / Editar archivo",
     "DELETE_FILE": "Eliminar archivo",
+    "NO_METRICS": "No se ha guardado ninguna métrica de un tpa",
+    "TPA_METRICS": "Métricas de TPA",
+    "INDIVIDUAL_METRICS": "Métricas individuales",
     "VIEWER": {
       "VIEWING": "Estás viendo {{fileName}}."
     },

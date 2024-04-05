@@ -65,7 +65,6 @@ button, pre {
 
 textarea::-webkit-scrollbar {
   width: 10px;
-
 }
 
 textarea::-webkit-scrollbar-track {
@@ -131,7 +130,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   border-radius: 15px;
   color: white;
   text-align: center;
-
 }
 
 .error {
@@ -154,16 +152,11 @@ button.btn-danger:enabled {
   background-color: #c70a0a;
 }
 
-.createMetric, hr {
+.createMetric, hr, #titulo, h4 {
   margin-top: 30px;
   margin-left: 15%;
   margin-right: 15%;
 }
-
-#titulo, h4 {
-  margin-left: calc(15% + 10px);
-}
-
 
 #filename2 {
   height: 40px;
@@ -183,4 +176,46 @@ button.btn-danger:enabled {
   height: 40px;
   margin-bottom: 10px!important;
   background-color: #007BFF!important;
+}
+.page-title {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.message-row {
+  margin-bottom: 20px;
+}
+
+.metrics-title {
+  color: #333;
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.metrics-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.empty-message {
+  color: #999;
+  font-style: italic;
+}
+
+.folder-container {
+  margin-bottom: 30px;
+}
+
+.folder-title {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.folder-table {
+  margin-bottom: 20px;
 }

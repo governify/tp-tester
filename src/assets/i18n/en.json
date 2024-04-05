@@ -199,6 +199,9 @@
     "VIEW_FILE": "View File",
     "EXECUTE_EDIT_FILE": "Execute / Edit File",
     "DELETE_FILE": "Delete File",
+    "NO_METRICS": "No saved TPA metrics",
+    "TPA_METRICS": "TPA Metrics",
+    "INDIVIDUAL_METRICS": "Individual Metrics",
     "VIEWER": {
       "VIEWING": "You are viewing {{fileName}}."
     },
