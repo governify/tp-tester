@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { BASE_URL } from '../../../config';
 @Injectable({
   providedIn: 'root'
 })
 export class BluejayService {
 
-  private url = 'http://localhost:5400/api/v6/agreements';
+  private url = `${BASE_URL}:5400/api/v6/agreements`;
 
   constructor(private http: HttpClient) { }
 
@@ -29,7 +29,7 @@ export class BluejayService {
   }
 
   postComputation(data: any): Observable<any> {
-    return this.http.post('http://localhost:5500/api/v2/computations', data);
+    return this.http.post(`${BASE_URL}:5500/api/v2/computations`, data);
   }
 
   getComputation(computationUrl: string): Observable<any> {

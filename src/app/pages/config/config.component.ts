@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {GithubhelpComponent} from "../../components/dialogs/githubhelp/githubhelp.component";
 import {ViewportScroller} from "@angular/common";
+import { BASE_URL } from 'config';
 
 interface Container {
   Id: string;
@@ -22,17 +23,18 @@ export class ConfigComponent implements OnInit {
   pdfUrl: SafeResourceUrl;
   showWarning = true;
   showWarningHelp = true;
+  baseUrl = BASE_URL;
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
     private viewportScroller: ViewportScroller) {
-    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:6012/glassmatrix/api/v1/pdf#toolbar=0');
+    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${BASE_URL}:6012/glassmatrix/api/v1/pdf#toolbar=0`);
   }
 
   ngOnInit(): void {
     const portsToHandle = ['3000/tcp', '80/tcp', '8086/tcp', '27017/tcp', '5173/tcp', '6379/tcp'];
-    this.http.get<any[]>('http://localhost:6012/api/containers').subscribe(containers => {
+    this.http.get<any[]>(`${BASE_URL}:6012/api/containers`).subscribe(containers => {
       // @ts-ignore
       this.containers = containers.flatMap(container => {
         const ports = container.NetworkSettings.Ports;
@@ -45,7 +47,7 @@ export class ConfigComponent implements OnInit {
             return {
               Id: container.Id,
               Name: container.Name.slice(1),
-              Url: `http://localhost:${hostPort}`,
+              Url: `${BASE_URL}:${hostPort}`,
               Port: Number(hostPort),
             };
           }

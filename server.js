@@ -15,6 +15,7 @@ const Docker = require('dockerode');
 const axios = require('axios');
 const docker = new Docker();
 const yaml = require('js-yaml');
+const { BASE_URL } = require('./config');
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -23,7 +24,7 @@ const swaggerOptions = {
       contact: {
         name: 'github.com/antoniiosc7'
       },
-      servers: ['http://localhost:6012']
+      servers: [`${BASE_URL}://localhost:6012`]
     }
   },
   // ['.routes/*.js']
@@ -1126,7 +1127,7 @@ app.post(apiName + '/github/push/:repoName', async (req, res) => {
 app.post('/api/convertYaml', async (req, res) => {
   const data = yaml.load(req.body.yaml);
   for (const step of data.steps) {
-    const url = `http://localhost:6012/${step.uses}`;
+    const url = `${BASE_URL}:6012/${step.uses}`;
     const body = step.with;
     const method = step.method;
     try {

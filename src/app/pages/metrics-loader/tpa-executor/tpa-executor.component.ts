@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {ScriptInfoComponent} from "../../../components/dialogs/script-info/script-info.component";
+import {BASE_URL} from "../../../../../config";
 
 @Component({
   selector: 'app-tpa-executor',
@@ -116,7 +117,7 @@ export class TpaExecutorComponent implements OnInit {
     this.bluejayService.postComputation(dataCopy).subscribe(
       (response: any) => {
         this.response = JSON.stringify(response, null, 2);
-        this.computationUrl = `http://localhost:5500${response.computation}`;
+        this.computationUrl = `${BASE_URL}:5500${response.computation}`;
         this.isLoading = false;
       },
       (error: any) => {
