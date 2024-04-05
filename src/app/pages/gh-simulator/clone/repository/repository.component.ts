@@ -36,13 +36,10 @@ export class RepositoryComponent implements OnInit {
   ngOnInit(): void {
     this.owner = this.route.snapshot.paramMap.get('owner');
     this.repoName = this.route.snapshot.paramMap.get('repoName');
-    console.log('Owner:', this.owner);
-    console.log('Repo Name:', this.repoName);
     if (this.owner && this.repoName) {
       this.githubService.getRepoInfo(this.owner, this.repoName).subscribe(
         repoInfo => {
           this.repoInfo = repoInfo;
-          console.log(repoInfo);
         }
       );
 

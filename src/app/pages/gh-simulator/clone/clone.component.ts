@@ -45,9 +45,6 @@ export class CloneComponent implements OnInit {
     this.githubService.listRepos(this.token).subscribe(
       repos => {
         repos.forEach((repo: any) => {
-          //console.log(repo.owner);
-          console.log(repo.owner.login);
-          console.log(repo.name);
           this.repoOwner = repo.owner.login;
           if (repo.name && repo.owner.login) {
             this.githubService.listBranchesForRepo(repo.owner.login, repo.name).pipe(
