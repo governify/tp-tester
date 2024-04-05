@@ -49,3 +49,4 @@ assets/repositories/
 /src/assets/savedMetrics/tpaMetrics/*
 src/assets/token/code.json
 src/assets/token/code.json
+src/assets/token/code_local.json

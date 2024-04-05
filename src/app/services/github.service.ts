@@ -50,28 +50,6 @@ export class GithubService {
     return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
   }
 
-  async createBranch(owner: string, repo: string, branchName: string, ref: string) {
-    const { data } = await this.octokit.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/${branchName}`,
-      sha: ref
-    });
-    return data;
-  }
-
-  async createFile(owner: string, repo: string, path: string, message: string, content: string, branch: string) {
-    const { data } = await this.octokit.repos.createOrUpdateFileContents({
-      owner,
-      repo,
-      path,
-      message,
-      content: btoa(content), // El contenido debe estar en formato base64
-      branch
-    });
-    return data;
-  }
-
   createPullRequest(token: string, owner: string, repo: string, prTitle: string, prHead: string, prBase: string, prBody: string): Observable<any> {
     const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls`;
     const headers = {
