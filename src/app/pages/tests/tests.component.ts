@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import {Component, OnInit} from "@angular/core";
 import {GlassmatrixService} from "../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
+import { BASE_URL } from "../../../../config";
+
 interface Step {
   method: string;
   uses: string;
@@ -55,7 +57,7 @@ export class TestsComponent implements OnInit {
     });
   }
   executeYaml(): void {
-    this.http.post<YamlData>('http://localhost:6012/api/convertYaml', { yaml: this.yamlContent }).subscribe(data => {
+    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
       // Inicializa response como una cadena vacía
       this.response = '';
 
@@ -65,7 +67,7 @@ export class TestsComponent implements OnInit {
         return prevPromise.then(() => {
           const repoName = step.with['repoName'];
           const branchName = step.with['branchName'];
-          let url = `http://localhost:6012/${step.uses}/${repoName}`;
+          let url = `${BASE_URL}:6012/${step.uses}/${repoName}`;
           const method = step.method;
 
           // Agrega la ruta del uses a la propiedad response y agrega un salto de línea

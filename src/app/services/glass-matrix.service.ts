@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BASE_URL} from "../../../config";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GlassmatrixService {
-  private url = 'http://localhost:6012/glassmatrix/api/v1';
+  private url = `${BASE_URL}:6012/glassmatrix/api/v1`;
   constructor(private http: HttpClient) { }
 
   saveToJson(fileName: string, data: any): Observable<any> {
