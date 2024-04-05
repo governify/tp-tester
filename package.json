@@ -9,6 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "docker": "docker-compose up --build",
+    "server": "concurrently \"ng serve --host 0.0.0.0 --disable-host-check\" \"node server.js\"",
     "electron": "concurrently \"ng build --base-href ./ && electron .\" \"node server.js\""
   },
   "private": true,
