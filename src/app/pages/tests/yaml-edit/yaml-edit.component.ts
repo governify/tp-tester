@@ -80,11 +80,13 @@ export class YamlEditComponent implements OnInit {
     'GET': {
       'github/getIssue': (step: { with: { [x: string]: string; }; }) => this.githubService.getIssues(this.token, step.with['owner'], step.with['repoName']).toPromise(),
       'github/getOpenPR': (step: { with: { [x: string]: string; }; }) => this.githubService.getOpenPullRequests(this.token, step.with['owner'], step.with['repoName']).toPromise(),
+      'github/pullCurrentBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.pullCurrentBranch(step.with['repoName']).toPromise(),
       'github/listRepos': () => this.glassmatrixService.listRepos().toPromise(),
       'github/getBranches': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.getBranches(step.with['repoName']).toPromise(),
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
     },
     'POST': {
+      'github/commitAllChanges': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.commitAllChanges(step.with['repoName'], step.with['commitMessage']).toPromise(),
       'github/createIssue': (step: { with: { [x: string]: string; }; }) => {
         const issue = { title: step.with['title'], body: step.with['body'] };
         return this.githubService.createIssue(this.token, step.with['owner'], step.with['repoName'], issue).toPromise();
@@ -139,7 +141,7 @@ export class YamlEditComponent implements OnInit {
   }
   setDefaultFormat(): void {
     this.yamlContent = `steps:
-  - uses: "glassmatrix/api/v1/github/#"
+  - uses: "github/#"
     with:
       repoName: "#"
     method: "#"`;

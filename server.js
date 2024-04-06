@@ -1044,6 +1044,46 @@ app.post(apiName + '/github/commit/:repoName', async (req, res) => {
 });
 /**
  * @swagger
+ * /glassmatrix/api/v1/github/commitAll/{repoName}:
+ *  post:
+ *    tags: [Github]
+ *    description: Use to commit all changes in a specific repository
+ *    parameters:
+ *      - name: repoName
+ *        description: Name of the repository
+ *        in: path
+ *        required: true
+ *        type: string
+ *      - name: commitMessage
+ *        description: Message of the commit
+ *        in: body
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '500':
+ *        description: An error occurred while committing
+ */
+app.post(apiName + '/github/commitAll/:repoName', async (req, res) => {
+  const { repoName } = req.params;
+  const { commitMessage } = req.body;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  try {
+    const { stdout, stderr } = await exec(`git add . && git commit -m "${commitMessage}"`, { cwd: repoPath });
+    if (stderr) {
+      console.log('Git commit stderr:', stderr);
+    }
+    res.json({ message: 'Commit created successfully', stdout, stderr });
+  } catch (err) {
+    console.error('Error executing git command:', err);
+    res.status(500).send('Error executing git command: ' + err.message);
+  }
+});
+/**
+ * @swagger
  * /glassmatrix/api/v1/github/createFile/{repoName}:
  *  post:
  *    tags: [Github]

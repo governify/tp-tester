@@ -109,6 +109,10 @@ export class GlassmatrixService {
     return this.http.post(`${this.url}/github/commit/${repoName}`, { fileContent, commitMessage });
   }
 
+  commitAllChanges(repoName: string, commitMessage: string): Observable<any> {
+    return this.http.post(`${this.url}/github/commitAll/${repoName}`, { commitMessage });
+  }
+
   // ARCHIVOS YAML
   saveYAMLFile(fileName: string, content: string): Observable<any> {
     return this.http.post(`${this.url}/tests/saveYAMLFile`, { fileName, content });
