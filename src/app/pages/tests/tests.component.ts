@@ -119,7 +119,15 @@ export class TestsComponent implements OnInit {
                 return this.githubService.getOpenPullRequests(this.token, step.with['owner'], repoName).toPromise().then(response => {
                   this.response += JSON.stringify(response, null, 2) + '\n\n';
                 });
-              } else {
+              } else if (step.uses === 'github/listRepos') {
+                return this.glassmatrixService.listRepos().toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              } else if (step.uses === 'github/getBranches') {
+                return this.glassmatrixService.getBranches(repoName).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              }else {
                 return this.githubService.getRepoInfo(repoName, branchName).toPromise().then(response => {
                   this.response += JSON.stringify(response, null, 2) + '\n\n';
                 });
@@ -135,6 +143,27 @@ export class TestsComponent implements OnInit {
                 return this.githubService.createPullRequest(this.token, step.with['owner'], repoName, pr.title, pr.head, pr.base, pr.body).toPromise().then(response => {
                   this.response += JSON.stringify(response, null, 2) + '\n\n';
                 });
+              } else if (step.uses === 'github/cloneRepo') {
+                return this.glassmatrixService.cloneRepo(step.with['owner'], repoName).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              } else if (step.uses === 'github/createBranch') {
+                const branchFormValue = { branchName: step.with['branchName'] };
+                return this.glassmatrixService.createBranch(repoName, branchFormValue).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              } else if (step.uses === 'github/createFile') {
+                return this.glassmatrixService.createFile(repoName, step.with['fileName'], step.with['fileContent']).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              } else if (step.uses === 'github/createCommit') {
+                return this.glassmatrixService.createCommit(repoName, step.with['fileContent'], step.with['commitMessage']).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              } else if (step.uses === 'github/pushChanges') {
+                return this.glassmatrixService.pushChanges(repoName).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
               }
               // Aquí necesitarás más información para saber qué método de GithubService llamar
             } else if (method === 'PUT') {
@@ -142,8 +171,22 @@ export class TestsComponent implements OnInit {
                 return this.githubService.mergePullRequest(this.token, step.with['owner'], repoName, Number(step.with['prNumber']), step.with['mergeMessage']).toPromise().then(response => {
                   this.response += JSON.stringify(response, null, 2) + '\n\n';
                 });
+              } else if (step.uses === 'github/changeBranch') {
+                return this.glassmatrixService.changeBranch(repoName, step.with['branchToChangeTo']).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
               }
               // Aquí necesitarás más información para saber qué método de GithubService llamar
+            } else if (method === 'DELETE') {
+              if (step.uses === 'github/deleteRepo') {
+                return this.glassmatrixService.deleteRepo(repoName).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              } else if (step.uses === 'github/deleteBranch') {
+                return this.glassmatrixService.deleteBranch(repoName, step.with['selectedBranch']).toPromise().then(response => {
+                  this.response += JSON.stringify(response, null, 2) + '\n\n';
+                });
+              }
             }
           }
         });
