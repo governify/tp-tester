@@ -49,10 +49,12 @@
 
       <button class="save-button" (click)="saveYaml()">Guardar</button>
       <button class="format" (click)="setDefaultFormat()">Establecer formato</button>
-
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{errorMessage}}
+        <span class="close-button" (click)="errorMessage = ''">X</span>
+      </div>
       <div class="textarea-container">
         <textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
-
       </div>
       <button class="execute-button" (click)="executeYaml()">Ejecutar YAML</button>
       <div class="response">

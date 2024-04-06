@@ -1,8 +1,0 @@
-  - uses: "github/createIssue"
-    with:
-      repoName: "tp-testbench"
-      owner: "Antoniiosc7"
-      title: "hello"
-      body: "body"
-    method: "POST"
-  
