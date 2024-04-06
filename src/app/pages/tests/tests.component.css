@@ -20,6 +20,11 @@ body {
   padding-bottom: 100px!important;
 }
 
+.close-button {
+  float: right;
+  cursor: pointer;
+  padding: 0 10px;
+}
 
 textarea {
   width: 100%;

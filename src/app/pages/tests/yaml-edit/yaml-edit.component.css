@@ -1,7 +1,9 @@
 body {
   padding: 20px 0;
   border-radius: 15px;
-  margin: 0 20px;
+  /*margin: 0 20px;*/
+  margin-left: 10%;
+  margin-right: 10%;
   padding-bottom: 100px!important;
 }
 
@@ -28,4 +30,48 @@ textarea {
   padding: 10px;
   font-size: 16px;
   font-family: monospace;
+}
+button.format {
+  background-color: #3e64dc;
+  border: none;
+  color: white;
+  padding: 2px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+button.common-button {
+  background-color: #3e64dc;
+  border: none;
+  color: white;
+  padding: 10px 20px; /* Aumenta el padding para hacer el botón más grande */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px; /* Añade border-radius para hacer el botón redondeado */
+}
+
+button.update-button {
+  background-color: #c0a920;
+  border: none;
+  color: white;
+  padding: 10px 20px; /* Aumenta el padding para hacer el botón más grande */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px; /* Añade border-radius para hacer el botón redondeado */
+}
+.close-button {
+  float: right;
+  cursor: pointer;
+  padding: 0 10px;
 }

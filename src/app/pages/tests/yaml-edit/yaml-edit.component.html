@@ -1,13 +1,30 @@
 <body>
 <div class="row justify-content-end">
-  <button class="btn btn-outline-primary btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+  <button class="common-button btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}
+  </button>
 </div>
-<h3> Estas viendo el archivo: {{fileName}}</h3>
-<div class="row">
+<h3> Estas viendo el archivo: {{ fileName }}</h3>
+<div class="row" id="ejecucion">
+  <br>
+  <hr>
   <div class="col-8">
-    <button class="btn btn-outline-primary" (click)="updateYaml()">Actualizar archivo</button>
-    <div class="textarea1">
-      <textarea [(ngModel)]="yamlContent" class="yaml-content"></textarea>
+    <h3> Zona de ejecución </h3>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+      <span class="close-button" (click)="errorMessage = ''">X</span>
+    </div>
+    <button class="common-button" (click)="setDefaultFormat()">Establecer formato</button>
+    <button class="update-button" (click)="updateYaml()">Actualizar archivo</button>
+    <div *ngIf="saveStatusMessage" class="alert alert-success">
+      {{saveStatusMessage}}
+      <span class="close-button" (click)="saveStatusMessage = ''">X</span>
+    </div>
+    <div class="textarea-container">
+      <textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
+    </div>
+    <button class="common-button" (click)="executeYaml()">Ejecutar YAML</button>
+    <div class="response">
+      <textarea id="textarea2" readonly>{{ response }}</textarea>
     </div>
   </div>
   <div class="col-4">

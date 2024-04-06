@@ -263,7 +263,7 @@ app.put(apiName + '/tests/updateYAMLFile/:fileName', (req, res) => {
  */
 app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
   const fileName = req.params.fileName;
-  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName} `);
+  const filePath = path.join(__dirname, '/src/assets/savedYAML', `${fileName}`);
   fs.unlink(filePath, (err) => {
     if (err) {
       console.error(err);
@@ -1125,26 +1125,13 @@ app.post(apiName + '/github/push/:repoName', async (req, res) => {
  *        description: A successful response
  */
 app.post('/api/convertYaml', async (req, res) => {
-  const data = yaml.load(req.body.yaml);
-  for (const step of data.steps) {
-    const url = `${BASE_URL}:6012/${step.uses}`;
-    const body = step.with;
-    const method = step.method;
-    try {
-      let response;
-      if (method === 'GET') {
-        response = await axios.get(url, { params: body });
-      } else if (method === 'POST') {
-        response = await axios.post(url, body);
-      } else if (method === 'DELETE') {
-        response = await axios.delete(url, { params: body });
-      }
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+  try {
+    const data = yaml.load(req.body.yaml);
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: 'Invalid YAML format' });
   }
-  res.json(data);
 });
 app.get('/api', (req, res) => {
   res.redirect('/api-docs');

@@ -3,6 +3,7 @@ import {Component, OnInit} from "@angular/core";
 import {GlassmatrixService} from "../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
 import { BASE_URL } from "../../../../config";
+import {GithubService} from "../../services/github.service";
 
 interface Step {
   method: string;
@@ -11,7 +12,9 @@ interface Step {
     [key: string]: string;
   };
 }
-
+interface Response {
+  data: any;
+}
 interface YamlData {
   steps: Step[];
 }
@@ -25,14 +28,29 @@ export class TestsComponent implements OnInit {
   yamlFiles: string[] = [];
   fileName!: string;
   response!: any;
+  token!: string;
+  errorMessage: string = '';
+  saveStatusMessage: string = '';
   constructor(
     private http: HttpClient,
-    private glassmatrixService: GlassmatrixService
+    private glassmatrixService: GlassmatrixService,
+    private githubService: GithubService
 ) { }
 
   ngOnInit(): void {
     this.loadYamlFiles();
+    this.getToken();
   }
+
+  getToken(): void {
+    this.glassmatrixService.getToken().subscribe(
+      response => {
+        this.token = response.token;
+      },
+      () => this.token = 'Token not found'
+    );
+  }
+
   loadYamlFiles() {
     this.glassmatrixService.getAllYAMLFiles().subscribe(files => {
       this.yamlFiles = files;
@@ -41,6 +59,7 @@ export class TestsComponent implements OnInit {
 
   saveYaml() {
     this.glassmatrixService.saveYAMLFile(this.fileName, this.yamlContent).subscribe(() => {
+      this.saveStatusMessage = 'El archivo se ha guardado correctamente.';
       this.loadYamlFiles();
     });
   }
@@ -56,48 +75,65 @@ export class TestsComponent implements OnInit {
       this.yamlContent = yaml.stringify(content);
     });
   }
+  private stepHandlers = {
+    'GET': {
+      'github/getIssue': (step: { with: { [x: string]: string; }; }) => this.githubService.getIssues(this.token, step.with['owner'], step.with['repoName']).toPromise(),
+      'github/getOpenPR': (step: { with: { [x: string]: string; }; }) => this.githubService.getOpenPullRequests(this.token, step.with['owner'], step.with['repoName']).toPromise(),
+      'github/listRepos': () => this.glassmatrixService.listRepos().toPromise(),
+      'github/getBranches': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.getBranches(step.with['repoName']).toPromise(),
+      'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
+    },
+    'POST': {
+      'github/createIssue': (step: { with: { [x: string]: string; }; }) => {
+        const issue = { title: step.with['title'], body: step.with['body'] };
+        return this.githubService.createIssue(this.token, step.with['owner'], step.with['repoName'], issue).toPromise();
+      },
+      'github/createPR': (step: { with: { [x: string]: string; }; }) => {
+        const pr = { title: step.with['title'], head: step.with['head'], base: step.with['base'], body: step.with['body'] };
+        return this.githubService.createPullRequest(this.token, step.with['owner'], step.with['repoName'], pr.title, pr.head, pr.base, pr.body).toPromise();
+      },
+      'github/cloneRepo': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.cloneRepo(step.with['owner'], step.with['repoName']).toPromise(),
+      'github/createBranch': (step: { with: { [x: string]: string; }; }) => {
+        const branchFormValue = { branchName: step.with['branchName'] };
+        return this.glassmatrixService.createBranch(step.with['repoName'], branchFormValue).toPromise();
+      },
+      'github/createFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.createFile(step.with['repoName'], step.with['fileName'], step.with['fileContent']).toPromise(),
+      'github/createCommit': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.createCommit(step.with['repoName'], step.with['fileContent'], step.with['commitMessage']).toPromise(),
+      'github/pushChanges': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.pushChanges(step.with['repoName']).toPromise()
+    },
+    'PUT': {
+      'github/mergePR': (step: { with: { [x: string]: string; }; }) => this.githubService.mergePullRequest(this.token, step.with['owner'], step.with['repoName'], Number(step.with['prNumber']), step.with['mergeMessage']).toPromise(),
+      'github/changeBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.changeBranch(step.with['repoName'], step.with['branchToChangeTo']).toPromise()
+    },
+    'DELETE': {
+      'github/deleteRepo': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteRepo(step.with['repoName']).toPromise(),
+      'github/deleteBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteBranch(step.with['repoName'], step.with['branchName']).toPromise()
+    }
+  };
+
   executeYaml(): void {
     this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
-      // Inicializa response como una cadena vacía
       this.response = '';
-
-      // Utiliza reduce para ejecutar las solicitudes HTTP de forma secuencial
-      data.steps.reduce((prevPromise, step) => {
-        // @ts-ignore
+      data.steps.reduce((prevPromise, step: Step) => {
         return prevPromise.then(() => {
-          const repoName = step.with['repoName'];
-          const branchName = step.with['branchName'];
-          let url = `${BASE_URL}:6012/${step.uses}/${repoName}`;
-          const method = step.method;
-
-          // Agrega la ruta del uses a la propiedad response y agrega un salto de línea
           this.response += step.uses + '\n';
-
-          if (method === 'GET') {
-            return this.http.get(url).toPromise().then(response => {
-              // Agrega la respuesta y un salto de línea adicional a la propiedad response
+          // @ts-ignore
+          const handler = this.stepHandlers[step.method][step.uses];
+          if (handler) {
+            return handler(step).then((response: Response) => {
               this.response += JSON.stringify(response, null, 2) + '\n\n';
             });
-          } else if (method === 'POST') {
-            return this.http.post(url, { branchName }).toPromise().then(response => {
-              // Agrega la respuesta y un salto de línea adicional a la propiedad response
-              this.response += JSON.stringify(response, null, 2) + '\n\n';
-            });
-          } else if (method === 'DELETE') {
-            if (branchName) {
-              url += `/${branchName}`;
-            }
-            return this.http.delete(url).toPromise().then(response => {
-              // Agrega la respuesta y un salto de línea adicional a la propiedad response
-              this.response += JSON.stringify(response, null, 2) + '\n\n';
-            });
+          } else {
+            console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
           }
         });
       }, Promise.resolve()).catch(error => {
         console.error(error);
+        this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
       });
     }, error => {
       console.error(error);
+      this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
     });
   }
   setDefaultFormat(): void {
