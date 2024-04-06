@@ -375,5 +375,48 @@
     "toma_datos_de_la_API": "Toma datos de la API de GitHub GQL que contiene información sobre las tarjetas (movimientos de tarjetas de proyecto - columna antigua y nueva columna) y aplica filtros basados en las variables que se le pasan. La etapa se vería así:",
     "como_se_puede_ver_2": "Como se puede ver, filtrará y mantendrá los issues cuyas tarjetas se hayan movido de una columna llamada 'In progress' a una columna llamada 'In review'. También utilizará el from y el to para filtrar los datos.",
     "CLOSE": "Cerrar"
+  },
+  "section": {
+    "example1": "Ramas del repositorio",
+    "example2": "Crear rama",
+    "example3": "Delete rama",
+    "example4": "Ver issues",
+    "example5": "Crear issues",
+    "example6": "Crear PR",
+    "example7": "PRs Abiertas",
+    "example8": "Mergear una PR",
+    "example9": "Hacer un pull de la rama",
+    "example10": "Crear archivo",
+    "example11": "Hacer commit",
+    "example12": "Hacer push"
+  },
+  "TESTS": {
+    "title": "Testeo de métricas con yaml",
+    "copy": "Copiar abajo",
+    "ejecucion": "Zona de ejecución",
+    "guardar": "Guardar",
+    "formato": "Establecer formato",
+    "ejecutar": "Ejecutar YAML",
+    "ejemplos": "Ejemplos",
+    "viendo": "Estas viendo el archivo:",
+    "actualizar": "Actualizar archivo"
+  },
+  "CONFIG": {
+    "DOCKER_ACTIVE": "Docker activos",
+    "WARNING_MESSAGE": "Si esta página se está ejecutando en un contenedor docker, no se podrán ver el resto de dockers activos.",
+    "CLOSE": "Cerrar",
+    "CONTAINER_ID": "ID del Contenedor",
+    "CONTAINER_NAME": "Nombre del Contenedor",
+    "URL": "URL",
+    "PORT": "Puerto",
+    "GITHUB_TOKEN": "Github Token",
+    "HOW_TO_GET_TOKEN": "Cómo obtener un token de GitHub",
+    "HELP": "Ayuda",
+    "SWAGGER": "Swagger",
+    "SWAGGER_DESCRIPTION": "Swagger es una herramienta utilizada para diseñar, construir, documentar y utilizar servicios web RESTful. Permite a los desarrolladores y usuarios entender y trabajar con una API de servicio web de una manera más fácil y visual.",
+    "SWAGGER_DESCRIPTION_2": "Desde swagger se pueden realizar las llamadas a la propia API y comprobar su correcto funcionamiento sin necesidad de otras aplicaciones como Postman.",
+    "OPEN_SWAGGER": "Abrir Swagger",
+    "DOCUMENTATION": "Documentación",
+    "OPEN_PDF_NEW_TAB": "Abrir PDF en nueva pestaña"
   }
 }

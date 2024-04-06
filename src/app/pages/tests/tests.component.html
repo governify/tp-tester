@@ -1,12 +1,12 @@
 <body>
   <div class="container">
-    <h3> Testeo de métricas con yaml</h3>
+    <h3> {{ 'TESTS.title' | translate }}</h3>
     <div class="row justify-content-center">
       <div class="col-md-12">
         <table class="table table-striped">
           <tr>
             <th>{{ 'METRICS_LOADER.FILE_NAME' | translate }}</th>
-            <th class="text-center"> Copiar abajo </th>
+            <th class="text-center"> {{ 'TESTS.copy' | translate }} </th>
             <th class="text-center">{{ 'METRICS_LOADER.VIEW_FILE' | translate }}</th>
             <th class="text-center">{{ 'METRICS_LOADER.EXECUTE_EDIT_FILE' | translate }}</th>
             <th class="text-center">{{ 'METRICS_LOADER.DELETE_FILE' | translate }}</th>
@@ -44,14 +44,14 @@
     <hr>
 
     <div class="col-8">
-      <h3> Zona de ejecución </h3>
+      <h3> {{ 'TESTS.ejecucion' | translate }} </h3>
       <input [(ngModel)]="fileName" placeholder="Nombre del archivo" />
-      <button class="save-button" (click)="saveYaml()">Guardar</button>
+      <button class="save-button" (click)="saveYaml()">{{ 'TESTS.guardar' | translate }}</button>
       <div *ngIf="saveStatusMessage" class="alert alert-success">
         {{saveStatusMessage}}
         <span class="close-button" (click)="saveStatusMessage = ''">X</span>
       </div>
-      <button class="format" (click)="setDefaultFormat()">Establecer formato</button>
+      <button class="format" (click)="setDefaultFormat()">{{ 'TESTS.formato' | translate }}</button>
       <div *ngIf="errorMessage" class="alert alert-danger">
         {{errorMessage}}
         <span class="close-button" (click)="errorMessage = ''">X</span>
@@ -59,13 +59,13 @@
       <div class="textarea-container">
         <textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
       </div>
-      <button class="execute-button" (click)="executeYaml()">Ejecutar YAML</button>
+      <button class="execute-button" (click)="executeYaml()">{{ 'TESTS.ejecutar' | translate }}</button>
       <div class="response">
         <textarea id="textarea2" readonly>{{response}}</textarea>
       </div>
     </div>
     <div class="col-4">
-      <h3> Ejemplos </h3>
+      <h3> {{ 'TESTS.ejemplos' | translate }} </h3>
       <app-yamels></app-yamels>
     </div>
   </div>

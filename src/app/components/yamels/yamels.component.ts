@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-yamels',
   templateUrl: './yamels.component.html',
   styleUrls: ['./yamels.component.css']
 })
+
 export class YamelsComponent implements OnInit {
   p: number = 1;
   sections = [
     {
-      title: 'Ramas del repositorio',
       id: 'example1',
       content:
         `- uses: "github/getBranches"
@@ -18,7 +19,6 @@ export class YamelsComponent implements OnInit {
       method: "GET"`
     },
     {
-      title: 'Crear rama',
       id: 'example2',
       content:
         `- uses: "github/createBranch"
@@ -28,7 +28,6 @@ export class YamelsComponent implements OnInit {
       method: "POST"`
     },
     {
-      title: 'Delete rama',
       id: 'example3',
       content: `- uses: "github/deleteBranch"
       with:
@@ -37,7 +36,6 @@ export class YamelsComponent implements OnInit {
       method: "DELETE"`
     },
     {
-      title: 'Ver issues',
       id: 'example4',
       content: `- uses: "github/getIssue"
       with:
@@ -46,7 +44,6 @@ export class YamelsComponent implements OnInit {
       method: "GET"`
     },
     {
-      title: 'Crear issues',
       id: 'example5',
       content: `- uses: "github/createIssue"
       with:
@@ -57,7 +54,6 @@ export class YamelsComponent implements OnInit {
       method: "POST"`
     },
     {
-      title: 'Crear PR',
       id: 'example6',
       content: `- uses: "github/createIssue"
       with:
@@ -70,7 +66,6 @@ export class YamelsComponent implements OnInit {
       method: "POST"`
     },
     {
-      title: 'PRs Abiertas',
       id: 'example7',
       content: `- uses: "github/getOpenPR"
       with:
@@ -79,7 +74,6 @@ export class YamelsComponent implements OnInit {
       method: "GET"`
     },
     {
-      title: 'Mergear una PR',
       id: 'example8',
       content: `- uses: "github/mergePR"
       with:
@@ -90,7 +84,6 @@ export class YamelsComponent implements OnInit {
       method: "PUT"`
     },
     {
-      title: 'Hacer un pull de la rama',
       id: 'example9',
       content: `- uses: "github/pullCurrentBranch"
       with:
@@ -98,7 +91,6 @@ export class YamelsComponent implements OnInit {
       method: "GET"`
     },
     {
-      title: 'Crear archivo',
       id: 'example10',
       content: `- uses: "github/createFile"
       with:
@@ -107,7 +99,6 @@ export class YamelsComponent implements OnInit {
         fileContent: "sevilla fc campeon"`
     },
     {
-      title: 'Hacer commit',
       id: 'example11',
       content: `- uses: "github/commitAllChanges"
       with:
@@ -116,7 +107,7 @@ export class YamelsComponent implements OnInit {
       method: "POST"`
     },
     {
-      title: 'Hacer push',
+      title: '',
       id: 'example12',
       content: `- uses: "github/pushChanges"
       with:
@@ -125,9 +116,14 @@ export class YamelsComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private translate: TranslateService) { }
 
   ngOnInit(): void {
+    this.sections.forEach(section => {
+      this.translate.get('section.' + section.id).subscribe((res: string) => {
+        section.title = res;
+      });
+    });
   }
 
   copyContent(elementId: string) {
@@ -135,4 +131,5 @@ export class YamelsComponent implements OnInit {
     copyText.select();
     document.execCommand('copy');
   }
+
 }

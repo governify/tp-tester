@@ -2,7 +2,7 @@
 <div class="row justify-content-end">
   <button class="btn btn-outline-primary btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
 </div>
-<h3> Estas viendo el archivo: {{fileName}}</h3>
+<h3> {{ 'TESTS.viendo' | translate }} {{fileName}}</h3>
   <div class="textarea1">
     <textarea readonly [value]="yamlContent" class="yaml-content"></textarea>
   </div>
