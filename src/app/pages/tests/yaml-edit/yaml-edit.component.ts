@@ -31,6 +31,7 @@ export class YamlEditComponent implements OnInit {
   errorMessage: string = '';
   response!: any;
   token!: string;
+  saveStatusMessage: string = '';
   constructor(
     private route: ActivatedRoute,
     private glassmatrixService: GlassmatrixService,
@@ -64,6 +65,7 @@ export class YamlEditComponent implements OnInit {
   updateYaml() {
     this.glassmatrixService.updateYAMLFile(this.fileName, this.yamlContent).subscribe(
       () => {
+        this.saveStatusMessage = 'El archivo se ha guardado correctamente.';
         console.log('El archivo se ha actualizado con éxito.');
       },
       error => {

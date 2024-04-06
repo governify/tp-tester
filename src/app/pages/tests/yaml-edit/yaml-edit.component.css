@@ -70,3 +70,8 @@ button.update-button {
   cursor: pointer;
   border-radius: 5px; /* Añade border-radius para hacer el botón redondeado */
 }
+.close-button {
+  float: right;
+  cursor: pointer;
+  padding: 0 10px;
+}

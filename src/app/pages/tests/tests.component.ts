@@ -30,6 +30,7 @@ export class TestsComponent implements OnInit {
   response!: any;
   token!: string;
   errorMessage: string = '';
+  saveStatusMessage: string = '';
   constructor(
     private http: HttpClient,
     private glassmatrixService: GlassmatrixService,
@@ -58,6 +59,7 @@ export class TestsComponent implements OnInit {
 
   saveYaml() {
     this.glassmatrixService.saveYAMLFile(this.fileName, this.yamlContent).subscribe(() => {
+      this.saveStatusMessage = 'El archivo se ha guardado correctamente.';
       this.loadYamlFiles();
     });
   }

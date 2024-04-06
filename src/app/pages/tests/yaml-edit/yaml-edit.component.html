@@ -15,7 +15,10 @@
     </div>
     <button class="common-button" (click)="setDefaultFormat()">Establecer formato</button>
     <button class="update-button" (click)="updateYaml()">Actualizar archivo</button>
-
+    <div *ngIf="saveStatusMessage" class="alert alert-success">
+      {{saveStatusMessage}}
+      <span class="close-button" (click)="saveStatusMessage = ''">X</span>
+    </div>
     <div class="textarea-container">
       <textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
     </div>

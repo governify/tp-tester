@@ -46,8 +46,11 @@
     <div class="col-8">
       <h3> Zona de ejecución </h3>
       <input [(ngModel)]="fileName" placeholder="Nombre del archivo" />
-
       <button class="save-button" (click)="saveYaml()">Guardar</button>
+      <div *ngIf="saveStatusMessage" class="alert alert-success">
+        {{saveStatusMessage}}
+        <span class="close-button" (click)="saveStatusMessage = ''">X</span>
+      </div>
       <button class="format" (click)="setDefaultFormat()">Establecer formato</button>
       <div *ngIf="errorMessage" class="alert alert-danger">
         {{errorMessage}}
