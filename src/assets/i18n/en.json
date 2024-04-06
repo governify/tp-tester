@@ -375,7 +375,48 @@
     "toma_datos_de_la_API": "It fetches data from the GitHub GQL API containing information about cards (project card movements - old column and new column) and applies filters based on the variables passed to it. The stage would look like this:",
     "como_se_puede_ver_2": "As you can see, it will filter and retain the issues whose cards have been moved from a column called 'In progress' to a column called 'In review'. It will also use the from and to to filter the data.",
     "CLOSE": "Close"
+  },
+  "section": {
+    "example1": "Repository branches",
+    "example2": "Create branch",
+    "example3": "Delete branch",
+    "example4": "View issues",
+    "example5": "Create issues",
+    "example6": "Create PR",
+    "example7": "Open PRs",
+    "example8": "Merge a PR",
+    "example9": "Pull the branch",
+    "example10": "Create file",
+    "example11": "Make commit",
+    "example12": "Push"
+  },
+  "TESTS": {
+    "title": "Metrics testing with yaml",
+    "copy": "Copy below",
+    "ejecucion": "Execution zone",
+    "guardar": "Save",
+    "formato": "Set format",
+    "ejecutar": "Execute YAML",
+    "ejemplos": "Examples",
+    "viendo": "You are viewing the file:",
+    "actualizar": "Update file"
+  },
+  "CONFIG": {
+    "DOCKER_ACTIVE": "Active Docker",
+    "WARNING_MESSAGE": "If this page is running in a docker container, the rest of the active dockers will not be visible.",
+    "CLOSE": "Close",
+    "CONTAINER_ID": "Container ID",
+    "CONTAINER_NAME": "Container Name",
+    "URL": "URL",
+    "PORT": "Port",
+    "GITHUB_TOKEN": "Github Token",
+    "HOW_TO_GET_TOKEN": "How to get a GitHub token",
+    "HELP": "Help",
+    "SWAGGER": "Swagger",
+    "SWAGGER_DESCRIPTION": "Swagger is a tool used to design, build, document, and use RESTful web services. It allows developers and users to understand and work with a web service API in an easier and more visual way.",
+    "SWAGGER_DESCRIPTION_2": "From swagger, you can make calls to the API itself and check its correct operation without the need for other applications like Postman.",
+    "OPEN_SWAGGER": "Open Swagger",
+    "DOCUMENTATION": "Documentation",
+    "OPEN_PDF_NEW_TAB": "Open PDF in new tab"
   }
-
-
 }

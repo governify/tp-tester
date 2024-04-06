@@ -3,18 +3,18 @@
   <button class="common-button btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}
   </button>
 </div>
-<h3> Estas viendo el archivo: {{ fileName }}</h3>
+<h3>  {{ 'TESTS.viendo' | translate }} {{ fileName }}</h3>
 <div class="row" id="ejecucion">
   <br>
   <hr>
   <div class="col-8">
-    <h3> Zona de ejecución </h3>
+    <h3>{{ 'TESTS.ejecucion' | translate }}</h3>
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
       <span class="close-button" (click)="errorMessage = ''">X</span>
     </div>
-    <button class="common-button" (click)="setDefaultFormat()">Establecer formato</button>
-    <button class="update-button" (click)="updateYaml()">Actualizar archivo</button>
+    <button class="common-button" (click)="setDefaultFormat()">{{ 'TESTS.formato' | translate }}</button>
+    <button class="update-button" (click)="updateYaml()">{{ 'TESTS.actualizar' | translate }}</button>
     <div *ngIf="saveStatusMessage" class="alert alert-success">
       {{saveStatusMessage}}
       <span class="close-button" (click)="saveStatusMessage = ''">X</span>
@@ -22,13 +22,13 @@
     <div class="textarea-container">
       <textarea [(ngModel)]="yamlContent" rows="10" cols="50"></textarea>
     </div>
-    <button class="common-button" (click)="executeYaml()">Ejecutar YAML</button>
+    <button class="common-button" (click)="executeYaml()">{{ 'TESTS.ejecutar' | translate }}</button>
     <div class="response">
       <textarea id="textarea2" readonly>{{ response }}</textarea>
     </div>
   </div>
   <div class="col-4">
-    <h3> Ejemplos </h3>
+    <h3> {{ 'TESTS.ejemplos' | translate }} </h3>
     <app-yamels></app-yamels>
   </div>
 </div>
