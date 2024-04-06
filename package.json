@@ -36,6 +36,7 @@
     "express": "^4.18.3",
     "js-yaml": "^4.1.0",
     "json-to-pretty-yaml": "^1.2.2",
+    "ngx-pagination": "^6.0.3",
     "rxjs": "~7.5.0",
     "simple-git": "^3.23.0",
     "swagger-jsdoc": "^6.2.8",

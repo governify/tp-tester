@@ -1,127 +1,15 @@
-<section>
-  <h4> Ramas del repositorio</h4>
-  <div class="example-container">
-  <textarea id="example1" class="example-textarea">
-  - uses: "github/getBranches"
-    with:
-      repoName: "tp-testbench"
-    method: "GET"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example1')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> Crear rama </h4>
-  <div class="example-container">
-  <textarea id="example2" class="example-textarea">
-  - uses: "github/createBranch"
-    with:
-      repoName: "tp-testbench"
-      branchName: "nombreDeLaRama_adios2"
-    method: "POST"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example2')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> Delete rama </h4>
-  <div class="example-container">
-  <textarea id="example3" class="example-textarea">
-  - uses: "github/deleteBranch"
-    with:
-      repoName: "tp-testbench"
-      branchName: "nombreDeLaRama_adios2"
-    method: "DELETE"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example3')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> Ver issues </h4>
-  <div class="example-container">
-  <textarea id="example4" class="example-textarea">
-  - uses: "github/getIssue"
-    with:
-      repoName: "tp-testbench"
-      owner: "Antoniiosc7"
-    method: "GET"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example4')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> Crear issues </h4>
-  <div class="example-container">
-  <textarea id="example5" class="example-textarea">
-  - uses: "github/createIssue"
-    with:
-      repoName: "tp-testbench"
-      owner: "Antoniiosc7"
-      title: "hello"
-      body: "body"
-    method: "POST"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example5')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> Crear PR </h4>
-  <div class="example-container">
-  <textarea id="example6" class="example-textarea">
-  - uses: "github/createIssue"
-    with:
-      repoName: "tp-testbench"
-      owner: "Antoniiosc7"
-      title: "title1"
-      head: "head"
-      base: "base"
-      body: "body"
-    method: "POST"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example6')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> PRs Abiertas </h4>
-  <div class="example-container">
-  <textarea id="example7" class="example-textarea">
-  - uses: "github/getOpenPR"
-    with:
-      repoName: "tp-testbench"
-      owner: "Antoniiosc7"
-    method: "GET"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example7')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
-<section>
-  <h4> Mergear una PR </h4>
-  <div class="example-container">
-  <textarea id="example8" class="example-textarea">
-  - uses: "github/mergePR"
-    with:
-      repoName: "tp-testbench"
-      owner: "Antoniiosc7"
-      prNumber: "7"
-      mergeMessage: "mergeado"
-    method: "PUT"
-  </textarea>
-    <button class="copy-button" (click)="copyContent('example8')">
-      <i class="fa-solid fa-copy"></i>
-    </button>
-  </div>
-</section>
+<div *ngFor="let section of sections | paginate: { itemsPerPage: 5, currentPage: p }">
+  <section>
+    <h4> {{section.title}} </h4>
+    <div class="example-container">
+    <textarea id="{{section.id}}" class="example-textarea">
+    {{section.content}}
+    </textarea>
+      <button class="copy-button" (click)="copyContent(section.id)">
+        <i class="fa-solid fa-copy"></i>
+      </button>
+    </div>
+  </section>
+</div>
+
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
