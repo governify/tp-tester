@@ -4,7 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {GithubhelpComponent} from "../../components/dialogs/githubhelp/githubhelp.component";
 import {ViewportScroller} from "@angular/common";
-import { BASE_URL } from 'config';
+import { BASE_URL } from 'lockedConfig';
 
 interface Container {
   Id: string;
@@ -24,11 +24,20 @@ export class ConfigComponent implements OnInit {
   showWarning = true;
   showWarningHelp = true;
   baseUrl = BASE_URL;
+  showConfigWarning = true;
+  config = {
+    BASE_URL: '',
+    DEFAULT_COLLECTOR: '',
+    COLLECTOR_EVENTS_URL: '',
+    AGREEMENTS_URL: '',
+    SCOPES_URL: ''
+  };
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
-    private viewportScroller: ViewportScroller) {
+    private viewportScroller: ViewportScroller,) {
+    this.getConfig()
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${BASE_URL}:6012/glassmatrix/api/v1/pdf#toolbar=0`);
   }
 
@@ -55,7 +64,17 @@ export class ConfigComponent implements OnInit {
       }).filter(Boolean);
     });
   }
+  getConfig() {
+    this.http.get(`${BASE_URL}:6012/config`).subscribe((config: any) => {
+      this.config = config;
+    });
+  }
 
+  updateConfig() {
+    this.http.post(`${BASE_URL}:6012/config`, this.config).subscribe(() => {
+      alert('Config updated successfully');
+    });
+  }
   openGithubDialog(): void {
     const dialogConfig = new MatDialogConfig();
     const [scrollTop, scrollLeft] = this.viewportScroller.getScrollPosition();

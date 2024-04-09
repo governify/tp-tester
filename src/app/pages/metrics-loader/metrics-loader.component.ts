@@ -5,7 +5,7 @@ import {FilesService} from "../../services/files.service";
 import {BluejayService} from "../../services/bluejay.service";
 import {ScriptInfoComponent} from "../../components/dialogs/script-info/script-info.component";
 import {MatDialog} from "@angular/material/dialog";
-import {BASE_URL} from "../../../../config";
+import {BASE_URL} from "../../../../lockedConfig";
 
 @Component({
   selector: 'app-metrics-loader',

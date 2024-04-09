@@ -6,7 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {ScriptInfoComponent} from "../../../components/dialogs/script-info/script-info.component";
-import {BASE_URL} from "../../../../../config";
+import {BASE_URL} from "../../../../../lockedConfig";
 
 @Component({
   selector: 'app-tpa-executor',
