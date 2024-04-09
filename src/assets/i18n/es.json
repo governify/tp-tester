@@ -417,6 +417,14 @@
     "SWAGGER_DESCRIPTION_2": "Desde swagger se pueden realizar las llamadas a la propia API y comprobar su correcto funcionamiento sin necesidad de otras aplicaciones como Postman.",
     "OPEN_SWAGGER": "Abrir Swagger",
     "DOCUMENTATION": "Documentación",
-    "OPEN_PDF_NEW_TAB": "Abrir PDF en nueva pestaña"
+    "OPEN_PDF_NEW_TAB": "Abrir PDF en nueva pestaña",
+    "CONSTANTS": "Constantes",
+    "BASE_URL": "URL Base",
+    "DEFAULT_COLLECTOR": "Colector Predeterminado",
+    "AGREEMENTS_URL": "URL de Acuerdos",
+    "COLLECTOR_EVENTS_URL": "URL de Eventos del Colector",
+    "SCOPES_URL": "URL de Alcances",
+    "UPDATE": "Actualizar",
+    "MESSAGE": "Deberías reiniciar el servidor para aplicar los cambios"
   }
 }

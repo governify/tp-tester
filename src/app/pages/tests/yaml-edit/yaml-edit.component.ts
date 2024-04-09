@@ -3,7 +3,7 @@ import {Location} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {GlassmatrixService} from "../../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
-import {BASE_URL} from "../../../../../config";
+import {BASE_URL} from "../../../../../lockedConfig";
 import {GithubService} from "../../../services/github.service";
 import {HttpClient} from "@angular/common/http";
 

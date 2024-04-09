@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {MatDialogRef} from "@angular/material/dialog";
 import {HttpClient} from "@angular/common/http";
-import {BASE_URL} from "../../../../../config";
+import {BASE_URL} from "../../../../../lockedConfig";
 
 @Component({
   selector: 'app-bluejay-ui',

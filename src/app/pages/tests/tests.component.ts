@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {Component, OnInit} from "@angular/core";
 import {GlassmatrixService} from "../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
-import { BASE_URL } from "../../../../config";
+import { BASE_URL } from "../../../../lockedConfig";
 import {GithubService} from "../../services/github.service";
 
 interface Step {

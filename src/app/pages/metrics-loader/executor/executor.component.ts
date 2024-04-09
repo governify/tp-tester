@@ -6,7 +6,7 @@ import {BluejayService} from "../../../services/bluejay.service";
 import {GlassmatrixService} from "../../../services/glass-matrix.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ScriptInfoComponent} from "../../../components/dialogs/script-info/script-info.component";
-import {BASE_URL} from "../../../../../config";
+import {BASE_URL} from "../../../../../lockedConfig";
 
 @Component({
   selector: 'app-executor',

@@ -39,6 +39,37 @@
 <app-token></app-token>
 <br>
 <hr>
+<h3>{{ 'CONFIG.CONSTANTS' | translate }}</h3>
+<div class="alert alert-warning alert-dismissible fade show custom-alert" role="alert" *ngIf="showConfigWarning">
+  <p>{{ 'CONFIG.MESSAGE' | translate }}</p>
+  <button type="button" class="close" aria-label="Close" (click)="showConfigWarning = false">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form>
+  <div class="form-group">
+    <label for="baseUrl">{{ 'CONFIG.BASE_URL' | translate }}</label>
+    <input type="text" class="form-control" id="baseUrl" [(ngModel)]="config.BASE_URL" name="BASE_URL">
+  </div>
+  <div class="form-group">
+    <label for="defaultCollector">{{ 'CONFIG.DEFAULT_COLLECTOR' | translate }}</label>
+    <input type="text" class="form-control" id="defaultCollector" [(ngModel)]="config.DEFAULT_COLLECTOR" name="DEFAULT_COLLECTOR">
+  </div>
+  <div class="form-group">
+    <label for="collectorEventsUrl">{{ 'CONFIG.COLLECTOR_EVENTS_URL' | translate }}</label>
+    <input type="text" class="form-control" id="collectorEventsUrl" [(ngModel)]="config.COLLECTOR_EVENTS_URL" name="COLLECTOR_EVENTS_URL">
+  </div>
+  <div class="form-group">
+    <label for="agreementsUrl">{{ 'CONFIG.AGREEMENTS_URL' | translate }}</label>
+    <input type="text" class="form-control" id="agreementsUrl" [(ngModel)]="config.AGREEMENTS_URL" name="AGREEMENTS_URL">
+  </div>
+  <div class="form-group">
+    <label for="scopesUrl">{{ 'CONFIG.SCOPES_URL' | translate }}</label>
+    <input type="text" class="form-control" id="scopesUrl" [(ngModel)]="config.SCOPES_URL" name="SCOPES_URL">
+  </div>
+  <button type="submit" class="btn btn-primary" (click)="updateConfig()">{{ 'CONFIG.UPDATE' | translate }}</button>
+</form>
+<br>
 <h3>{{ 'CONFIG.SWAGGER' | translate }}</h3>
 <p>{{ 'CONFIG.SWAGGER_DESCRIPTION' | translate }}</p>
 <p>{{ 'CONFIG.SWAGGER_DESCRIPTION_2' | translate }}</p>

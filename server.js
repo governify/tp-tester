@@ -15,7 +15,7 @@ const Docker = require('dockerode');
 const axios = require('axios');
 const docker = new Docker();
 const yaml = require('js-yaml');
-const { BASE_URL } = require('./config');
+const { BASE_URL, DEFAULT_COLLECTOR, COLLECTOR_EVENTS_URL, AGREEMENTS_URL, SCOPES_URL } = require('./config.js');
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -30,7 +30,6 @@ const swaggerOptions = {
   // ['.routes/*.js']
   apis: ['server.js']
 };
-
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -47,6 +46,44 @@ app.use((err, req, res, next) => {
   console.error(`Error en petición: ${req.method} ${req.path}`);
   console.error(err.stack);
   res.status(500).send('¡Algo salió mal!');
+});
+
+// Leer el archivo config.js
+const configData = fs.readFileSync(path.join(__dirname, 'config.js'), 'utf8');
+
+// Convertir el contenido a formato TypeScript
+let configTs = configData.replace(/const/g, 'export const');
+configTs = configTs.replace(/module\.exports = {[^}]*};/g, '');
+
+// Escribir el contenido en config.ts
+fs.writeFileSync(path.join(__dirname, 'lockedConfig.ts'), configTs);
+
+
+let config = {
+  BASE_URL,
+  DEFAULT_COLLECTOR,
+  COLLECTOR_EVENTS_URL,
+  AGREEMENTS_URL,
+  SCOPES_URL
+};
+
+app.get('/config', (req, res) => {
+  res.json(config);
+});
+
+app.post('/config', (req, res) => {
+  const keys = Object.keys(req.body);
+  let configData = fs.readFileSync(path.join(__dirname, 'config.js'), 'utf8');
+
+  keys.forEach((key) => {
+    if (configData.includes(key)) {
+      const regex = new RegExp(`(${key} = ).*;`);
+      configData = configData.replace(regex, `$1'${req.body[key]}';`);
+    }
+  });
+
+  fs.writeFileSync(path.join(__dirname, 'config.js'), configData);
+  res.json({ message: 'Config updated successfully' });
 });
 /**
  * @swagger

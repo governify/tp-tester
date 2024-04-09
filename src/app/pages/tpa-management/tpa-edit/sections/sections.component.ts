@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { BluejayService } from '../../../../services/bluejay.service';
 import {FilesService} from "../../../../services/files.service";
 import {GlassmatrixService} from "../../../../services/glass-matrix.service";
+import {SCOPES_URL} from "../../../../../../lockedConfig";
 
 @Component({
   selector: 'app-sections',
@@ -157,10 +158,10 @@ export class SectionsComponent implements OnInit {
     let restOfParts = parts.slice(1);
     let restOfString = restOfParts.join('-');
     let className = parts[1];
-    // Crear un nuevo objeto JSON con la plantilla proporcionada
+    // Crear un nuevo objeto JSON con la plantilla
     const newMetricContent = {
       "config": {
-        "scopeManager": "http://host.docker.internal:5700/api/v1/scopes/development"
+        "scopeManager": SCOPES_URL
       },
       "metric": {
         "computing": "actual",
