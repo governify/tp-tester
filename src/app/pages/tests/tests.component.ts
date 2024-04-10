@@ -4,6 +4,8 @@ import {GlassmatrixService} from "../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
 import { BASE_URL } from "../../../../lockedConfig";
 import {GithubService} from "../../services/github.service";
+import {BluejayService} from "../../services/bluejay.service";
+import {catchError, Observable, tap, throwError} from "rxjs";
 
 interface Step {
   method: string;
@@ -28,13 +30,32 @@ export class TestsComponent implements OnInit {
   yamlFiles: string[] = [];
   fileName!: string;
   response!: any;
+  tpa!: string;
   token!: string;
   errorMessage: string = '';
   saveStatusMessage: string = '';
+  computationUrl: string | null = null;
+  data!: string;
+  filename!: string;
+  scope = {
+    project: '',
+    class: '',
+    member: ''
+  };
+
+  window = {
+    type: '',
+    period: '',
+    initial: '',
+    from: '',
+    end: '',
+    timeZone: ''
+  };
   constructor(
     private http: HttpClient,
     private glassmatrixService: GlassmatrixService,
-    private githubService: GithubService
+    private githubService: GithubService,
+    private bluejayService: BluejayService
 ) { }
 
   ngOnInit(): void {
@@ -85,6 +106,22 @@ export class TestsComponent implements OnInit {
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
     },
     'POST': {
+
+      'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
+        // Leer el contenido del archivo
+        const tpa = step.with['tpa'];
+        const metric = step.with['metric'];
+        return this.loadData(tpa, metric).toPromise().then(() => {
+          // Ejecutar postComputation
+          this.postContent().subscribe(response => {
+            // Esperar 10 segundos y luego llamar a getComputation
+            setTimeout(() => {
+              this.getComputation();
+              console.log(this.computationUrl)
+            }, 1000);
+          });
+        });
+      },
       'github/createIssue': (step: { with: { [x: string]: string; }; }) => {
         const issue = { title: step.with['title'], body: step.with['body'] };
         return this.githubService.createIssue(this.token, step.with['owner'], step.with['repoName'], issue).toPromise();
@@ -145,5 +182,73 @@ export class TestsComponent implements OnInit {
       repoName: "#"
     method: "#"`;
   }
+  postContent(): Observable<any> {
+    const dataCopy = JSON.parse(this.data);
 
+    if (dataCopy && dataCopy.metric) {
+      if (dataCopy.metric.scope) {
+        dataCopy.metric.scope = this.scope;
+      }
+      if (dataCopy.metric.window) {
+        dataCopy.metric.window = this.window;
+      }
+    }
+
+    return this.bluejayService.postComputation(dataCopy).pipe(
+      tap((response: any) => {
+        this.response = JSON.stringify(response, null, 2);
+        this.computationUrl = `${BASE_URL}:5500${response.computation}`;
+      }),
+      catchError((error: any) => {
+        console.error('Error:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  getComputation(): void {
+    if (this.computationUrl) {
+      setTimeout(() => {
+        if (this.computationUrl) {
+          this.bluejayService.getComputation(this.computationUrl).subscribe(
+            (response: any) => {
+              this.response = JSON.stringify(response, null, 2);
+            },
+            (error: any) => {
+              console.error('Error:', error);
+            },
+          );
+        }
+      }, 5000);
+    }
+  }
+
+  private loadData(tpa: string, metric: string): Observable<any> {
+    this.tpa = tpa;
+    this.fileName = metric;
+    return this.glassmatrixService.loadFileContent(tpa, this.fileName).pipe(
+      tap(data => {
+        this.data = JSON.stringify(data, null, 2);
+        const parsedData = JSON.parse(this.data);
+        console.log(parsedData); // Aquí está el console.log
+        if (parsedData && parsedData.metric) {
+          if (parsedData.metric.scope) {
+            this.scope.project = parsedData.metric.scope.project || '';
+            this.scope.class = parsedData.metric.scope.class || '';
+            this.scope.member = parsedData.metric.scope.member || '';
+          }
+          if(parsedData.metric.window) {
+            this.window.type = parsedData.metric.window.type || '';
+            this.window.period = parsedData.metric.window.period || '';
+            this.window.initial = parsedData.metric.window.initial || '';
+            this.window.from = parsedData.metric.window.from || '';
+            this.window.end = parsedData.metric.window.end || '';
+            this.window.timeZone = parsedData.metric.window.timeZone || '';
+          }
+        } else {
+          console.error('Cannot read, invalid data');
+        }
+      })
+    );
+  }
 }
