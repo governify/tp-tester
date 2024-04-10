@@ -38,6 +38,7 @@ export class TestsComponent implements OnInit {
   computationUrl: string | null = null;
   data!: string;
   filename!: string;
+  computationResponse!: any;
   scope = {
     project: '',
     class: '',
@@ -58,7 +59,7 @@ export class TestsComponent implements OnInit {
     private githubService: GithubService,
     private bluejayService: BluejayService,
     private filesService: FilesService
-) { }
+) { this.computationResponse = ''; }
 
   ngOnInit(): void {
     this.loadYamlFiles();
@@ -167,30 +168,33 @@ export class TestsComponent implements OnInit {
   };
 
   executeYaml(): void {
-    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
-      this.response = '';
-      data.steps.reduce((prevPromise, step: Step) => {
-        return prevPromise.then(() => {
-          this.response += step.uses + '\n';
-          // @ts-ignore
-          const handler = this.stepHandlers[step.method][step.uses];
-          if (handler) {
-            return handler(step).then((response: Response) => {
-              this.response += JSON.stringify(response, null, 2) + '\n\n';
-            });
-          } else {
-            console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
-          }
-        });
-      }, Promise.resolve()).catch(error => {
-        console.error(error);
-        this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
+  this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
+    this.response = '';
+    data.steps.reduce((prevPromise, step: Step) => {
+      return prevPromise.then(() => {
+        // @ts-ignore
+        const handler = this.stepHandlers[step.method][step.uses];
+        if (handler) {
+          return handler(step).then((response: Response) => {
+            if(step.uses === 'bluejay/compute/tpa' || step.uses === 'bluejay/compute/metric') {
+              this.computationResponse += step.uses + '\n';
+            }else{
+              this.response += step.uses + '\n' + JSON.stringify(response, null, 2) + '\n\n';
+            }
+          });
+        } else {
+          console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
+        }
       });
-    }, error => {
+    }, Promise.resolve()).catch(error => {
       console.error(error);
       this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
     });
-  }
+  }, error => {
+    console.error(error);
+    this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
+  });
+}
   setDefaultFormat(): void {
     this.yamlContent = `steps:
   - uses: "github/#"
@@ -212,7 +216,7 @@ export class TestsComponent implements OnInit {
 
     return this.bluejayService.postComputation(dataCopy).pipe(
       tap((response: any) => {
-        this.response = JSON.stringify(response, null, 2);
+        this.computationResponse += JSON.stringify(response, null, 2);
         this.computationUrl = `${BASE_URL}:5500${response.computation}`;
       }),
       catchError((error: any) => {
@@ -228,12 +232,19 @@ export class TestsComponent implements OnInit {
         if (this.computationUrl) {
           this.bluejayService.getComputation(this.computationUrl).subscribe(
             (response: any) => {
-              this.response = JSON.stringify(response, null, 2);
+              // Agregar la respuesta al contenido existente en lugar de reemplazarlo
+              this.computationResponse += JSON.stringify(response, null, 2) + '\n\n';
 
-              // Guardar la respuesta en la base de datos a través del servidor Express
-              this.http.post('http://localhost:6012/saveData', response).subscribe(
-                (res) => console.log('Data saved successfully'),
-                (err) => console.error('Error saving data:', err)
+              // Eliminar todos los datos existentes en la base de datos
+              this.http.delete(`${BASE_URL}:6012/deleteData`).subscribe(
+                () => {
+                  // Guardar la respuesta en la base de datos a través del servidor Express
+                  this.http.post(`${BASE_URL}:6012/saveData`, response).subscribe(
+                    (res) => console.log('Data saved successfully'),
+                    (err) => console.error('Error saving data:', err)
+                  );
+                },
+                (err) => console.error('Error deleting data:', err)
               );
             },
             (error: any) => {
@@ -244,7 +255,6 @@ export class TestsComponent implements OnInit {
       }, 5000);
     }
   }
-
   private loadData(tpa: string, metric: string): Observable<any> {
     this.tpa = tpa;
     this.fileName = metric;

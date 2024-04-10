@@ -63,6 +63,9 @@
       <div class="response">
         <textarea id="textarea2" readonly>{{response}}</textarea>
       </div>
+      <div class="computaionResponse" *ngIf="computationResponse">
+        <textarea id="textarea3" readonly>{{computationResponse}}</textarea>
+      </div>
     </div>
     <div class="col-4">
       <h3> {{ 'TESTS.ejemplos' | translate }} </h3>

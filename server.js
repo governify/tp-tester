@@ -69,7 +69,16 @@ app.post('/saveData', (req, res) => {
     }
   });
 });
-
+app.delete('/deleteData', (req, res) => {
+  // Utiliza el método 'remove' de NeDB para eliminar todos los documentos
+  db.remove({}, { multi: true }, function (err, numRemoved) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send({ message: 'All data deleted successfully', deletedCount: numRemoved });
+    }
+  });
+});
 let config = {
   BASE_URL,
   DEFAULT_COLLECTOR,
