@@ -23,3 +23,19 @@
 .copy-button:hover {
   background-color: #0056b3;
 }
+
+.search-container input[type="text"] {
+  width: 150px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 15px;
+  margin-right: 5px;
+}
+.btn.btn-primary{
+  margin-right: 5px;
+}
+
+.btn.btn-light{
+  background-color: #c51f1f;
+  color: white;
+}

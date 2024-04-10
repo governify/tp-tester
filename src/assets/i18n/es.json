@@ -388,7 +388,9 @@
     "example9": "Hacer un pull de la rama",
     "example10": "Crear archivo",
     "example11": "Hacer commit",
-    "example12": "Hacer push"
+    "example12": "Hacer push",
+    "example13": "Computar métrica de TPA",
+    "example14": "Computar métrica"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",
