@@ -39,6 +39,7 @@ export class TestsComponent implements OnInit {
   data!: string;
   filename!: string;
   computationResponse!: any;
+  testStatuses: { text: string, success: boolean }[] = [];
   scope = {
     project: '',
     class: '',
@@ -109,7 +110,30 @@ export class TestsComponent implements OnInit {
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
     },
     'POST': {
+      'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
+        // Obtener la clave a buscar y el valor mínimo esperado
+        const key = step.with['key'];
+        const minExpectedValue = Number(step.with['minExpectedValue']);
 
+        // Hacer una solicitud GET al endpoint '/getData/:key'
+        return this.http.get<any>(`http://localhost:6012/getData/${key}`, {}).toPromise().then((data: any) => {
+          // Comprueba si el campo especificado existe en los datos devueltos
+          if (data && data[0] && data[0][key]) {
+            const value = data[0][key];
+            // Comprueba si el valor obtenido es mayor o igual al valor mínimo esperado
+            if (value >= minExpectedValue) {
+              // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
+              this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
+            } else {
+              // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
+              this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
+            }
+          } else {
+            // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
+            this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
+          }
+        });
+      },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
         const tpa = step.with['tpa'];
@@ -309,5 +333,9 @@ export class TestsComponent implements OnInit {
         }
       })
     );
+  }
+
+  removeStatus(index: number): void {
+    this.testStatuses.splice(index, 1);
   }
 }

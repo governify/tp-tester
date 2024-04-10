@@ -79,6 +79,44 @@ app.delete('/deleteData', (req, res) => {
     }
   });
 });
+function deepSearch(obj, key) {
+  if (obj.hasOwnProperty(key)) {
+    return obj[key];
+  }
+  for (let i in obj) {
+    if (typeof obj[i] === 'object') {
+      let result = deepSearch(obj[i], key);
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return null;
+}
+
+app.get('/getData/:field', (req, res) => {
+  const field = req.params.field;
+
+  db.find({}, function (err, docs) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      const fieldDocs = docs.map(doc => {
+        const value = deepSearch(doc, field);
+        if (value) {
+          return { [field]: value };
+        }
+        return null;
+      }).filter(doc => doc !== null);
+
+      if (fieldDocs.length > 0) {
+        res.status(200).send(fieldDocs);
+      } else {
+        res.status(200).send({ message: `No hay coincidencias para el campo '${field}' en la base de datos.` });
+      }
+    }
+  });
+});
 let config = {
   BASE_URL,
   DEFAULT_COLLECTOR,

@@ -131,6 +131,14 @@ export class YamelsComponent implements OnInit {
         collector: "EVENTS"
         metric: "FUNCIONANDO_PR_CON_COMENTARIOS.json"
       method: "POST"`
+    },
+    {
+      id: 'example15',
+      content: `- uses: "bluejay/checkContain"
+      with:
+        key: "additions"
+        minExpectedValue: "5"
+      method: "POST"`
     }
   ];
 
