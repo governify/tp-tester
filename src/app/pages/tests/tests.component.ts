@@ -6,6 +6,7 @@ import { BASE_URL } from "../../../../lockedConfig";
 import {GithubService} from "../../services/github.service";
 import {BluejayService} from "../../services/bluejay.service";
 import {catchError, Observable, tap, throwError} from "rxjs";
+import {FilesService} from "../../services/files.service";
 
 interface Step {
   method: string;
@@ -55,7 +56,8 @@ export class TestsComponent implements OnInit {
     private http: HttpClient,
     private glassmatrixService: GlassmatrixService,
     private githubService: GithubService,
-    private bluejayService: BluejayService
+    private bluejayService: BluejayService,
+    private filesService: FilesService
 ) { }
 
   ngOnInit(): void {
@@ -112,6 +114,20 @@ export class TestsComponent implements OnInit {
         const tpa = step.with['tpa'];
         const metric = step.with['metric'];
         return this.loadData(tpa, metric).toPromise().then(() => {
+          // Ejecutar postComputation
+          this.postContent().subscribe(response => {
+            // Esperar 10 segundos y luego llamar a getComputation
+            setTimeout(() => {
+              this.getComputation();
+              console.log(this.computationUrl)
+            }, 1000);
+          });
+        });
+      },
+      'bluejay/compute/metric': (step: { with: { [x: string]: string; }; }) => {
+        // Leer el contenido del archivo
+        const metric = step.with['metric'];
+        return this.loadIndividualData(metric).toPromise().then(() => {
           // Ejecutar postComputation
           this.postContent().subscribe(response => {
             // Esperar 10 segundos y luego llamar a getComputation
@@ -213,6 +229,12 @@ export class TestsComponent implements OnInit {
           this.bluejayService.getComputation(this.computationUrl).subscribe(
             (response: any) => {
               this.response = JSON.stringify(response, null, 2);
+
+              // Guardar la respuesta en la base de datos a través del servidor Express
+              this.http.post('http://localhost:6012/saveData', response).subscribe(
+                (res) => console.log('Data saved successfully'),
+                (err) => console.error('Error saving data:', err)
+              );
             },
             (error: any) => {
               console.error('Error:', error);
@@ -227,6 +249,33 @@ export class TestsComponent implements OnInit {
     this.tpa = tpa;
     this.fileName = metric;
     return this.glassmatrixService.loadFileContent(tpa, this.fileName).pipe(
+      tap(data => {
+        this.data = JSON.stringify(data, null, 2);
+        const parsedData = JSON.parse(this.data);
+        console.log(parsedData); // Aquí está el console.log
+        if (parsedData && parsedData.metric) {
+          if (parsedData.metric.scope) {
+            this.scope.project = parsedData.metric.scope.project || '';
+            this.scope.class = parsedData.metric.scope.class || '';
+            this.scope.member = parsedData.metric.scope.member || '';
+          }
+          if(parsedData.metric.window) {
+            this.window.type = parsedData.metric.window.type || '';
+            this.window.period = parsedData.metric.window.period || '';
+            this.window.initial = parsedData.metric.window.initial || '';
+            this.window.from = parsedData.metric.window.from || '';
+            this.window.end = parsedData.metric.window.end || '';
+            this.window.timeZone = parsedData.metric.window.timeZone || '';
+          }
+        } else {
+          console.error('Cannot read, invalid data');
+        }
+      })
+    );
+  }
+  private loadIndividualData(metric: string): Observable<any> {
+    this.fileName = metric;
+    return this.filesService.getSavedMetric(this.fileName).pipe(
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
         const parsedData = JSON.parse(this.data);
