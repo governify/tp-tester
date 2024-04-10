@@ -153,7 +153,7 @@ button.btn-danger:enabled {
 }
 
 .createMetric, hr, #titulo, h4 {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-left: 15%;
   margin-right: 15%;
 }
@@ -207,7 +207,7 @@ button.btn-danger:enabled {
 }
 
 .folder-container {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .folder-title {
