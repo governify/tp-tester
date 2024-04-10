@@ -79,6 +79,25 @@ app.delete('/deleteData', (req, res) => {
     }
   });
 });
+app.get('/getData', (req, res) => {
+  // Utiliza el método 'find' de NeDB para obtener todos los documentos
+  db.find({}, function (err, docs) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      // Busca el campo 'additions' en los documentos
+      const additionsDocs = docs.filter(doc => 'additions' in doc);
+
+      if (additionsDocs.length > 0) {
+        // Si se encuentra el campo 'additions', devuelve los documentos correspondientes
+        res.status(200).send(additionsDocs);
+      } else {
+        // Si no se encuentra el campo 'additions', devuelve un mensaje de error
+        res.status(404).send({ message: 'No se encontró el campo \'additions\' en la base de datos.' });
+      }
+    }
+  });
+});
 let config = {
   BASE_URL,
   DEFAULT_COLLECTOR,
