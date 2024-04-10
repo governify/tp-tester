@@ -53,3 +53,4 @@ src/assets/token/code_local.json
 src/assets/savedYAML/
 src/assets/savedYAML/*
 myDatabase.db
+*.json
