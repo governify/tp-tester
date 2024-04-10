@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 export class YamelsComponent implements OnInit {
   p: number = 1;
+  searchTerm: string = '';
   sections = [
     {
       id: 'example1',
@@ -113,6 +114,23 @@ export class YamelsComponent implements OnInit {
       with:
         repoName: "tp-testbench"
       method: "POST"`
+    },
+    {
+      id: 'example13',
+      content: `- uses: "bluejay/compute/tpa"
+      with:
+        collector: "EVENTS"
+        tpa: "tpa-TFG-GH-antoniiosc7_Glassmatrix"
+        metric: "working_metric.json"
+      method: "POST"`
+    },
+    {
+      id: 'example14',
+      content: `- uses: "bluejay/compute/metric"
+      with:
+        collector: "EVENTS"
+        metric: "FUNCIONANDO_PR_CON_COMENTARIOS.json"
+      method: "POST"`
     }
   ];
 
@@ -131,5 +149,19 @@ export class YamelsComponent implements OnInit {
     copyText.select();
     document.execCommand('copy');
   }
+  filteredSections = this.sections; // Add this line
 
+  searchMetric(): void {
+    if (this.searchTerm) {
+      this.filteredSections = this.sections.filter(section =>
+        section.title && section.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredSections = this.sections;
+    }
+  }
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.filteredSections = this.sections;
+  }
 }

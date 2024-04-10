@@ -388,7 +388,9 @@
     "example9": "Pull the branch",
     "example10": "Create file",
     "example11": "Make commit",
-    "example12": "Push"
+    "example12": "Push",
+    "example13": "Compute TPA Metrics",
+    "example14": "Compute Metric"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",
