@@ -46,7 +46,7 @@ Thumbs.db
 /src/assets/token/code.json
 /assets/repositories/*
 assets/repositories/
-/src/assets/savedMetrics/tpaMetrics/*
+/src/assets/savedMetrics/tpaMetrics/.json
 src/assets/token/code.json
 src/assets/token/code_local.json
 src/assets/savedYAML/*.yaml
