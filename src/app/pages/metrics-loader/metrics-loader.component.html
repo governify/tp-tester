@@ -17,7 +17,7 @@
     </div>
     <div *ngFor="let folder of folders" class="folder-container">
       <ng-container *ngIf="loadSubdirectoryFiles(folder).length > 0">
-        <h4 class="folder-title"> {{ folder }} </h4>
+        <h5 class="folder-title"> {{ folder }} </h5>
         <table class="table table-striped folder-table">
           <thead>
           <tr>
