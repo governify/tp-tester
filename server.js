@@ -79,21 +79,40 @@ app.delete('/deleteData', (req, res) => {
     }
   });
 });
-app.get('/getData', (req, res) => {
-  // Utiliza el método 'find' de NeDB para obtener todos los documentos
+function deepSearch(obj, key) {
+  if (obj.hasOwnProperty(key)) {
+    return obj[key];
+  }
+  for (let i in obj) {
+    if (typeof obj[i] === 'object') {
+      let result = deepSearch(obj[i], key);
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return null;
+}
+
+app.get('/getData/:field', (req, res) => {
+  const field = req.params.field;
+
   db.find({}, function (err, docs) {
     if (err) {
       res.status(500).send(err);
     } else {
-      // Busca el campo 'additions' en los documentos
-      const additionsDocs = docs.filter(doc => 'additions' in doc);
+      const fieldDocs = docs.map(doc => {
+        const value = deepSearch(doc, field);
+        if (value) {
+          return { [field]: value };
+        }
+        return null;
+      }).filter(doc => doc !== null);
 
-      if (additionsDocs.length > 0) {
-        // Si se encuentra el campo 'additions', devuelve los documentos correspondientes
-        res.status(200).send(additionsDocs);
+      if (fieldDocs.length > 0) {
+        res.status(200).send(fieldDocs);
       } else {
-        // Si no se encuentra el campo 'additions', devuelve un mensaje de error
-        res.status(404).send({ message: 'No se encontró el campo \'additions\' en la base de datos.' });
+        res.status(200).send({ message: `No hay coincidencias para el campo '${field}' en la base de datos.` });
       }
     }
   });

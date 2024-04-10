@@ -390,7 +390,8 @@
     "example11": "Make commit",
     "example12": "Push",
     "example13": "Compute TPA Metrics",
-    "example14": "Compute Metric"
+    "example14": "Compute Metric",
+    "example15": "Check in response"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",

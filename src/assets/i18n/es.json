@@ -390,7 +390,8 @@
     "example11": "Hacer commit",
     "example12": "Hacer push",
     "example13": "Computar métrica de TPA",
-    "example14": "Computar métrica"
+    "example14": "Computar métrica",
+    "example15": "Comprobar en la respuesta"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",

@@ -70,6 +70,16 @@
     <div class="col-4">
       <h3> {{ 'TESTS.ejemplos' | translate }} </h3>
       <app-yamels></app-yamels>
+      <h3>Test Results</h3>
+      <div *ngIf="testStatuses.length === 0" class="alert alert-info">
+        No test executed yet.
+      </div>
+      <div *ngFor="let status of testStatuses; let i = index" class="alert" [ngClass]="{'alert-success': status.success, 'alert-danger': !status.success}">
+        {{ status.text }}
+        <button type="button" class="close float-right bg-transparent" (click)="removeStatus(i)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     </div>
   </div>
 
