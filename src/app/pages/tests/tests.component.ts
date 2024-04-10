@@ -4,6 +4,9 @@ import {GlassmatrixService} from "../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
 import { BASE_URL } from "../../../../lockedConfig";
 import {GithubService} from "../../services/github.service";
+import {BluejayService} from "../../services/bluejay.service";
+import {catchError, Observable, tap, throwError} from "rxjs";
+import {FilesService} from "../../services/files.service";
 
 interface Step {
   method: string;
@@ -28,14 +31,35 @@ export class TestsComponent implements OnInit {
   yamlFiles: string[] = [];
   fileName!: string;
   response!: any;
+  tpa!: string;
   token!: string;
   errorMessage: string = '';
   saveStatusMessage: string = '';
+  computationUrl: string | null = null;
+  data!: string;
+  filename!: string;
+  computationResponse!: any;
+  scope = {
+    project: '',
+    class: '',
+    member: ''
+  };
+
+  window = {
+    type: '',
+    period: '',
+    initial: '',
+    from: '',
+    end: '',
+    timeZone: ''
+  };
   constructor(
     private http: HttpClient,
     private glassmatrixService: GlassmatrixService,
-    private githubService: GithubService
-) { }
+    private githubService: GithubService,
+    private bluejayService: BluejayService,
+    private filesService: FilesService
+) { this.computationResponse = ''; }
 
   ngOnInit(): void {
     this.loadYamlFiles();
@@ -85,6 +109,36 @@ export class TestsComponent implements OnInit {
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
     },
     'POST': {
+
+      'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
+        // Leer el contenido del archivo
+        const tpa = step.with['tpa'];
+        const metric = step.with['metric'];
+        return this.loadData(tpa, metric).toPromise().then(() => {
+          // Ejecutar postComputation
+          this.postContent().subscribe(response => {
+            // Esperar 10 segundos y luego llamar a getComputation
+            setTimeout(() => {
+              this.getComputation();
+              console.log(this.computationUrl)
+            }, 1000);
+          });
+        });
+      },
+      'bluejay/compute/metric': (step: { with: { [x: string]: string; }; }) => {
+        // Leer el contenido del archivo
+        const metric = step.with['metric'];
+        return this.loadIndividualData(metric).toPromise().then(() => {
+          // Ejecutar postComputation
+          this.postContent().subscribe(response => {
+            // Esperar 10 segundos y luego llamar a getComputation
+            setTimeout(() => {
+              this.getComputation();
+              console.log(this.computationUrl)
+            }, 1000);
+          });
+        });
+      },
       'github/createIssue': (step: { with: { [x: string]: string; }; }) => {
         const issue = { title: step.with['title'], body: step.with['body'] };
         return this.githubService.createIssue(this.token, step.with['owner'], step.with['repoName'], issue).toPromise();
@@ -114,30 +168,33 @@ export class TestsComponent implements OnInit {
   };
 
   executeYaml(): void {
-    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
-      this.response = '';
-      data.steps.reduce((prevPromise, step: Step) => {
-        return prevPromise.then(() => {
-          this.response += step.uses + '\n';
-          // @ts-ignore
-          const handler = this.stepHandlers[step.method][step.uses];
-          if (handler) {
-            return handler(step).then((response: Response) => {
-              this.response += JSON.stringify(response, null, 2) + '\n\n';
-            });
-          } else {
-            console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
-          }
-        });
-      }, Promise.resolve()).catch(error => {
-        console.error(error);
-        this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
+  this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
+    this.response = '';
+    data.steps.reduce((prevPromise, step: Step) => {
+      return prevPromise.then(() => {
+        // @ts-ignore
+        const handler = this.stepHandlers[step.method][step.uses];
+        if (handler) {
+          return handler(step).then((response: Response) => {
+            if(step.uses === 'bluejay/compute/tpa' || step.uses === 'bluejay/compute/metric') {
+              this.computationResponse += step.uses + '\n';
+            }else{
+              this.response += step.uses + '\n' + JSON.stringify(response, null, 2) + '\n\n';
+            }
+          });
+        } else {
+          console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
+        }
       });
-    }, error => {
+    }, Promise.resolve()).catch(error => {
       console.error(error);
       this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
     });
-  }
+  }, error => {
+    console.error(error);
+    this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
+  });
+}
   setDefaultFormat(): void {
     this.yamlContent = `steps:
   - uses: "github/#"
@@ -145,5 +202,112 @@ export class TestsComponent implements OnInit {
       repoName: "#"
     method: "#"`;
   }
+  postContent(): Observable<any> {
+    const dataCopy = JSON.parse(this.data);
 
+    if (dataCopy && dataCopy.metric) {
+      if (dataCopy.metric.scope) {
+        dataCopy.metric.scope = this.scope;
+      }
+      if (dataCopy.metric.window) {
+        dataCopy.metric.window = this.window;
+      }
+    }
+
+    return this.bluejayService.postComputation(dataCopy).pipe(
+      tap((response: any) => {
+        this.computationResponse += JSON.stringify(response, null, 2);
+        this.computationUrl = `${BASE_URL}:5500${response.computation}`;
+      }),
+      catchError((error: any) => {
+        console.error('Error:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  getComputation(): void {
+    if (this.computationUrl) {
+      setTimeout(() => {
+        if (this.computationUrl) {
+          this.bluejayService.getComputation(this.computationUrl).subscribe(
+            (response: any) => {
+              // Agregar la respuesta al contenido existente en lugar de reemplazarlo
+              this.computationResponse += JSON.stringify(response, null, 2) + '\n\n';
+
+              // Eliminar todos los datos existentes en la base de datos
+              this.http.delete(`${BASE_URL}:6012/deleteData`).subscribe(
+                () => {
+                  // Guardar la respuesta en la base de datos a través del servidor Express
+                  this.http.post(`${BASE_URL}:6012/saveData`, response).subscribe(
+                    (res) => console.log('Data saved successfully'),
+                    (err) => console.error('Error saving data:', err)
+                  );
+                },
+                (err) => console.error('Error deleting data:', err)
+              );
+            },
+            (error: any) => {
+              console.error('Error:', error);
+            },
+          );
+        }
+      }, 5000);
+    }
+  }
+  private loadData(tpa: string, metric: string): Observable<any> {
+    this.tpa = tpa;
+    this.fileName = metric;
+    return this.glassmatrixService.loadFileContent(tpa, this.fileName).pipe(
+      tap(data => {
+        this.data = JSON.stringify(data, null, 2);
+        const parsedData = JSON.parse(this.data);
+        console.log(parsedData); // Aquí está el console.log
+        if (parsedData && parsedData.metric) {
+          if (parsedData.metric.scope) {
+            this.scope.project = parsedData.metric.scope.project || '';
+            this.scope.class = parsedData.metric.scope.class || '';
+            this.scope.member = parsedData.metric.scope.member || '';
+          }
+          if(parsedData.metric.window) {
+            this.window.type = parsedData.metric.window.type || '';
+            this.window.period = parsedData.metric.window.period || '';
+            this.window.initial = parsedData.metric.window.initial || '';
+            this.window.from = parsedData.metric.window.from || '';
+            this.window.end = parsedData.metric.window.end || '';
+            this.window.timeZone = parsedData.metric.window.timeZone || '';
+          }
+        } else {
+          console.error('Cannot read, invalid data');
+        }
+      })
+    );
+  }
+  private loadIndividualData(metric: string): Observable<any> {
+    this.fileName = metric;
+    return this.filesService.getSavedMetric(this.fileName).pipe(
+      tap(data => {
+        this.data = JSON.stringify(data, null, 2);
+        const parsedData = JSON.parse(this.data);
+        console.log(parsedData); // Aquí está el console.log
+        if (parsedData && parsedData.metric) {
+          if (parsedData.metric.scope) {
+            this.scope.project = parsedData.metric.scope.project || '';
+            this.scope.class = parsedData.metric.scope.class || '';
+            this.scope.member = parsedData.metric.scope.member || '';
+          }
+          if(parsedData.metric.window) {
+            this.window.type = parsedData.metric.window.type || '';
+            this.window.period = parsedData.metric.window.period || '';
+            this.window.initial = parsedData.metric.window.initial || '';
+            this.window.from = parsedData.metric.window.from || '';
+            this.window.end = parsedData.metric.window.end || '';
+            this.window.timeZone = parsedData.metric.window.timeZone || '';
+          }
+        } else {
+          console.error('Cannot read, invalid data');
+        }
+      })
+    );
+  }
 }

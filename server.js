@@ -15,6 +15,8 @@ const Docker = require('dockerode');
 const axios = require('axios');
 const docker = new Docker();
 const yaml = require('js-yaml');
+const Datastore = require('nedb');
+const db = new Datastore({ filename: './myDatabase.db', autoload: true });
 const { BASE_URL, DEFAULT_COLLECTOR, COLLECTOR_EVENTS_URL, AGREEMENTS_URL, SCOPES_URL } = require('./config.js');
 const swaggerOptions = {
   swaggerDefinition: {
@@ -58,7 +60,25 @@ configTs = configTs.replace(/module\.exports = {[^}]*};/g, '');
 // Escribir el contenido en config.ts
 fs.writeFileSync(path.join(__dirname, 'lockedConfig.ts'), configTs);
 
-
+app.post('/saveData', (req, res) => {
+  db.insert(req.body, function (err, newDoc) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(newDoc);
+    }
+  });
+});
+app.delete('/deleteData', (req, res) => {
+  // Utiliza el método 'remove' de NeDB para eliminar todos los documentos
+  db.remove({}, { multi: true }, function (err, numRemoved) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send({ message: 'All data deleted successfully', deletedCount: numRemoved });
+    }
+  });
+});
 let config = {
   BASE_URL,
   DEFAULT_COLLECTOR,
