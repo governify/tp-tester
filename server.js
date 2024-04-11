@@ -94,7 +94,19 @@ function deepSearch(obj, key) {
   }
   return null;
 }
+app.post(apiName + '/calculateSHA', (req, res) => {
+  const data = req.body;
 
+  // Convert the data to a string
+  const dataString = JSON.stringify(data);
+
+  // Create a hash of the data
+  const hash = crypto.createHash('sha256');
+  hash.update(dataString);
+  const hashedContent = hash.digest('hex');
+
+  res.json({ sha256: hashedContent });
+});
 app.get('/getData/:field', (req, res) => {
   const field = req.params.field;
 
@@ -576,7 +588,8 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while reading the directory.' });
     } else {
-      res.json(files);
+      const jsonFiles = files.filter(file => path.extname(file) === '.json');
+      res.json(jsonFiles);
     }
   });
 });
