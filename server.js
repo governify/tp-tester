@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const simpleGit = require('simple-git');
 const git = simpleGit();
 const app = express();
@@ -93,7 +94,19 @@ function deepSearch(obj, key) {
   }
   return null;
 }
+app.post(apiName + '/calculateSHA', (req, res) => {
+  const data = req.body;
 
+  // Convert the data to a string
+  const dataString = JSON.stringify(data);
+
+  // Create a hash of the data
+  const hash = crypto.createHash('sha256');
+  hash.update(dataString);
+  const hashedContent = hash.digest('hex');
+
+  res.json({ sha256: hashedContent });
+});
 app.get('/getData/:field', (req, res) => {
   const field = req.params.field;
 
@@ -192,6 +205,8 @@ app.get('/api/containers', (req, res) => {
     }
   });
 });
+
+
 /**
  * @swagger
  * /glassmatrix/api/v1/tpa/save:
@@ -221,7 +236,21 @@ app.post(apiName + '/tpa/save', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
-      res.json({ message: 'File saved successfully.' });
+      // Create a hash of the content
+      const hash = crypto.createHash('sha256');
+      hash.update(JSON.stringify(data.content));
+      const hashedContent = hash.digest('hex');
+
+      // Write the hashed content to a new file
+      const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}_hash.yaml`);
+      fs.writeFile(hashedFilePath, JSON.stringify({ hashedContent }, null, 2), (err) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ message: 'An error occurred while saving the hashed file.' });
+        } else {
+          res.json({ message: 'File and hashed file saved successfully.' });
+        }
+      });
     }
   });
 });
@@ -378,6 +407,16 @@ app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
  *      '200':
  *        description: A successful response
  */
+/**
+ * @swagger
+ * /glassmatrix/api/v1/tpa/saveTPAMetric:
+ *  post:
+ *    tags: [Bluejay]
+ *    description: Use to save a TPA metric
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
   const data = req.body;
   const dirPath = path.join(__dirname, `/src/assets/savedMetrics/tpaMetrics/${data.folderName}`);
@@ -392,7 +431,21 @@ app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
-      res.json({ message: 'File saved successfully.' });
+      // Create a hash of the content
+      const hash = crypto.createHash('sha256');
+      hash.update(JSON.stringify(data.content));
+      const hashedContent = hash.digest('hex');
+
+      // Write the hashed content to a new file
+      const hashedFilePath = path.join(dirPath, `${data.fileName}_hash.yaml`);
+      fs.writeFile(hashedFilePath, JSON.stringify({ hashedContent }, null, 2), (err) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ message: 'An error occurred while saving the hashed file.' });
+        } else {
+          res.json({ message: 'File and hashed file saved successfully.' });
+        }
+      });
     }
   });
 });
@@ -535,7 +588,8 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while reading the directory.' });
     } else {
-      res.json(files);
+      const jsonFiles = files.filter(file => path.extname(file) === '.json');
+      res.json(jsonFiles);
     }
   });
 });
@@ -628,7 +682,10 @@ app.use((req, res, next) => {
  *        description: A successful response
  */
 app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
-  const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${req.params.fileName}`);
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${fileName}`);
+  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${fileName}_hash.yaml`);
+
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
       console.error('File does not exist:', err);
@@ -639,7 +696,14 @@ app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
           console.error('An error occurred while deleting the file:', err);
           res.status(500).json({ message: 'An error occurred while deleting the file.' });
         } else {
-          res.json({ message: 'File deleted successfully.' });
+          // Delete the hashed file
+          fs.unlink(hashedFilePath, (err) => {
+            if (err) {
+              console.error('An error occurred while deleting the hashed file:', err);
+              // Don't send a response here, as we've already sent a response
+            }
+          });
+          res.json({ message: 'File and hashed file deleted successfully.' });
         }
       });
     }
@@ -667,7 +731,11 @@ app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
  *        description: A successful response
  */
 app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) => {
-  const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', req.params.subdirectory, `${req.params.fileName}`);
+  const subdirectory = req.params.subdirectory;
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory, `${fileName}`);
+  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory, `${fileName}_hash.yaml`);
+
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
       console.error('File does not exist:', err);
@@ -678,7 +746,14 @@ app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) =>
           console.error('An error occurred while deleting the file:', err);
           res.status(500).json({ message: 'An error occurred while deleting the file.' });
         } else {
-          res.json({ message: 'File deleted successfully.' });
+          // Delete the hashed file
+          fs.unlink(hashedFilePath, (err) => {
+            if (err) {
+              console.error('An error occurred while deleting the hashed file:', err);
+              // Don't send a response here, as we've already sent a response
+            }
+          });
+          res.json({ message: 'File and hashed file deleted successfully.' });
         }
       });
     }
