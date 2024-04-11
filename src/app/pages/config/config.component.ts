@@ -65,13 +65,13 @@ export class ConfigComponent implements OnInit {
     });
   }
   getConfig() {
-    this.http.get(`${BASE_URL}:6012/config`).subscribe((config: any) => {
+    this.http.get(`${BASE_URL}:6012/glassmatrix/api/v1/config`).subscribe((config: any) => {
       this.config = config;
     });
   }
 
   updateConfig() {
-    this.http.post(`${BASE_URL}:6012/config`, this.config).subscribe(() => {
+    this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/config`, this.config).subscribe(() => {
       alert('Config updated successfully');
     });
   }

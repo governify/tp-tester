@@ -13,7 +13,6 @@ const swaggerUi = require('swagger-ui-express');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const Docker = require('dockerode');
-const axios = require('axios');
 const docker = new Docker();
 const yaml = require('js-yaml');
 const Datastore = require('nedb');
@@ -51,35 +50,19 @@ app.use((err, req, res, next) => {
   res.status(500).send('¡Algo salió mal!');
 });
 
-// Leer el archivo config.js
+//CONFIG URLS
 const configData = fs.readFileSync(path.join(__dirname, 'config.js'), 'utf8');
-
-// Convertir el contenido a formato TypeScript
 let configTs = configData.replace(/const/g, 'export const');
 configTs = configTs.replace(/module\.exports = {[^}]*};/g, '');
-
-// Escribir el contenido en config.ts
 fs.writeFileSync(path.join(__dirname, 'lockedConfig.ts'), configTs);
-
-app.post('/saveData', (req, res) => {
-  db.insert(req.body, function (err, newDoc) {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(newDoc);
-    }
-  });
-});
-app.delete('/deleteData', (req, res) => {
-  // Utiliza el método 'remove' de NeDB para eliminar todos los documentos
-  db.remove({}, { multi: true }, function (err, numRemoved) {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send({ message: 'All data deleted successfully', deletedCount: numRemoved });
-    }
-  });
-});
+let config = {
+  BASE_URL,
+  DEFAULT_COLLECTOR,
+  COLLECTOR_EVENTS_URL,
+  AGREEMENTS_URL,
+  SCOPES_URL
+};
+//AUX
 function deepSearch(obj, key) {
   if (obj.hasOwnProperty(key)) {
     return obj[key];
@@ -94,20 +77,114 @@ function deepSearch(obj, key) {
   }
   return null;
 }
+
+/**
+ * @swagger
+ * /api/saveData:
+ *   post:
+ *     tags:
+ *       - Data
+ *     description: Save data to the database
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: data
+ *         description: Data to save
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Data'
+ *     responses:
+ *       200:
+ *         description: Successfully saved data
+ *       500:
+ *         description: Error occurred while saving data
+ */
+app.post(apiName + '/saveData', (req, res) => {
+  db.insert(req.body, function (err, newDoc) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(newDoc);
+    }
+  });
+});
+/**
+ * @swagger
+ * /api/deleteData:
+ *   delete:
+ *     tags:
+ *       - Data
+ *     description: Delete all data from the database
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Successfully deleted data
+ *       500:
+ *         description: Error occurred while deleting data
+ */
+app.delete(apiName + '/deleteData', (req, res) => {
+  // Utiliza el método 'remove' de NeDB para eliminar todos los documentos
+  db.remove({}, { multi: true }, function (err, numRemoved) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send({ message: 'All data deleted successfully', deletedCount: numRemoved });
+    }
+  });
+});
+
+/**
+ * @swagger
+ * /api/calculateSHA:
+ *   post:
+ *     tags:
+ *       - internal
+ *     description: Calculate SHA256 hash of the provided data
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: data
+ *         description: Data to hash
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Data'
+ *     responses:
+ *       200:
+ *         description: Successfully calculated hash
+ */
 app.post(apiName + '/calculateSHA', (req, res) => {
   const data = req.body;
-
-  // Convert the data to a string
   const dataString = JSON.stringify(data);
-
-  // Create a hash of the data
   const hash = crypto.createHash('sha256');
   hash.update(dataString);
   const hashedContent = hash.digest('hex');
-
   res.json({ sha256: hashedContent });
 });
-app.get('/getData/:field', (req, res) => {
+/**
+ * @swagger
+ * /api/getData/{field}:
+ *   get:
+ *     tags:
+ *       - internal
+ *     description: Get data by field from the database
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: field
+ *         description: Field to search for
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved data
+ *       500:
+ *         description: Error occurred while retrieving data
+ */
+app.get(apiName+ '/getData/:field', (req, res) => {
   const field = req.params.field;
 
   db.find({}, function (err, docs) {
@@ -130,19 +207,44 @@ app.get('/getData/:field', (req, res) => {
     }
   });
 });
-let config = {
-  BASE_URL,
-  DEFAULT_COLLECTOR,
-  COLLECTOR_EVENTS_URL,
-  AGREEMENTS_URL,
-  SCOPES_URL
-};
 
-app.get('/config', (req, res) => {
+/**
+ * @swagger
+ * /api/config:
+ *   get:
+ *     tags:
+ *       - internal
+ *     description: Get the current configuration
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved configuration
+ */
+app.get(apiName + '/config', (req, res) => {
   res.json(config);
 });
-
-app.post('/config', (req, res) => {
+/**
+ * @swagger
+ * /api/config:
+ *   post:
+ *     tags:
+ *       - internal
+ *     description: Update the current configuration
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: config
+ *         description: New configuration
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Config'
+ *     responses:
+ *       200:
+ *         description: Successfully updated configuration
+ */
+app.post(apiName + '/config', (req, res) => {
   const keys = Object.keys(req.body);
   let configData = fs.readFileSync(path.join(__dirname, 'config.js'), 'utf8');
 
@@ -1343,6 +1445,7 @@ app.post('/api/convertYaml', async (req, res) => {
     res.status(400).json({ error: 'Invalid YAML format' });
   }
 });
+
 app.get('/api', (req, res) => {
   res.redirect('/api-docs');
 });

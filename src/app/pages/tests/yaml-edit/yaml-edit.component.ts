@@ -118,7 +118,7 @@ export class YamlEditComponent implements OnInit {
         const minExpectedValue = Number(step.with['minExpectedValue']);
 
         // Hacer una solicitud GET al endpoint '/getData/:key'
-        return this.http.get<any>(`http://localhost:6012/getData/${key}`, {}).toPromise().then((data: any) => {
+        return this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).toPromise().then((data: any) => {
           // Comprueba si el campo especificado existe en los datos devueltos
           if (data && data[0] && data[0][key]) {
             const value = data[0][key];
@@ -262,10 +262,10 @@ export class YamlEditComponent implements OnInit {
               this.computationResponse += JSON.stringify(response, null, 2) + '\n\n';
 
               // Eliminar todos los datos existentes en la base de datos
-              this.http.delete(`${BASE_URL}:6012/deleteData`).subscribe(
+              this.http.delete(`${BASE_URL}:6012/glassmatrix/api/v1/deleteData`).subscribe(
                 () => {
                   // Guardar la respuesta en la base de datos a través del servidor Express
-                  this.http.post(`${BASE_URL}:6012/saveData`, response).subscribe(
+                  this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/saveData`, response).subscribe(
                     (res) => console.log('Data saved successfully'),
                     (err) => console.error('Error saving data:', err)
                   );
