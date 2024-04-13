@@ -192,7 +192,7 @@ export class SectionsComponent implements OnInit {
 
     this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, newMetricContentString).subscribe(() => {
       console.log('Metric exported successfully');
-      this.router.navigate(['/metrics-loader']).then(() => {
+      this.router.navigate([`/metrics-loader/tpa/executor/${this.tpaId}/${metricKey}.json`]).then(() => {
         window.scrollTo(0, 0);
       });
     }, error => {
