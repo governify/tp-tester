@@ -29,6 +29,7 @@ interface YamlData {
 export class TestsComponent implements OnInit {
   yamlContent!: string;
   yamlFiles: string[] = [];
+  isLoading = false;
   fileName!: string;
   response!: any;
   tpa!: string;
@@ -114,8 +115,9 @@ export class TestsComponent implements OnInit {
         // Obtener la clave a buscar y el valor mínimo esperado
         const key = step.with['key'];
         const minExpectedValue = Number(step.with['minExpectedValue']);
-
+        this.isLoading = true;
         // Hacer una solicitud GET al endpoint '/getData/:key'
+        new Promise((resolve) => setTimeout(resolve, 10000)).then(() => {
         return this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).toPromise().then((data: any) => {
           // Comprueba si el campo especificado existe en los datos devueltos
           if (data && data[0] && data[0][key]) {
@@ -124,15 +126,19 @@ export class TestsComponent implements OnInit {
             if (value >= minExpectedValue) {
               // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
               this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
+              this.isLoading = false;
             } else {
               // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
               this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
+              this.isLoading = false;
             }
           } else {
             // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
             this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
+            this.isLoading = false;
           }
         });
+      });
       },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
@@ -144,7 +150,6 @@ export class TestsComponent implements OnInit {
             // Esperar 10 segundos y luego llamar a getComputation
             setTimeout(() => {
               this.getComputation();
-              console.log(this.computationUrl)
             }, 1000);
           });
         });
@@ -158,7 +163,6 @@ export class TestsComponent implements OnInit {
             // Esperar 10 segundos y luego llamar a getComputation
             setTimeout(() => {
               this.getComputation();
-              console.log(this.computationUrl)
             }, 1000);
           });
         });
@@ -208,6 +212,7 @@ export class TestsComponent implements OnInit {
           });
         } else {
           console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
+          return Promise.reject(`No handler found for method ${step.method} and uses ${step.uses}`);
         }
       });
     }, Promise.resolve()).catch(error => {
@@ -217,8 +222,8 @@ export class TestsComponent implements OnInit {
   }, error => {
     console.error(error);
     this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
-  });
-}
+    });
+  }
   setDefaultFormat(): void {
     this.yamlContent = `steps:
   - uses: "github/#"
@@ -286,7 +291,13 @@ export class TestsComponent implements OnInit {
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
         const parsedData = JSON.parse(this.data);
-        console.log(parsedData); // Aquí está el console.log
+        const now = new Date();
+        const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
+        const endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, -1);
+
+        this.window.from = startOfHour.toISOString();
+        this.window.initial = startOfHour.toISOString();
+        this.window.end = endOfHour.toISOString();
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';
@@ -296,9 +307,6 @@ export class TestsComponent implements OnInit {
           if(parsedData.metric.window) {
             this.window.type = parsedData.metric.window.type || '';
             this.window.period = parsedData.metric.window.period || '';
-            this.window.initial = parsedData.metric.window.initial || '';
-            this.window.from = parsedData.metric.window.from || '';
-            this.window.end = parsedData.metric.window.end || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
           }
         } else {
@@ -313,7 +321,13 @@ export class TestsComponent implements OnInit {
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
         const parsedData = JSON.parse(this.data);
-        console.log(parsedData); // Aquí está el console.log
+        const now = new Date();
+        const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
+        const endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, -1);
+
+        this.window.from = startOfHour.toISOString();
+        this.window.initial = startOfHour.toISOString();
+        this.window.end = endOfHour.toISOString();
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';
@@ -323,9 +337,6 @@ export class TestsComponent implements OnInit {
           if(parsedData.metric.window) {
             this.window.type = parsedData.metric.window.type || '';
             this.window.period = parsedData.metric.window.period || '';
-            this.window.initial = parsedData.metric.window.initial || '';
-            this.window.from = parsedData.metric.window.from || '';
-            this.window.end = parsedData.metric.window.end || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
           }
         } else {

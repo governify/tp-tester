@@ -230,6 +230,28 @@ export class TpaExecutorComponent implements OnInit {
     this.window.from = startOfHour.toISOString();
     this.window.initial = startOfHour.toISOString();
     this.window.end = endOfHour.toISOString();
+
+    const data = JSON.parse(this.data);
+    if (data.metric.window) {
+      data.metric.window.type = this.window.type;
+      data.metric.window.period = this.window.period;
+      data.metric.window.initial = this.window.initial;
+      data.metric.window.from = this.window.from;
+      data.metric.window.end = this.window.end;
+      data.metric.window.timeZone = this.window.timeZone;
+    }
+    this.glassmatrixService.updateTPAFile(this.tpa, this.fileName, data).subscribe(
+      () => {
+        this.message = 'File saved successfully';
+        this.messageClass = 'success';
+      },
+      (error) => {
+        this.message = 'An error occurred: ' + error;
+        this.messageClass = 'error';
+      }
+    );
+    // Recargar la página
+    location.reload();
   }
 
   goBack(): void {

@@ -50,8 +50,6 @@ export class CloneComponent implements OnInit {
             this.githubService.listBranchesForRepo(repo.owner.login, repo.name).pipe(
               catchError(error => {
                 if (error.status === 429) {
-                  console.log('Rate limit exceeded. Retrying in 1 minute...');
-                  console.log('Error:', error.message);
                   this.error2 = true;
                   return timer(60000).pipe(
                     switchMap(() => this.githubService.listBranchesForRepo(repo.owner.login, repo.name))

@@ -1,8 +1,7 @@
 <div class="search-container">
   <input type="text" placeholder="Search metric..." [(ngModel)]="searchTerm">
   <button class="btn btn-primary" (click)="searchMetric()">Search</button>
-  <button class="btn btn-light" (click)="clearSearch()"><i class="fas fa-trash"></i></button>
-</div>
+  <button class="btn btn-light" (click)="clearSearch()"><i class="fas fa-times"></i></button></div>
 <div *ngFor="let section of filteredSections | paginate: { itemsPerPage: 5, currentPage: p }">
   <section>
     <h4> {{section.title}} </h4>

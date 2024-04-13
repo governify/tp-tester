@@ -17,11 +17,9 @@ export class TpaDeleteComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      console.log(id)
       if (id) {
         this.tpaId = id;
         this.bluejayService.getTpa(id).subscribe(data => {
-          console.log(data);
           this.tpaData = JSON.stringify(data, null, 2);
         });
       }
