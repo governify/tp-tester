@@ -52,7 +52,6 @@ export class ConfigComponent implements OnInit {
           const portData = ports[internalPort];
           if (portData && portData[0]) {
             const hostPort = portData[0].HostPort;
-            console.log(hostPort);
             return {
               Id: container.Id,
               Name: container.Name.slice(1),

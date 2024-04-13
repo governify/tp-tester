@@ -56,7 +56,6 @@ export class RepositoryComponent implements OnInit {
       this.glassmatrixService.cloneRepo(this.owner, this.repoName)
         .subscribe(
           () => {
-            console.log('Repository cloned successfully');
             this.router.navigate(['/gh-simulator/local']);
           },
           error => console.error('Error cloning repository', error)

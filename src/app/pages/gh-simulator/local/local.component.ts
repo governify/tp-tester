@@ -24,7 +24,6 @@ export class LocalComponent implements OnInit {
   getRepos(): void {
     this.glassmatrixService.listRepos().subscribe(data => {
       this.repositories = data.repositories;
-      console.log(this.repositories);
     });
   }
 

@@ -94,20 +94,17 @@ export class SectionsComponent implements OnInit {
     // Actualiza el objeto metrics en tpaData con los valores de metricsJson
     for (const key in this.metricsJson) {
       if (Object.prototype.hasOwnProperty.call(this.metricsJson, key)) {
-        console.log('metricsJson[' + key + ']:', this.metricsJson[key]);
         this.tpaData.terms.metrics[key] = JSON.parse(this.metricsJson[key]);
       }
     }
 
     // Actualiza el array guarantees en tpaData con los valores de guaranteesJson
     for (let i = 0; i < this.guaranteesJson.length; i++) {
-      console.log('guaranteesJson[' + i + ']:', this.guaranteesJson[i]);
       this.tpaData.terms.guarantees[i] = JSON.parse(this.guaranteesJson[i]);
     }
 
     // Elimina el TPA actual
     this.bluejayService.deleteTpa(this.tpaId).subscribe(() => {
-      console.log("Todo el json: ", this.tpaData)
       this.bluejayService.createTpa(JSON.stringify(this.tpaData)).subscribe(() => {
         window.location.reload();
       });
@@ -191,7 +188,6 @@ export class SectionsComponent implements OnInit {
     const newMetricContentString = JSON.stringify(newMetricContent, null, 2);
 
     this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, newMetricContentString).subscribe(() => {
-      console.log('Metric exported successfully');
       this.router.navigate([`/metrics-loader/tpa/executor/${this.tpaId}/${metricKey}.json`]).then(() => {
         window.scrollTo(0, 0);
       });

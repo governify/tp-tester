@@ -144,7 +144,6 @@ export class TestsComponent implements OnInit {
             // Esperar 10 segundos y luego llamar a getComputation
             setTimeout(() => {
               this.getComputation();
-              console.log(this.computationUrl)
             }, 1000);
           });
         });
@@ -158,7 +157,6 @@ export class TestsComponent implements OnInit {
             // Esperar 10 segundos y luego llamar a getComputation
             setTimeout(() => {
               this.getComputation();
-              console.log(this.computationUrl)
             }, 1000);
           });
         });
@@ -286,7 +284,6 @@ export class TestsComponent implements OnInit {
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
         const parsedData = JSON.parse(this.data);
-        console.log(parsedData); // Aquí está el console.log
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';
@@ -313,7 +310,6 @@ export class TestsComponent implements OnInit {
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
         const parsedData = JSON.parse(this.data);
-        console.log(parsedData); // Aquí está el console.log
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';

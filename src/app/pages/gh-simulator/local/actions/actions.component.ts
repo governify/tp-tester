@@ -99,7 +99,6 @@ export class ActionsComponent {
   pushChanges() {
     this.glassmatrixService.pushChanges(this.repoName!).subscribe(
       res => {
-        console.log('Changes pushed successfully');
       },
       err => {
         console.error('Error pushing changes:', err);
@@ -109,7 +108,6 @@ export class ActionsComponent {
   createCommit() {
     this.glassmatrixService.createCommit(this.repoName!, this.fileContent, this.commitMessage).subscribe(
       res => {
-        console.log('Commit created');
         this.getFiles();
       },
       err => {
@@ -139,7 +137,6 @@ export class ActionsComponent {
     if (this.owner && this.repoName) {
       this.githubService.createIssue(this.token, this.owner, this.repoName, {title, body}).subscribe(
         issue => {
-          console.log('Issue created:', issue);
           this.getIssues(); // Actualizar la lista de issues
         },
         error => {
