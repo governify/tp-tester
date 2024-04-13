@@ -236,7 +236,7 @@ export class ExecutorComponent implements OnInit {
       data.metric.window.end = this.window.end;
       data.metric.window.timeZone = this.window.timeZone;
     }
-    this.glassmatrixService.updateFile(this.fileName, data).subscribe(
+      this.glassmatrixService.updateFile(this.fileName, data).subscribe(
       () => {
         this.message = 'File saved successfully';
         this.messageClass = 'success';
