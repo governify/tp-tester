@@ -10,61 +10,89 @@
       <pre class="form-control" readonly>{{ tpaData | json }}</pre>
     </div>
   </div>
-  <div class="container form-container">
-    <div class="alert alert-warning">
-      <div style="display: flex; align-items: center;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <p>{{ 'TPA.EDIT.SECTIONS.WARNING' | translate }}</p>
-      </div>
-    </div>
-    <h4 class="section-title">{{ 'TPA.EDIT.SECTIONS.METRICS2' | translate }}</h4>
-    <input class="input-field" type="text" [(ngModel)]="newMetricName" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_METRIC_NAME' | translate }}">
-    <textarea class="textarea-field" [(ngModel)]="newMetricContent" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_METRIC_CONTENT' | translate }}"></textarea>
-    <button class="btn btn-add" (click)="addMetric()">{{ 'TPA.EDIT.SECTIONS.CREATE_NEW_METRIC' | translate }}</button>
-    <button class="btn btn-save" (click)="copyExampleMetric()">{{ 'TPA.EDIT.SECTIONS.COPY_EXAMPLE_METRIC' | translate }}</button>
+  <mat-accordion>
+    <mat-expansion-panel #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="section-title">
+          <h4 id="titulo2" >{{ 'TPA.EDIT.SECTIONS.CREATE' | translate }}</h4>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="container form-container">
+        <div class="alert alert-warning">
+          <div style="display: flex; align-items: center;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>{{ 'TPA.EDIT.SECTIONS.WARNING' | translate }}</p>
+          </div>
+        </div>
+        <h4 class="section-title">{{ 'TPA.EDIT.SECTIONS.METRICS2' | translate }}</h4>
+        <input class="input-field" type="text" [(ngModel)]="newMetricName" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_METRIC_NAME' | translate }}">
+        <textarea class="textarea-field" [(ngModel)]="newMetricContent" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_METRIC_CONTENT' | translate }}"></textarea>
+        <button class="btn btn-add" (click)="addMetric()">{{ 'TPA.EDIT.SECTIONS.CREATE_NEW_METRIC' | translate }}</button>
+        <button class="btn btn-save" (click)="copyExampleMetric()">{{ 'TPA.EDIT.SECTIONS.COPY_EXAMPLE_METRIC' | translate }}</button>
 
-    <h4 class="section-title">{{ 'TPA.EDIT.SECTIONS.GUARANTEES2' | translate }}</h4>
-    <input class="input-field" type="text" [(ngModel)]="newGuaranteeName" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_GUARANTEE_NAME' | translate }}">
-    <textarea class="textarea-field" [(ngModel)]="newGuaranteeContent" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_GUARANTEE_CONTENT' | translate }}"></textarea>
-    <button class="btn btn-add" (click)="addGuarantee()">{{ 'TPA.EDIT.SECTIONS.CREATE_NEW_GUARANTEE' | translate }}</button>
-    <button class="btn btn-save" (click)="copyExampleGuarantee()">{{ 'TPA.EDIT.SECTIONS.COPY_EXAMPLE_GUARANTEE' | translate }}</button>
-  </div>
+        <h4 class="section-title">{{ 'TPA.EDIT.SECTIONS.GUARANTEES2' | translate }}</h4>
+        <input class="input-field" type="text" [(ngModel)]="newGuaranteeName" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_GUARANTEE_NAME' | translate }}">
+        <textarea class="textarea-field" [(ngModel)]="newGuaranteeContent" placeholder="{{ 'TPA.EDIT.SECTIONS.NEW_GUARANTEE_CONTENT' | translate }}"></textarea>
+        <button class="btn btn-add" (click)="addGuarantee()">{{ 'TPA.EDIT.SECTIONS.CREATE_NEW_GUARANTEE' | translate }}</button>
+        <button class="btn btn-save" (click)="copyExampleGuarantee()">{{ 'TPA.EDIT.SECTIONS.COPY_EXAMPLE_GUARANTEE' | translate }}</button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
   <form>
     <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'TPA.EDIT.SECTIONS.CONTEXT_SECTION' | translate }}</h2>
     <div class="row">
       <p>{{ 'TPA.EDIT.SECTIONS.CONTEXT_SECTION_DESCRIPTION' | translate }}</p>
       <div class="container">
         <h4>{{ 'TPA.EDIT.SECTIONS.METRICS' | translate }}</h4>
-        <div class="row" *ngFor="let metric of metrics | keyvalue; let i = index">
-          <div class="col-md-12">
-            <h5>{{ metric.key }}
-              <button class="btn btn-danger small-button" (click)="deleteMetric(metric.key)">
-                <i class="fas fa-trash small-icon"></i>
-              </button>
-              <button class="btn btn-success small-button" (click)="saveChanges()">
-                <i class="fas fa-check-square small-icon"></i>
-              </button>
-              <button class="btn btn-info small-button" (click)="exportMetric(metric.key)">
-                <i class="fas fa-download small-icon"></i>
-              </button>
-            </h5>
-            <textarea class="form-control" [(ngModel)]="metricsJson[getKeyAsString(metric.key)]" name="metric{{i}}"></textarea>
+        <mat-accordion>
+          <div *ngFor="let metric of metrics | keyvalue; let i = index">
+            <mat-expansion-panel #metricPanel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div class="title-container">
+                    {{ metric.key }}
+                    <div class="button-group">
+                      <button class="btn btn-info small-button" (click)="exportMetric(metric.key)">
+                        <i class="fas fa-download small-icon"></i>
+                      </button>
+                      <button class="btn btn-success small-button" [disabled]="!metricPanel.expanded" (click)="saveChanges()">
+                        <i class="fas fa-save small-icon"></i>
+                      </button>
+                      <button class="btn btn-danger small-button" (click)="deleteMetric(metric.key)">
+                        <i class="fas fa-trash small-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <textarea class="form-control metric-textarea" [(ngModel)]="metricsJson[getKeyAsString(metric.key)]" name="metric{{i}}"></textarea>
+            </mat-expansion-panel>
           </div>
-        </div>
+        </mat-accordion>
         <h4>{{ 'TPA.EDIT.SECTIONS.GUARANTEES' | translate }}</h4>
-        <div class="row" *ngFor="let guarantee of guarantees; let i = index">
-          <div class="col-md-12">
-            <h5>{{ guarantee.id }}
-              <button class="btn btn-danger small-button" (click)="deleteGuarantee(i)">
-                <i class="fas fa-trash small-icon"></i>
-              </button>
-            </h5>
-            <textarea class="form-control" [(ngModel)]="guaranteesJson[i]" name="guarantee{{i}}"></textarea>
+        <mat-accordion>
+          <div *ngFor="let guarantee of guarantees; let i = index">
+            <mat-expansion-panel #guaranteePanel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div class="title-container">
+                    {{ guarantee.id }}
+                    <div class="button-group">
+                      <button class="btn btn-success small-button" [disabled]="!guaranteePanel.expanded" (click)="saveChanges()">
+                        <i class="fas fa-save small-icon"></i>
+                      </button>
+                      <button class="btn btn-danger small-button" (click)="deleteGuarantee(i)">
+                        <i class="fas fa-trash small-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <textarea class="form-control metric-textarea" [(ngModel)]="guaranteesJson[i]" name="guarantee{{i}}"></textarea>
+            </mat-expansion-panel>
           </div>
-        </div>
-
+        </mat-accordion>
       </div>
     </div>
   </form>
-
 </div>

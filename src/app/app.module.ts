@@ -50,6 +50,7 @@ import { YamlViewComponent } from './pages/tests/yaml-view/yaml-view.component';
 import { YamlEditComponent } from './pages/tests/yaml-edit/yaml-edit.component';
 import { YamelsComponent } from './components/yamels/yamels.component';
 import {NgxPaginationModule} from "ngx-pagination";
+import { MatExpansionModule } from '@angular/material/expansion';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -107,6 +108,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDialogModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    MatExpansionModule,
     NgxPaginationModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',

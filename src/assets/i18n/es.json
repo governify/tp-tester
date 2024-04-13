@@ -151,6 +151,7 @@
       "EDIT_COMPLETE_TPA": "Editar TPA Completo",
       "EDIT_METRICS_GUARANTEES": "Editar Solo Métricas y Garantías",
       "SECTIONS": {
+        "CREATE": "Crear métrica o garantía",
         "BACK": "Atrás",
         "WORK_IN_PROGRESS": "Trabajo en progreso",
         "TPA_JSON": "TPA JSON:",
@@ -399,7 +400,7 @@
     "ejecucion": "Zona de ejecución",
     "guardar": "Guardar",
     "formato": "Establecer formato",
-    "ejecutar": "Ejecutar YAML",
+    "ejecutar": "Lanzar tests",
     "ejemplos": "Ejemplos",
     "viendo": "Estas viendo el archivo:",
     "actualizar": "Actualizar archivo"

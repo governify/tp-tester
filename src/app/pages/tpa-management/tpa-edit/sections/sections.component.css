@@ -16,6 +16,28 @@
   margin-right: 5px;
 }
 
+.metric-textarea {
+  margin-top: 20px;
+}
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+.mat-expansion-panel {
+  padding-bottom: 10px;
+  margin-top: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.metric-textarea {
+  margin-top: 20px;
+}
 .alert.alert-warning p {
   margin: 0;
   padding: 0;
@@ -109,4 +131,9 @@ form {
 .small-button {
   margin-left: 15px;
   padding: 7px 15px;
+}
+#titulo2{
+  width: 100%!important;
+  padding-left: -10px;
+  background-color: #85e6c3;
 }
