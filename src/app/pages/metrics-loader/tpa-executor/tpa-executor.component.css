@@ -90,7 +90,21 @@ textarea::-webkit-scrollbar-thumb:hover {
 .mat-spinner circle, .mat-progress-spinner circle {
   stroke: #000;
 }
+.btn-hash-equal {
+  background-color: green;
+  color: white;
+  padding-bottom: -5px!important;
+}
 
+.btn-hash-different {
+  background-color: red;
+  color:white;
+  padding-bottom: -5px!important;
+}
+
+btn-edit-2{
+  background-color: #3e64dc!important;
+}
 .btn-right {
   float: right;
   height: 40px!important;
