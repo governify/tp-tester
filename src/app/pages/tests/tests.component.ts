@@ -103,7 +103,7 @@ export class TestsComponent implements OnInit {
   }
   private stepHandlers = {
     'TEST': {
-      'bluejay/check': (step: { with: { key: string, conditions: { minExpectedValue?: string, maxExpectedValue?: string, expectedValue?: string } }[]; }) => {
+      'bluejay/check': (step: { with: { key: string, conditions: { minExpectedValue?: string, maxExpectedValue?: string, expectedValue?: string } }[]; value?: string, createdAt?: string, authorLogin?: string }) => {
         this.isLoading = true;
         // Hacer una solicitud GET al endpoint '/getData/:key' para cada key
         return Promise.all(step.with.map(({ key, conditions }) => {
@@ -111,26 +111,34 @@ export class TestsComponent implements OnInit {
             setTimeout(() => {
               this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
                 // Comprueba si el campo especificado existe en los datos devueltos
-                if (data && data[0] && data[0][key]) {
-                  const value = data[0][key];
-                  // Comprueba si el valor obtenido cumple con las condiciones
-                  if (
-                    (conditions.minExpectedValue === undefined || value >= Number(conditions.minExpectedValue)) &&
-                    (conditions.maxExpectedValue === undefined || value <= Number(conditions.maxExpectedValue)) &&
-                    (conditions.expectedValue === undefined || value === conditions.expectedValue)
-                  ) {
-                    // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
-                    this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
-                    this.isLoading = false;
-                    resolve();
-                  } else {
-                    // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
-                    this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
-                    this.isLoading = false;
-                    resolve();
-                  }
+                if (data) {
+                  data.forEach((item: any) => {
+                    if (item[key]) {
+                      const value = item[key];
+                      console.log("Value: ", item['value']);
+                      console.log("data: ", data);
+                      // Comprueba si el valor obtenido cumple con las condiciones y si el campo 'value' es el mismo que el especificado en el paso del test, solo si el campo 'value' está presente en el paso del test
+                      if (
+                        (conditions.minExpectedValue === undefined || value >= Number(conditions.minExpectedValue)) &&
+                        (conditions.maxExpectedValue === undefined || value <= Number(conditions.maxExpectedValue)) &&
+                        (conditions.expectedValue === undefined || value === conditions.expectedValue) &&
+                        (step.value === undefined || item['value'] === step.value)
+                      ) {
+                        // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
+                        this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
+                      } else {
+                        // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
+                        this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
+                      }
+                    } else {
+                      // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
+                      this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
+                    }
+                  });
+                  this.isLoading = false;
+                  resolve();
                 } else {
-                  // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
+                  // Si no hay datos, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
                   this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
                   this.isLoading = false;
                   resolve();
