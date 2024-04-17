@@ -707,8 +707,15 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory/:file', (req, res) => {
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred while reading the file.' });
+      if (err.code === 'ENOENT') {
+        // Manejar específicamente el error 'no such file or directory'
+        console.log(`File ${file} not found in subdirectory ${subdirectory}`);
+        res.status(404).json({ message: 'File not found.' });
+      } else {
+        // Manejar otros errores
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while reading the file.' });
+      }
     } else {
       try {
         const jsonData = JSON.parse(data);

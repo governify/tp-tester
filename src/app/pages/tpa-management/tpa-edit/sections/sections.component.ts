@@ -5,6 +5,7 @@ import { BluejayService } from '../../../../services/bluejay.service';
 import {FilesService} from "../../../../services/files.service";
 import {GlassmatrixService} from "../../../../services/glass-matrix.service";
 import {SCOPES_URL} from "../../../../../../lockedConfig";
+import {catchError, map, Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-sections',
@@ -12,9 +13,10 @@ import {SCOPES_URL} from "../../../../../../lockedConfig";
   styleUrls: ['./sections.component.css']
 })
 export class SectionsComponent implements OnInit {
-
+  fileExistsResults: { [key: string]: Observable<boolean> } = {};
   tpaId!: string;
   tpaData: any;
+  genericMetricKey: string = 'genericKey';
   tpaDataJson!: string;
   metrics: any = {};
   metricsJson: { [key: string]: string } = {};
@@ -46,6 +48,7 @@ export class SectionsComponent implements OnInit {
             for (const key in this.metrics) {
               if (Object.prototype.hasOwnProperty.call(this.metrics, key)) {
                 this.metricsJson[key] = JSON.stringify(this.metrics[key], null, 2);
+                this.fileExistsResults[key] = this.fileExists(this.tpaId, key);
               }
             }
           } else {
@@ -198,4 +201,23 @@ export class SectionsComponent implements OnInit {
   updateMetricContent(metricKey: string, newContent: string): void {
     this.metricsJson[metricKey] = newContent;
   }
+
+  fileExists(tpaId: string, metricKey: unknown, retryCount = 0): Observable<boolean> {
+    return this.glassmatrixService.loadFileContent(tpaId, `${metricKey}.json`).pipe(
+      map(() => true),
+      catchError((error: any) => {
+        if (error.status === 404) {
+          return of(false);
+        }
+        if (retryCount >= 2) {
+          // Si ya hemos intentado 3 veces, dejamos de intentarlo y devolvemos false
+          return of(false);
+        } else {
+          // Si no, intentamos de nuevo sin registrar nada en la consola
+          return this.fileExists(tpaId, metricKey, retryCount + 1);
+        }
+      })
+    );
+  }
+
 }
