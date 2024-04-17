@@ -51,6 +51,8 @@ import { YamlEditComponent } from './pages/tests/yaml-edit/yaml-edit.component';
 import { YamelsComponent } from './components/yamels/yamels.component';
 import {NgxPaginationModule} from "ngx-pagination";
 import { MatExpansionModule } from '@angular/material/expansion';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './services/error.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -120,7 +122,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

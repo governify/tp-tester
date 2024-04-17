@@ -333,19 +333,15 @@ app.get('/api/containers', (req, res) => {
 app.post(apiName + '/tpa/save', (req, res) => {
   const data = req.body;
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}.json`);
+  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}_hash.yaml`);
   fs.writeFile(filePath, JSON.stringify(data.content, null, 2), (err) => {
     if (err) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
       // Create a hash of the content
-      const hash = crypto.createHash('sha256');
-      hash.update(JSON.stringify(data.content));
-      const hashedContent = hash.digest('hex');
-
       // Write the hashed content to a new file
-      const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${data.fileName}_hash.yaml`);
-      fs.writeFile(hashedFilePath, JSON.stringify({ hashedContent }, null, 2), (err) => {
+      fs.writeFile(hashedFilePath, JSON.stringify(data.content, null, 2), (err) => {
         if (err) {
           console.error(err);
           res.status(500).json({ message: 'An error occurred while saving the hashed file.' });
@@ -509,16 +505,6 @@ app.delete(apiName + '/tests/deleteYAMLFile/:fileName', (req, res) => {
  *      '200':
  *        description: A successful response
  */
-/**
- * @swagger
- * /glassmatrix/api/v1/tpa/saveTPAMetric:
- *  post:
- *    tags: [Bluejay]
- *    description: Use to save a TPA metric
- *    responses:
- *      '200':
- *        description: A successful response
- */
 app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
   const data = req.body;
   const dirPath = path.join(__dirname, `/src/assets/savedMetrics/tpaMetrics/${data.folderName}`);
@@ -534,13 +520,10 @@ app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
       // Create a hash of the content
-      const hash = crypto.createHash('sha256');
-      hash.update(JSON.stringify(data.content));
-      const hashedContent = hash.digest('hex');
 
       // Write the hashed content to a new file
       const hashedFilePath = path.join(dirPath, `${data.fileName}_hash.yaml`);
-      fs.writeFile(hashedFilePath, JSON.stringify({ hashedContent }, null, 2), (err) => {
+      fs.writeFile(hashedFilePath, data.content, (err) => {
         if (err) {
           console.error(err);
           res.status(500).json({ message: 'An error occurred while saving the hashed file.' });
@@ -724,8 +707,15 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory/:file', (req, res) => {
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred while reading the file.' });
+      if (err.code === 'ENOENT') {
+        // Manejar específicamente el error 'no such file or directory'
+        console.log(`File ${file} not found in subdirectory ${subdirectory}`);
+        res.status(404).json({ message: 'File not found.' });
+      } else {
+        // Manejar otros errores
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while reading the file.' });
+      }
     } else {
       try {
         const jsonData = JSON.parse(data);
@@ -786,7 +776,8 @@ app.use((req, res, next) => {
 app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
   const fileName = req.params.fileName;
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${fileName}`);
-  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${fileName}_hash.yaml`);
+  const baseFileName = fileName.replace('.json', '');
+  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics', `${baseFileName}_hash.yaml`);
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
@@ -836,7 +827,8 @@ app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) =>
   const subdirectory = req.params.subdirectory;
   const fileName = req.params.fileName;
   const filePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory, `${fileName}`);
-  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory, `${fileName}_hash.yaml`);
+  const baseFileName2 = fileName.replace('.json', '');
+  const hashedFilePath = path.join(__dirname, '/src/assets/savedMetrics/tpaMetrics', subdirectory, `${baseFileName2}_hash.yaml`);
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {

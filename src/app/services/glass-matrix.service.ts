@@ -133,4 +133,8 @@ export class GlassmatrixService {
   deleteYAMLFile(fileName: string): Observable<any> {
     return this.http.delete(`${this.url}/tests/deleteYAMLFile/` + fileName);
   }
+  calculateSHA(data: any): Observable<any> {
+    return this.http.post(`${this.url}/calculateSHA`, data);
+  }
+
 }

@@ -1,6 +1,16 @@
 <body>
 <div class="row">
-  <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+  <div class="col-8">
+    <div class="modified">
+      <div class="btn-edit-2" [ngClass]="hashAreEqual ? 'btn-hash-equal' : 'btn-hash-different'" style="display: inline-flex; align-items: center; justify-content: center; padding: 15px; border-radius: 10px;">
+        <p *ngIf="hashAreEqual" style="margin: 0;">Same content as TPA</p>
+        <p *ngIf="!hashAreEqual" style="margin: 0;">The metric has been modified</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 text-right">
+    <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
+  </div>
 </div>
 <div class="row" id="context">
   <div>{{ 'METRICS_LOADER.EXECUTOR.EXECUTING' | translate:{fileName: fileName} }}</div>
@@ -60,7 +70,6 @@
 </form>
 
 <div class="row">
-
   <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.EXECUTION_SECTION' | translate }}</h2>
 
   <p [ngClass]="messageClass2">{{ message2 }}</p>
