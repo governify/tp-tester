@@ -68,7 +68,14 @@ function deepSearch(obj, key) {
     return obj[key];
   }
   for (let i in obj) {
-    if (typeof obj[i] === 'object') {
+    if (Array.isArray(obj[i])) {
+      for (let j = 0; j < obj[i].length; j++) {
+        let result = deepSearch(obj[i][j], key);
+        if (result) {
+          return result;
+        }
+      }
+    } else if (typeof obj[i] === 'object' && obj[i] !== null) {
       let result = deepSearch(obj[i], key);
       if (result) {
         return result;
@@ -191,18 +198,33 @@ app.get(apiName+ '/getData/:field', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      const fieldDocs = docs.map(doc => {
-        const value = deepSearch(doc, field);
-        if (value) {
-          return { [field]: value };
+      let fieldDocs = [];
+
+      docs.forEach(doc => {
+        if (doc.computations && Array.isArray(doc.computations)) {
+          doc.computations.forEach(computation => {
+            if (computation.evidences && Array.isArray(computation.evidences)) {
+              computation.evidences.forEach(evidence => {
+                if (evidence[field] !== undefined) {
+                  fieldDocs.push({
+                    value: computation.value,
+                    [field]: evidence[field],
+                    createdAt: evidence.createdAt,
+                    authorLogin: evidence.author.login
+                  });
+                }
+              });
+            }
+          });
         }
-        return null;
-      }).filter(doc => doc !== null);
+      });
 
       if (fieldDocs.length > 0) {
         res.status(200).send(fieldDocs);
       } else {
-        res.status(200).send({ message: `No hay coincidencias para el campo '${field}' en la base de datos.` });
+        let response = {};
+        response[field] = "not found";
+        res.status(200).send([response]); // Envía la respuesta como un array
       }
     }
   });

@@ -102,6 +102,65 @@ export class TestsComponent implements OnInit {
     });
   }
   private stepHandlers = {
+    'TEST': {
+      'bluejay/check': (step: { with: { key: string, conditions: { minExpectedValue?: string, maxExpectedValue?: string, expectedValue?: string } }[]; value?: string, createdAt?: string, authorLogin?: string }) => {
+        this.isLoading = true;
+        // Hacer una solicitud GET al endpoint '/getData/:key' para cada key
+        return Promise.all(step.with.map(({ key, conditions }) => {
+          return new Promise<void>((resolve, reject) => {
+            setTimeout(() => {
+              this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
+                // Comprueba si el campo especificado existe en los datos devueltos
+                if (data) {
+                  data.forEach((item: any) => {
+                    // Si 'value' no está definido en el paso, o si es igual al 'value' en el objeto de datos, entonces procesa el objeto
+                    if (item[key] && (step.value === undefined || item['value'] == step.value)) {
+                      const value = item[key];
+                      // Comprueba si el valor de la clave es "not found"
+                      if (value === "not found") {
+                        this.testStatuses.push({ text: `Test failed. Field '${key}' not found in the database`, success: false });
+                        this.isLoading = false;
+                        resolve();
+                      } else {
+                        // Comprueba cada condición por separado
+                        if (conditions.minExpectedValue !== undefined) {
+                          if (value >= Number(conditions.minExpectedValue)) {
+                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`, success: true });
+                          } else {
+                            this.testStatuses.push({ text: `Test failed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`, success: false });
+                          }
+                        }
+                        if (conditions.maxExpectedValue !== undefined) {
+                          if (value <= Number(conditions.maxExpectedValue)) {
+                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`, success: true });
+                          } else {
+                            this.testStatuses.push({ text: `Test failed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`, success: false });
+                          }
+                        }
+                        if (conditions.expectedValue !== undefined) {
+                          if (value === conditions.expectedValue) {
+                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: true });
+                          } else {
+                            this.testStatuses.push({ text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: false });
+                          }
+                        }
+                        this.isLoading = false;
+                        resolve();
+                      }
+                    }
+                  });
+                } else {
+                  // Si no hay datos, empuja un mensaje indicando que el test ha fallado a this.testStatuses
+                  this.testStatuses.push({ text: `Test failed. Field '${key}' not found in the database`, success: false });
+                  this.isLoading = false;
+                  resolve();
+                }
+              }, reject);
+            }, 10000);
+          });
+        }));
+      },
+    },
     'GET': {
       'github/getIssue': (step: { with: { [x: string]: string; }; }) => this.githubService.getIssues(this.token, step.with['owner'], step.with['repoName']).toPromise(),
       'github/getOpenPR': (step: { with: { [x: string]: string; }; }) => this.githubService.getOpenPullRequests(this.token, step.with['owner'], step.with['repoName']).toPromise(),
@@ -111,40 +170,14 @@ export class TestsComponent implements OnInit {
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
     },
     'POST': {
-      'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
-        // Obtener la clave a buscar y el valor mínimo esperado
-        const key = step.with['key'];
-        const minExpectedValue = Number(step.with['minExpectedValue']);
-        this.isLoading = true;
-        // Hacer una solicitud GET al endpoint '/getData/:key'
-        new Promise((resolve) => setTimeout(resolve, 10000)).then(() => {
-        return this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).toPromise().then((data: any) => {
-          // Comprueba si el campo especificado existe en los datos devueltos
-          if (data && data[0] && data[0][key]) {
-            const value = data[0][key];
-            // Comprueba si el valor obtenido es mayor o igual al valor mínimo esperado
-            if (value >= minExpectedValue) {
-              // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
-              this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
-              this.isLoading = false;
-            } else {
-              // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
-              this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
-              this.isLoading = false;
-            }
-          } else {
-            // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
-            this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
-            this.isLoading = false;
-          }
-        });
-      });
-      },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
         const tpa = step.with['tpa'];
         const metric = step.with['metric'];
-        return this.loadData(tpa, metric).toPromise().then(() => {
+        return this.loadData(tpa, metric).toPromise().then((data) => {
+          // Imprimir los datos devueltos por loadData
+          console.log(data);
+
           // Ejecutar postComputation
           this.postContent().subscribe(response => {
             // Esperar 10 segundos y luego llamar a getComputation
@@ -157,14 +190,54 @@ export class TestsComponent implements OnInit {
       'bluejay/compute/metric': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
         const metric = step.with['metric'];
-        return this.loadIndividualData(metric).toPromise().then(() => {
-          // Ejecutar postComputation
-          this.postContent().subscribe(response => {
-            // Esperar 10 segundos y luego llamar a getComputation
-            setTimeout(() => {
-              this.getComputation();
-            }, 1000);
-          });
+        return new Promise<void>((resolve, reject) => {
+          this.loadIndividualData(metric).subscribe(
+            () => {
+              // Ejecutar postComputation
+              this.postContent().subscribe(response => {
+                // Esperar 10 segundos y luego llamar a getComputation
+                setTimeout(() => {
+                  this.getComputation();
+                }, 1000);
+                resolve();
+              }, reject);
+            },
+            reject
+          );
+        });
+      },
+      'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
+        // Obtener la clave a buscar y el valor mínimo esperado
+        const key = step.with['key'];
+        const minExpectedValue = Number(step.with['minExpectedValue']);
+        this.isLoading = true;
+        // Hacer una solicitud GET al endpoint '/getData/:key'
+        return new Promise<void>((resolve, reject) => {
+          setTimeout(() => {
+            this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
+              // Comprueba si el campo especificado existe en los datos devueltos
+              if (data && data[0] && data[0][key]) {
+                const value = data[0][key];
+                // Comprueba si el valor obtenido es mayor o igual al valor mínimo esperado
+                if (value >= minExpectedValue) {
+                  // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
+                  this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
+                  this.isLoading = false;
+                  resolve();
+                } else {
+                  // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
+                  this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
+                  this.isLoading = false;
+                  resolve();
+                }
+              } else {
+                // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
+                this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
+                this.isLoading = false;
+                resolve();
+              }
+            }, reject);
+          }, 10000);
         });
       },
       'github/createIssue': (step: { with: { [x: string]: string; }; }) => {
@@ -196,32 +269,41 @@ export class TestsComponent implements OnInit {
   };
 
   executeYaml(): void {
-  this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
-    this.response = '';
-    data.steps.reduce((prevPromise, step: Step) => {
-      return prevPromise.then(() => {
-        // @ts-ignore
-        const handler = this.stepHandlers[step.method][step.uses];
-        if (handler) {
-          return handler(step).then((response: Response) => {
-            if(step.uses === 'bluejay/compute/tpa' || step.uses === 'bluejay/compute/metric') {
-              this.computationResponse += step.uses + '\n';
-            }else{
-              this.response += step.uses + '\n' + JSON.stringify(response, null, 2) + '\n\n';
-            }
-          });
-        } else {
-          console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
-          return Promise.reject(`No handler found for method ${step.method} and uses ${step.uses}`);
-        }
+    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
+      this.response = '';
+      data.steps.reduce((prevPromise, step: Step) => {
+        return prevPromise.then(() => {
+          // @ts-ignore
+          const handler = this.stepHandlers[step.method][step.uses];
+          if (handler) {
+            return handler(step).then((response: Response) => {
+              if(step.uses === 'bluejay/compute/tpa' || step.uses === 'bluejay/compute/metric') {
+                this.computationResponse += step.uses + '\n';
+              } else if(step.uses === 'bluejay/check' || step.uses === 'bluejay/checkContain') {
+                this.response += step.uses + '\n';
+              }else{
+                // Verificar si la respuesta no es undefined antes de agregarla a la respuesta
+                if (response !== undefined) {
+                  // Construir la cadena completa antes de agregarla a la respuesta
+                  const responseString = step.uses + ' ' + JSON.stringify(response, null, 2) + '\n\n';
+                  this.response += responseString;
+                } else {
+                  this.response += step.uses + '\n\n';
+                }
+              }
+            });
+          } else {
+            console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
+            return Promise.reject(`No handler found for method ${step.method} and uses ${step.uses}`);
+          }
+        });
+      }, Promise.resolve()).catch(error => {
+        console.error(error);
+        this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
       });
-    }, Promise.resolve()).catch(error => {
+    }, error => {
       console.error(error);
       this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
-    });
-  }, error => {
-    console.error(error);
-    this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
     });
   }
   setDefaultFormat(): void {
@@ -320,14 +402,18 @@ export class TestsComponent implements OnInit {
     return this.filesService.getSavedMetric(this.fileName).pipe(
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
+
         const parsedData = JSON.parse(this.data);
+        /*
         const now = new Date();
         const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
-        const endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, -1);
+        let endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1);
+        endOfHour.setSeconds(endOfHour.getSeconds() - 1);
 
         this.window.from = startOfHour.toISOString();
         this.window.initial = startOfHour.toISOString();
         this.window.end = endOfHour.toISOString();
+         */
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';
@@ -337,6 +423,9 @@ export class TestsComponent implements OnInit {
           if(parsedData.metric.window) {
             this.window.type = parsedData.metric.window.type || '';
             this.window.period = parsedData.metric.window.period || '';
+            this.window.initial = parsedData.metric.window.initial || '';
+            this.window.from = parsedData.metric.window.from || '';
+            this.window.end = parsedData.metric.window.end || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
           }
         } else {
