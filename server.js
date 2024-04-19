@@ -222,7 +222,9 @@ app.get(apiName+ '/getData/:field', (req, res) => {
       if (fieldDocs.length > 0) {
         res.status(200).send(fieldDocs);
       } else {
-        res.status(200).send({ message: `No hay coincidencias para el campo '${field}' en la base de datos.` });
+        let response = {};
+        response[field] = "not found";
+        res.status(200).send([response]); // Envía la respuesta como un array
       }
     }
   });

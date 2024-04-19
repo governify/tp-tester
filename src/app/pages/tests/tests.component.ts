@@ -113,33 +113,45 @@ export class TestsComponent implements OnInit {
                 // Comprueba si el campo especificado existe en los datos devueltos
                 if (data) {
                   data.forEach((item: any) => {
-                    if (item[key]) {
+                    // Si 'value' no está definido en el paso, o si es igual al 'value' en el objeto de datos, entonces procesa el objeto
+                    if (item[key] && (step.value === undefined || item['value'] == step.value)) {
                       const value = item[key];
-                      console.log("Value: ", item['value']);
-                      console.log("data: ", data);
-                      // Comprueba si el valor obtenido cumple con las condiciones y si el campo 'value' es el mismo que el especificado en el paso del test, solo si el campo 'value' está presente en el paso del test
-                      if (
-                        (conditions.minExpectedValue === undefined || value >= Number(conditions.minExpectedValue)) &&
-                        (conditions.maxExpectedValue === undefined || value <= Number(conditions.maxExpectedValue)) &&
-                        (conditions.expectedValue === undefined || value === conditions.expectedValue) &&
-                        (step.value === undefined || item['value'] === step.value)
-                      ) {
-                        // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
-                        this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
+                      // Comprueba si el valor de la clave es "not found"
+                      if (value === "not found") {
+                        this.testStatuses.push({ text: `Test failed. Field '${key}' not found in the database`, success: false });
+                        this.isLoading = false;
+                        resolve();
                       } else {
-                        // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
-                        this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
+                        // Comprueba cada condición por separado
+                        if (conditions.minExpectedValue !== undefined) {
+                          if (value >= Number(conditions.minExpectedValue)) {
+                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`, success: true });
+                          } else {
+                            this.testStatuses.push({ text: `Test failed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`, success: false });
+                          }
+                        }
+                        if (conditions.maxExpectedValue !== undefined) {
+                          if (value <= Number(conditions.maxExpectedValue)) {
+                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`, success: true });
+                          } else {
+                            this.testStatuses.push({ text: `Test failed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`, success: false });
+                          }
+                        }
+                        if (conditions.expectedValue !== undefined) {
+                          if (value === conditions.expectedValue) {
+                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: true });
+                          } else {
+                            this.testStatuses.push({ text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: false });
+                          }
+                        }
+                        this.isLoading = false;
+                        resolve();
                       }
-                    } else {
-                      // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
-                      this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
                     }
                   });
-                  this.isLoading = false;
-                  resolve();
                 } else {
-                  // Si no hay datos, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
-                  this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
+                  // Si no hay datos, empuja un mensaje indicando que el test ha fallado a this.testStatuses
+                  this.testStatuses.push({ text: `Test failed. Field '${key}' not found in the database`, success: false });
                   this.isLoading = false;
                   resolve();
                 }
