@@ -25,7 +25,7 @@ export class YamelsComponent implements OnInit {
         `- uses: "github/createBranch"
       with:
         repoName: "tp-testbench"
-        branchName: "nombreDeLaRama_adios2"
+        branchName: "branchNameHere"
       method: "POST"`
     },
     {
@@ -33,7 +33,7 @@ export class YamelsComponent implements OnInit {
       content: `- uses: "github/deleteBranch"
       with:
         repoName: "tp-testbench"
-        branchName: "nombreDeLaRama_adios2"
+        branchName: "branchNameHere"
       method: "DELETE"`
     },
     {
@@ -50,20 +50,20 @@ export class YamelsComponent implements OnInit {
       with:
         repoName: "tp-testbench"
         owner: "Antoniiosc7"
-        title: "hello"
-        body: "body"
+        title: "titleText"
+        body: "bodyText"
       method: "POST"`
     },
     {
       id: 'example6',
-      content: `- uses: "github/createIssue"
+      content: `- uses: "github/createPR"
       with:
         repoName: "tp-testbench"
         owner: "Antoniiosc7"
         title: "title1"
-        head: "head"
-        base: "base"
-        body: "body"
+        head: "main"
+        base: "branchX"
+        body: "bodyText"
       method: "POST"`
     },
     {
@@ -80,8 +80,8 @@ export class YamelsComponent implements OnInit {
       with:
         repoName: "tp-testbench"
         owner: "Antoniiosc7"
-        prNumber: "7"
-        mergeMessage: "mergeado"
+        prNumber: "1"
+        mergeMessage: "mergead"
       method: "PUT"`
     },
     {
@@ -96,15 +96,15 @@ export class YamelsComponent implements OnInit {
       content: `- uses: "github/createFile"
       with:
         repoName: "tp-testbench"
-        fileName: "sevillafc232"
-        fileContent: "sevilla fc campeon"`
+        fileName: "file.txt"
+        fileContent: "content"`
     },
     {
       id: 'example11',
       content: `- uses: "github/commitAllChanges"
       with:
         repoName: "tp-testbench"
-        commitMessage: "subida sevilla sevillafc232"
+        commitMessage: "commit message"
       method: "POST"`
     },
     {
@@ -129,15 +129,34 @@ export class YamelsComponent implements OnInit {
       content: `- uses: "bluejay/compute/metric"
       with:
         collector: "EVENTS"
-        metric: "FUNCIONANDO_PR_CON_COMENTARIOS.json"
+        metric: "additions_metric.json"
       method: "POST"`
     },
     {
       id: 'example15',
-      content: `- uses: "bluejay/checkContain"
+      content: `- uses: "bluejay/check"
+      value: "1" //optional
       with:
-        key: "additions"
-        minExpectedValue: "5"
+        - key: "additions"
+          conditions:
+            minExpectedValue: "5"
+            maxExpectedValue: "12"
+        - key: "additions"
+          conditions:
+            minExpectedValue: "5"
+            maxExpectedValue: "12"
+        - key: "key1"
+          conditions:
+            expectedValue: "value1"
+      method: "TEST"`
+    },
+    {
+      id: 'example16',
+      content: `uses: "github/mergeLastOpenPR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        mergeMessage: "mergedPR"
       method: "POST"`
     }
   ];

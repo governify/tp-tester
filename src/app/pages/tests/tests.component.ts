@@ -170,6 +170,9 @@ export class TestsComponent implements OnInit {
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise()
     },
     'POST': {
+      'github/mergeLastOpenPR': (step: { with: { [x: string]: string; }; }) => {
+        return this.githubService.mergeLastOpenPullRequest(this.token, step.with['owner'], step.with['repoName'], step.with['mergeMessage']).toPromise();
+      },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
         const tpa = step.with['tpa'];
@@ -206,32 +209,26 @@ export class TestsComponent implements OnInit {
           );
         });
       },
+      //DEPRECADO
       'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
-        // Obtener la clave a buscar y el valor mínimo esperado
         const key = step.with['key'];
         const minExpectedValue = Number(step.with['minExpectedValue']);
         this.isLoading = true;
-        // Hacer una solicitud GET al endpoint '/getData/:key'
         return new Promise<void>((resolve, reject) => {
           setTimeout(() => {
             this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
-              // Comprueba si el campo especificado existe en los datos devueltos
               if (data && data[0] && data[0][key]) {
                 const value = data[0][key];
-                // Comprueba si el valor obtenido es mayor o igual al valor mínimo esperado
                 if (value >= minExpectedValue) {
-                  // Si es así, empuja un mensaje indicando que el test ha sido superado a this.testStatuses
                   this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
                   this.isLoading = false;
                   resolve();
                 } else {
-                  // Si no es así, empuja un mensaje indicando que el test no ha sido superado a this.testStatuses
                   this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
                   this.isLoading = false;
                   resolve();
                 }
               } else {
-                // Si no existe, empuja un mensaje indicando que no hay coincidencias a this.testStatuses
                 this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
                 this.isLoading = false;
                 resolve();
@@ -404,7 +401,7 @@ export class TestsComponent implements OnInit {
         this.data = JSON.stringify(data, null, 2);
 
         const parsedData = JSON.parse(this.data);
-        /*
+        /* Esta zona actualiza la fecha del tpa a la actual */
         const now = new Date();
         const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
         let endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1);
@@ -413,7 +410,7 @@ export class TestsComponent implements OnInit {
         this.window.from = startOfHour.toISOString();
         this.window.initial = startOfHour.toISOString();
         this.window.end = endOfHour.toISOString();
-         */
+         /**/
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';
@@ -423,9 +420,6 @@ export class TestsComponent implements OnInit {
           if(parsedData.metric.window) {
             this.window.type = parsedData.metric.window.type || '';
             this.window.period = parsedData.metric.window.period || '';
-            this.window.initial = parsedData.metric.window.initial || '';
-            this.window.from = parsedData.metric.window.from || '';
-            this.window.end = parsedData.metric.window.end || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
           }
         } else {

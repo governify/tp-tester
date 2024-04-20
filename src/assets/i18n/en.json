@@ -392,7 +392,8 @@
     "example12": "Push",
     "example13": "Compute TPA Metrics",
     "example14": "Compute Metric",
-    "example15": "Check in response"
+    "example15": "Check in response",
+    "example16": "Merge last created PR"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",
