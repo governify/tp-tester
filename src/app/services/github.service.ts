@@ -74,6 +74,28 @@ export class GithubService {
     return this.http.put(url, data, {headers});
   }
 
+  mergeLastOpenPullRequest(token: string, owner: string, repo: string, mergeCommitMessage: string): Observable<any> {
+    return this.getOpenPullRequests(token, owner, repo).pipe(
+      switchMap((pullRequests: any[]) => {
+        if (pullRequests.length > 0) {
+          const lastOpenPr = pullRequests[pullRequests.length - 1];
+          const mergePrNumber = lastOpenPr.number;
+
+          const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls/${mergePrNumber}/merge`;
+          const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json'
+          };
+          const data = {commit_message: mergeCommitMessage};
+
+          return this.http.put(url, data, {headers});
+        } else {
+          throw new Error('No open pull requests found');
+        }
+      })
+    );
+  }
+
   getBranches(token: string, owner: string, repo: string): Observable<any[]> {
     const url = `${this.apiUrl}/repos/${owner}/${repo}/branches`;
     const headers = {

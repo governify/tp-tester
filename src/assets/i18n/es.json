@@ -392,7 +392,8 @@
     "example12": "Hacer push",
     "example13": "Computar métrica de TPA",
     "example14": "Computar métrica",
-    "example15": "Comprobar en la respuesta"
+    "example15": "Comprobar en la respuesta",
+    "example16": "Mergear última PR"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",
