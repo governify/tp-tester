@@ -19,6 +19,31 @@ body {
   border: 2px solid #007BFF;
   margin: 20px 40px 20px auto;
 }
+.loading-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.5);
+  z-index: 9999;
+}
+.alert {
+  position: relative;
+  padding: 20px;
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
 .btn.btn-outline-primary{
   margin-bottom: 20px;
 }
@@ -74,4 +99,8 @@ button.update-button {
   float: right;
   cursor: pointer;
   padding: 0 10px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

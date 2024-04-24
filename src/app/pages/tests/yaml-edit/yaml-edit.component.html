@@ -1,3 +1,7 @@
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="loader"></div>
+  <p class="loading-text">{{ 'METRICS_TESTER.COLLECTING_RESOURCES' | translate }}</p>
+</div>
 <body>
 <div class="row justify-content-end">
   <button class="common-button btn-right2" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}

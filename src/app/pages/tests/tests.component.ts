@@ -30,6 +30,7 @@ export class TestsComponent implements OnInit {
   yamlContent!: string;
   yamlFiles: string[] = [];
   isLoading = false;
+  fileName2!: string;
   fileName!: string;
   response!: any;
   tpa!: string;
@@ -138,7 +139,7 @@ export class TestsComponent implements OnInit {
                           }
                         }
                         if (conditions.expectedValue !== undefined) {
-                          if (value === conditions.expectedValue) {
+                          if (Number(value) === Number(conditions.expectedValue)) {
                             this.testStatuses.push({ text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: true });
                           } else {
                             this.testStatuses.push({ text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: false });
@@ -177,7 +178,8 @@ export class TestsComponent implements OnInit {
         // Leer el contenido del archivo
         const tpa = step.with['tpa'];
         const metric = step.with['metric'];
-        return this.loadData(tpa, metric).toPromise().then((data) => {
+        const time = step.with['actualTime'] === 'true';
+        return this.loadData(tpa, metric, time).toPromise().then((data) => {
           // Imprimir los datos devueltos por loadData
           console.log(data);
 
@@ -193,8 +195,9 @@ export class TestsComponent implements OnInit {
       'bluejay/compute/metric': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
         const metric = step.with['metric'];
+        const time = step.with['actualTime'] === 'true';
         return new Promise<void>((resolve, reject) => {
-          this.loadIndividualData(metric).subscribe(
+          this.loadIndividualData(metric, time).subscribe(
             () => {
               // Ejecutar postComputation
               this.postContent().subscribe(response => {
@@ -211,12 +214,14 @@ export class TestsComponent implements OnInit {
       },
       //DEPRECADO
       'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
+        console.warn("Deprecation Warning: 'bluejay/checkContain' has been deprecated. Please use 'TEST' method with 'bluejay/check' instead.");
         const key = step.with['key'];
         const minExpectedValue = Number(step.with['minExpectedValue']);
         this.isLoading = true;
         return new Promise<void>((resolve, reject) => {
           setTimeout(() => {
             this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
+              this.testStatuses.push({ text: `Deprecation Warning: 'bluejay/checkContain' has been deprecated. Please use 'TEST' method with 'bluejay/check' instead.`, success: false });
               if (data && data[0] && data[0][key]) {
                 const value = data[0][key];
                 if (value >= minExpectedValue) {
@@ -363,20 +368,14 @@ export class TestsComponent implements OnInit {
       }, 5000);
     }
   }
-  private loadData(tpa: string, metric: string): Observable<any> {
+  private loadData(tpa: string, metric: string, time: boolean): Observable<any> {
     this.tpa = tpa;
-    this.fileName = metric;
-    return this.glassmatrixService.loadFileContent(tpa, this.fileName).pipe(
+    this.fileName2 = metric;
+    return this.glassmatrixService.loadFileContent(tpa, this.fileName2).pipe(
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
         const parsedData = JSON.parse(this.data);
-        const now = new Date();
-        const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
-        const endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, -1);
 
-        this.window.from = startOfHour.toISOString();
-        this.window.initial = startOfHour.toISOString();
-        this.window.end = endOfHour.toISOString();
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
             this.scope.project = parsedData.metric.scope.project || '';
@@ -384,6 +383,19 @@ export class TestsComponent implements OnInit {
             this.scope.member = parsedData.metric.scope.member || '';
           }
           if(parsedData.metric.window) {
+            if(time){
+              const now = new Date();
+              const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
+              const endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, -1);
+
+              this.window.from = startOfHour.toISOString();
+              this.window.initial = startOfHour.toISOString();
+              this.window.end = endOfHour.toISOString();
+            }else{
+              this.window.from = parsedData.metric.window.from || '';
+              this.window.initial = parsedData.metric.window.initial || '';
+              this.window.end = parsedData.metric.window.end || '';
+            }
             this.window.type = parsedData.metric.window.type || '';
             this.window.period = parsedData.metric.window.period || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
@@ -394,22 +406,15 @@ export class TestsComponent implements OnInit {
       })
     );
   }
-  private loadIndividualData(metric: string): Observable<any> {
-    this.fileName = metric;
-    return this.filesService.getSavedMetric(this.fileName).pipe(
+  private loadIndividualData(metric: string, time: boolean): Observable<any> {
+    this.fileName2 = metric;
+    return this.filesService.getSavedMetric(this.fileName2).pipe(
       tap(data => {
         this.data = JSON.stringify(data, null, 2);
 
         const parsedData = JSON.parse(this.data);
         /* Esta zona actualiza la fecha del tpa a la actual */
-        const now = new Date();
-        const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
-        let endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1);
-        endOfHour.setSeconds(endOfHour.getSeconds() - 1);
 
-        this.window.from = startOfHour.toISOString();
-        this.window.initial = startOfHour.toISOString();
-        this.window.end = endOfHour.toISOString();
          /**/
         if (parsedData && parsedData.metric) {
           if (parsedData.metric.scope) {
@@ -418,6 +423,20 @@ export class TestsComponent implements OnInit {
             this.scope.member = parsedData.metric.scope.member || '';
           }
           if(parsedData.metric.window) {
+            if(time){
+              const now = new Date();
+              const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()+2);
+              let endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 3);
+              endOfHour.setSeconds(endOfHour.getSeconds() - 1);
+
+              this.window.from = startOfHour.toISOString();
+              this.window.initial = startOfHour.toISOString();
+              this.window.end = endOfHour.toISOString();
+            }else{
+              this.window.from = parsedData.metric.window.from;
+              this.window.initial = parsedData.metric.window.initial;
+              this.window.end = parsedData.metric.window.end;
+            }
             this.window.type = parsedData.metric.window.type || '';
             this.window.period = parsedData.metric.window.period || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
