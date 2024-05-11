@@ -208,7 +208,7 @@ export class TestsComponent implements OnInit {
               )
             );
             if (!foundValue) {
-              this.testStatuses.push({ text: `Test failed. Value ${valueObj.value} not found.`, success: false });
+              this.testStatuses.push({ text: `Test failed. Test for value: ${valueObj.value} has failed.`, success: false });
             }
           });
         });
