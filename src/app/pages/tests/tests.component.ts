@@ -425,13 +425,20 @@ export class TestsComponent implements OnInit {
           if(parsedData.metric.window) {
             if(time){
               const now = new Date();
-              const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()+2);
-              let endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 3);
+              const startOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
+              let endOfHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1);
               endOfHour.setSeconds(endOfHour.getSeconds() - 1);
 
-              this.window.from = startOfHour.toISOString();
-              this.window.initial = startOfHour.toISOString();
-              this.window.end = endOfHour.toISOString();
+              // data.metric.window.from = "2024-04-24T14:00:00.000Z";
+              // data.metric.window.initial = "2024-04-24T15:00:00.000Z";
+              // data.metric.window.end = "2024-04-24T15:59:59.000Z";
+              data.metric.window.from = startOfHour.toISOString();
+              data.metric.window.initial = startOfHour.toISOString();
+              data.metric.window.end = endOfHour.toISOString();
+              this.window.from = data.metric.window.from;
+              this.window.initial = data.metric.window.initial;
+              this.window.end = data.metric.window.end;
+              console.log(data.metric.window.from, data.metric.window.initial, data.metric.window.end);
             }else{
               this.window.from = parsedData.metric.window.from;
               this.window.initial = parsedData.metric.window.initial;
@@ -441,6 +448,7 @@ export class TestsComponent implements OnInit {
             this.window.period = parsedData.metric.window.period || '';
             this.window.timeZone = parsedData.metric.window.timeZone || '';
           }
+          console.log(data)
         } else {
           console.error('Cannot read, invalid data');
         }
