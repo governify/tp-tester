@@ -161,6 +161,58 @@ export class TestsComponent implements OnInit {
           });
         }));
       },
+      'bluejay/findCheck': (step: { with: { values: any[]; }; }) => {
+        const url = `${BASE_URL}:6012/glassmatrix/api/v1/bluejay/findCheck`;
+        const headers = { 'Authorization': `Bearer ${this.token}` };
+
+        return this.http.post(url, { values: step.with.values }, { headers }).toPromise().then((response: any) => {
+          // Agrega la respuesta a la respuesta existente
+          this.response += 'bluejay/findCheck ' + JSON.stringify(response, null, 2) + '\n\n';
+
+          // Comprueba si se encontraron los valores esperados y agrega los resultados a testStatuses
+          step.with.values.forEach((valueObj: any) => {
+            const foundValue = response.find((res: any) =>
+              res.computations.some((comp: any) =>
+                comp.value === valueObj.value &&
+                comp.evidences.some((evidence: any) => {
+                  let allEvidencesFound = true;
+                  for (const key in valueObj.evidences) {
+                    if (key === 'login') {
+                      const foundLogin = evidence.author.login === valueObj.evidences.login;
+                      allEvidencesFound = allEvidencesFound && foundLogin;
+                      if (foundLogin) {
+                        this.testStatuses.push({ text: `Test successfully completed. login = "${valueObj.evidences.login}" found.`, success: true });
+                      } else {
+                        this.testStatuses.push({ text: `Test failed. login = "${valueObj.evidences.login}" not found.`, success: false });
+                      }
+                    } else if (key === 'bodyText') {
+                      const foundBodyText = evidence.comments.nodes.some((comment: any) => comment.bodyText === valueObj.evidences.bodyText);
+                      allEvidencesFound = allEvidencesFound && foundBodyText;
+                      if (foundBodyText) {
+                        this.testStatuses.push({ text: `Test successfully completed. bodyText = "${valueObj.evidences.bodyText}" found.`, success: true });
+                      } else {
+                        this.testStatuses.push({ text: `Test failed. bodyText = "${valueObj.evidences.bodyText}" not found.`, success: false });
+                      }
+                    } else {
+                      const foundEvidence = evidence[key] === valueObj.evidences[key];
+                      allEvidencesFound = allEvidencesFound && foundEvidence;
+                      if (foundEvidence) {
+                        this.testStatuses.push({ text: `Test successfully completed. ${key} = "${valueObj.evidences[key]}" found.`, success: true });
+                      } else {
+                        this.testStatuses.push({ text: `Test failed. ${key} = "${valueObj.evidences[key]}" not found.`, success: false });
+                      }
+                    }
+                  }
+                  return allEvidencesFound;
+                })
+              )
+            );
+            if (!foundValue) {
+              this.testStatuses.push({ text: `Test failed. Value ${valueObj.value} not found.`, success: false });
+            }
+          });
+        });
+      },
     },
     'GET': {
       'github/getIssue': (step: { with: { [x: string]: string; }; }) => this.githubService.getIssues(this.token, step.with['owner'], step.with['repoName']).toPromise(),

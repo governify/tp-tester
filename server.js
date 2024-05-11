@@ -229,7 +229,50 @@ app.get(apiName+ '/getData/:field', (req, res) => {
     }
   });
 });
+/**
+ * @swagger
+ * /glassmatrix/api/v1/bluejay/findCheck:
+ *  post:
+ *    tags: [Bluejay]
+ *    description: Use to check for evidence in the database
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.post(apiName + '/bluejay/findCheck', (req, res) => {
+  const { values } = req.body;
 
+  // Extract the evidences from the values
+  const evidences = values.flatMap(value => value.evidences);
+
+  // Construct the query for the database
+  const query = {
+    'computations.value': { $in: values.map(value => value.value) },
+    $or: evidences.map(evidence => {
+      const evidenceQuery = {};
+      for (const key in evidence) {
+        if (key === 'login') {
+          evidenceQuery[`computations.evidences.author.${key}`] = evidence[key];
+        } else if (key === 'bodyText') {
+          evidenceQuery[`computations.evidences.comments.nodes.${key}`] = evidence[key];
+        } else {
+          evidenceQuery[`computations.evidences.${key}`] = evidence[key];
+        }
+      }
+      return evidenceQuery;
+    })
+  };
+
+  // Execute the query on the database
+  db.find(query, (err, docs) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while querying the database.' });
+    } else {
+      res.json(docs);
+    }
+  });
+});
 /**
  * @swagger
  * /api/config:
