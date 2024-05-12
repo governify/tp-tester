@@ -242,10 +242,10 @@ app.get(apiName+ '/getData/:field', (req, res) => {
 app.post(apiName + '/bluejay/findCheck', (req, res) => {
   const { values } = req.body;
 
-  // Extract the evidences from the values
+  // Miro las evidencias que tengo que buscar
   const evidences = values.flatMap(value => value.evidences);
 
-  // Construct the query for the database
+  // Construyo una query para llamar al db.find
   const query = {
     'computations.value': { $in: values.map(value => value.value) },
     $or: evidences.map(evidence => {
