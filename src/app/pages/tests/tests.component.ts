@@ -62,7 +62,7 @@ export class TestsComponent implements OnInit {
     private githubService: GithubService,
     private bluejayService: BluejayService,
     private filesService: FilesService
-) { this.computationResponse = ''; }
+  ) { this.computationResponse = ''; }
 
   ngOnInit(): void {
     this.loadYamlFiles();
@@ -104,10 +104,17 @@ export class TestsComponent implements OnInit {
   }
   private stepHandlers = {
     'TEST': {
-      'bluejay/check': (step: { with: { key: string, conditions: { minExpectedValue?: string, maxExpectedValue?: string, expectedValue?: string } }[]; value?: string, createdAt?: string, authorLogin?: string }) => {
-        this.isLoading = true;
+      'bluejay/check': (step: {
+        with: {
+          key: string,
+          conditions: { minExpectedValue?: string, maxExpectedValue?: string, expectedValue?: string }
+        }[];
+        value?: string,
+        createdAt?: string,
+        authorLogin?: string
+      }) => {
         // Hacer una solicitud GET al endpoint '/getData/:key' para cada key
-        return Promise.all(step.with.map(({ key, conditions }) => {
+        return Promise.all(step.with.map(({key, conditions}) => {
           return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
               this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
@@ -119,41 +126,62 @@ export class TestsComponent implements OnInit {
                       const value = item[key];
                       // Comprueba si el valor de la clave es "not found"
                       if (value === "not found") {
-                        this.testStatuses.push({ text: `Test failed. Field '${key}' not found in the database`, success: false });
-                        this.isLoading = false;
+                        this.testStatuses.push({
+                          text: `Test failed. Field '${key}' not found in the database`,
+                          success: false
+                        });
                         resolve();
                       } else {
                         // Comprueba cada condición por separado
                         if (conditions.minExpectedValue !== undefined) {
                           if (value >= Number(conditions.minExpectedValue)) {
-                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`, success: true });
+                            this.testStatuses.push({
+                              text: `Test successfully completed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`,
+                              success: true
+                            });
                           } else {
-                            this.testStatuses.push({ text: `Test failed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`, success: false });
+                            this.testStatuses.push({
+                              text: `Test failed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`,
+                              success: false
+                            });
                           }
                         }
                         if (conditions.maxExpectedValue !== undefined) {
                           if (value <= Number(conditions.maxExpectedValue)) {
-                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`, success: true });
+                            this.testStatuses.push({
+                              text: `Test successfully completed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`,
+                              success: true
+                            });
                           } else {
-                            this.testStatuses.push({ text: `Test failed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`, success: false });
+                            this.testStatuses.push({
+                              text: `Test failed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`,
+                              success: false
+                            });
                           }
                         }
                         if (conditions.expectedValue !== undefined) {
                           if (Number(value) === Number(conditions.expectedValue)) {
-                            this.testStatuses.push({ text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: true });
+                            this.testStatuses.push({
+                              text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`,
+                              success: true
+                            });
                           } else {
-                            this.testStatuses.push({ text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`, success: false });
+                            this.testStatuses.push({
+                              text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`,
+                              success: false
+                            });
                           }
                         }
-                        this.isLoading = false;
                         resolve();
                       }
                     }
                   });
                 } else {
                   // Si no hay datos, empuja un mensaje indicando que el test ha fallado a this.testStatuses
-                  this.testStatuses.push({ text: `Test failed. Field '${key}' not found in the database`, success: false });
-                  this.isLoading = false;
+                  this.testStatuses.push({
+                    text: `Test failed. Field '${key}' not found in the database`,
+                    success: false
+                  });
                   resolve();
                 }
               }, reject);
@@ -162,56 +190,80 @@ export class TestsComponent implements OnInit {
         }));
       },
       'bluejay/findCheck': (step: { with: { values: any[]; }; }) => {
-        const url = `${BASE_URL}:6012/glassmatrix/api/v1/bluejay/findCheck`;
-        const headers = { 'Authorization': `Bearer ${this.token}` };
+        return new Promise(resolve => setTimeout(resolve, 1000))
+          .then(() => {
+            const url = `${BASE_URL}:6012/glassmatrix/api/v1/bluejay/findCheck`;
+            const headers = {'Authorization': `Bearer ${this.token}`};
 
-        return this.http.post(url, { values: step.with.values }, { headers }).toPromise().then((response: any) => {
-          // Agrega la respuesta a la respuesta existente
-          this.response += 'bluejay/findCheck ' + JSON.stringify(response, null, 2) + '\n\n';
+            return this.http.post(url, {values: step.with.values}, {headers}).toPromise().then((response: any) => {
+              // Agrega la respuesta a la respuesta existente
+              this.response += 'bluejay/findCheck ' + JSON.stringify(response, null, 2) + '\n\n';
 
-          // Comprueba si se encontraron los valores esperados y agrega los resultados a testStatuses
-          step.with.values.forEach((valueObj: any) => {
-            const foundValue = response.find((res: any) =>
-              res.computations.some((comp: any) =>
-                comp.value === valueObj.value &&
-                comp.evidences.some((evidence: any) => {
-                  let allEvidencesFound = true;
-                  for (const key in valueObj.evidences) {
-                    if (key === 'login') {
-                      const foundLogin = evidence.author.login === valueObj.evidences.login;
-                      allEvidencesFound = allEvidencesFound && foundLogin;
-                      if (foundLogin) {
-                        this.testStatuses.push({ text: `Test successfully completed. login = "${valueObj.evidences.login}" found.`, success: true });
-                      } else {
-                        this.testStatuses.push({ text: `Test failed. login = "${valueObj.evidences.login}" not found.`, success: false });
+              // Comprueba si se encontraron los valores esperados y agrega los resultados a testStatuses
+              step.with.values.forEach((valueObj: any) => {
+                const foundValue = response.find((res: any) =>
+                  res.computations.some((comp: any) =>
+                    comp.value === valueObj.value &&
+                    comp.evidences.some((evidence: any) => {
+                      let allEvidencesFound = true;
+                      for (const key in valueObj.evidences) {
+                        if (key === 'login') {
+                          const foundLogin = evidence.author.login === valueObj.evidences.login;
+                          allEvidencesFound = allEvidencesFound && foundLogin;
+                          if (foundLogin) {
+                            this.testStatuses.push({
+                              text: `Test successfully completed. login = "${valueObj.evidences.login}" found.`,
+                              success: true
+                            });
+                          } else {
+                            this.testStatuses.push({
+                              text: `Test failed. login = "${valueObj.evidences.login}" not found.`,
+                              success: false
+                            });
+                          }
+                        } else if (key === 'bodyText') {
+                          const foundBodyText = evidence.comments.nodes.some((comment: any) => comment.bodyText === valueObj.evidences.bodyText);
+                          allEvidencesFound = allEvidencesFound && foundBodyText;
+                          if (foundBodyText) {
+                            this.testStatuses.push({
+                              text: `Test successfully completed. bodyText = "${valueObj.evidences.bodyText}" found.`,
+                              success: true
+                            });
+                          } else {
+                            this.testStatuses.push({
+                              text: `Test failed. bodyText = "${valueObj.evidences.bodyText}" not found.`,
+                              success: false
+                            });
+                          }
+                        } else {
+                          const foundEvidence = evidence[key] === valueObj.evidences[key];
+                          allEvidencesFound = allEvidencesFound && foundEvidence;
+                          if (foundEvidence) {
+                            this.testStatuses.push({
+                              text: `Test successfully completed. ${key} = "${valueObj.evidences[key]}" found.`,
+                              success: true
+                            });
+                          } else {
+                            this.testStatuses.push({
+                              text: `Test failed. ${key} = "${valueObj.evidences[key]}" not found.`,
+                              success: false
+                            });
+                          }
+                        }
                       }
-                    } else if (key === 'bodyText') {
-                      const foundBodyText = evidence.comments.nodes.some((comment: any) => comment.bodyText === valueObj.evidences.bodyText);
-                      allEvidencesFound = allEvidencesFound && foundBodyText;
-                      if (foundBodyText) {
-                        this.testStatuses.push({ text: `Test successfully completed. bodyText = "${valueObj.evidences.bodyText}" found.`, success: true });
-                      } else {
-                        this.testStatuses.push({ text: `Test failed. bodyText = "${valueObj.evidences.bodyText}" not found.`, success: false });
-                      }
-                    } else {
-                      const foundEvidence = evidence[key] === valueObj.evidences[key];
-                      allEvidencesFound = allEvidencesFound && foundEvidence;
-                      if (foundEvidence) {
-                        this.testStatuses.push({ text: `Test successfully completed. ${key} = "${valueObj.evidences[key]}" found.`, success: true });
-                      } else {
-                        this.testStatuses.push({ text: `Test failed. ${key} = "${valueObj.evidences[key]}" not found.`, success: false });
-                      }
-                    }
-                  }
-                  return allEvidencesFound;
-                })
-              )
-            );
-            if (!foundValue) {
-              this.testStatuses.push({ text: `Test failed. Test for value: ${valueObj.value} has failed.`, success: false });
-            }
+                      return allEvidencesFound;
+                    })
+                  )
+                );
+                if (!foundValue) {
+                  this.testStatuses.push({
+                    text: `Test failed. Test for value: ${valueObj.value} has failed.`,
+                    success: false
+                  });
+                }
+              });
+            });
           });
-        });
       },
     },
     'GET': {
@@ -225,6 +277,9 @@ export class TestsComponent implements OnInit {
     'POST': {
       'github/mergeLastOpenPR': (step: { with: { [x: string]: string; }; }) => {
         return this.githubService.mergeLastOpenPullRequest(this.token, step.with['owner'], step.with['repoName'], step.with['mergeMessage']).toPromise();
+      },
+      'github/undoLastMergedPR': (step: { with: { [x: string]: string; }; }) => {
+        return this.githubService.undoLastMergedPullRequest(this.token, step.with['owner'], step.with['repoName']).toPromise();
       },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
         // Leer el contenido del archivo
@@ -251,9 +306,7 @@ export class TestsComponent implements OnInit {
         return new Promise<void>((resolve, reject) => {
           this.loadIndividualData(metric, time).subscribe(
             () => {
-              // Ejecutar postComputation
               this.postContent().subscribe(response => {
-                // Esperar 10 segundos y luego llamar a getComputation
                 setTimeout(() => {
                   this.getComputation();
                 }, 1000);
@@ -269,7 +322,6 @@ export class TestsComponent implements OnInit {
         console.warn("Deprecation Warning: 'bluejay/checkContain' has been deprecated. Please use 'TEST' method with 'bluejay/check' instead.");
         const key = step.with['key'];
         const minExpectedValue = Number(step.with['minExpectedValue']);
-        this.isLoading = true;
         return new Promise<void>((resolve, reject) => {
           setTimeout(() => {
             this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
@@ -278,16 +330,13 @@ export class TestsComponent implements OnInit {
                 const value = data[0][key];
                 if (value >= minExpectedValue) {
                   this.testStatuses.push({ text: `Test successfully completed. ${key}=${value}`, success: true });
-                  this.isLoading = false;
                   resolve();
                 } else {
                   this.testStatuses.push({ text: `Test failed. ${key}=${value}`, success: false });
-                  this.isLoading = false;
                   resolve();
                 }
               } else {
                 this.testStatuses.push({ text: `No records found for the field '${key}' in the database`, success: false });
-                this.isLoading = false;
                 resolve();
               }
             }, reject);
@@ -318,46 +367,52 @@ export class TestsComponent implements OnInit {
     },
     'DELETE': {
       'github/deleteRepo': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteRepo(step.with['repoName']).toPromise(),
-      'github/deleteBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteBranch(step.with['repoName'], step.with['branchName']).toPromise()
+      'github/deleteBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteBranch(step.with['repoName'], step.with['branchName']).toPromise(),
+      'github/deleteFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteGithubFile(step.with['repoName'], step.with['fileName']).toPromise()
+
     }
   };
 
   executeYaml(): void {
+    this.isLoading = true;
     this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
       this.response = '';
       data.steps.reduce((prevPromise, step: Step) => {
         return prevPromise.then(() => {
-          // @ts-ignore
-          const handler = this.stepHandlers[step.method][step.uses];
-          if (handler) {
-            return handler(step).then((response: Response) => {
-              if(step.uses === 'bluejay/compute/tpa' || step.uses === 'bluejay/compute/metric') {
-                this.computationResponse += step.uses + '\n';
-              } else if(step.uses === 'bluejay/check' || step.uses === 'bluejay/checkContain') {
-                this.response += step.uses + '\n';
-              }else{
-                // Verificar si la respuesta no es undefined antes de agregarla a la respuesta
-                if (response !== undefined) {
-                  // Construir la cadena completa antes de agregarla a la respuesta
-                  const responseString = step.uses + ' ' + JSON.stringify(response, null, 2) + '\n\n';
-                  this.response += responseString;
-                } else {
-                  this.response += step.uses + '\n\n';
-                }
+          return new Promise(resolve => setTimeout(resolve, 3000)) // Agregar retraso de 5 segundos aquí
+            .then(() => {
+              // @ts-ignore
+              const handler = this.stepHandlers[step.method][step.uses];
+              if (handler) {
+                return handler(step).then((response: Response) => {
+                  if (response !== undefined) {
+                    const responseString = step.uses + ' ' + JSON.stringify(response, null, 2) + '\n\n';
+                    this.response += responseString;
+                  } else {
+                    this.response += step.uses + '\n\n';
+                  }
+                }).catch((error: any) => {
+                  console.error(`Error in step ${step.method} ${step.uses}:`, error);
+                });
+              } else {
+                console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
+                return Promise.reject(`No handler found for method ${step.method} and uses ${step.uses}`);
               }
             });
-          } else {
-            console.error(`No handler found for method ${step.method} and uses ${step.uses}`);
-            return Promise.reject(`No handler found for method ${step.method} and uses ${step.uses}`);
-          }
         });
-      }, Promise.resolve()).catch(error => {
+      }, Promise.resolve()).then(
+        () => {
+          this.isLoading = false; // Mover esta línea aquí
+        }
+      ).catch(error => {
         console.error(error);
         this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
+        this.isLoading = false;
       });
     }, error => {
       console.error(error);
       this.errorMessage = 'Se produjo un error durante la ejecución: ' + error.message;
+      this.isLoading = false;
     });
   }
   setDefaultFormat(): void {

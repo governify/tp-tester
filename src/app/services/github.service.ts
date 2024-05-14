@@ -73,7 +73,34 @@ export class GithubService {
 
     return this.http.put(url, data, {headers});
   }
+  undoLastMergedPullRequest(token: string, owner: string, repo: string): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls?state=closed`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
 
+    return this.http.get<any[]>(url, { headers }).pipe(
+      switchMap((pullRequests: any[]) => {
+        const lastMergedPr = pullRequests.find(pr => pr.merged_at !== null);
+        if (lastMergedPr) {
+          const revertBranchName = `revert-${lastMergedPr.number}`;
+          const revertCommitMessage = `Revert "Merge pull request #${lastMergedPr.number}"`;
+
+          return this.octokit.git.createRef({
+            owner,
+            repo,
+            ref: `refs/heads/${revertBranchName}`,
+            sha: lastMergedPr.merge_commit_sha
+          }).then(() => {
+            return this.createPullRequest(token, owner, repo, revertCommitMessage, revertBranchName, 'main', '');
+          });
+        } else {
+          throw new Error('No merged pull requests found');
+        }
+      })
+    );
+  }
   mergeLastOpenPullRequest(token: string, owner: string, repo: string, mergeCommitMessage: string): Observable<any> {
     return this.getOpenPullRequests(token, owner, repo).pipe(
       switchMap((pullRequests: any[]) => {

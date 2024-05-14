@@ -393,7 +393,9 @@
     "example13": "Compute TPA Metrics",
     "example14": "Compute Metric",
     "example15": "Check in response",
-    "example16": "Merge last created PR"
+    "example16": "Merge last created PR",
+    "example17": "Check in response 2",
+    "example18": "Delete file"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",

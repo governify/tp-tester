@@ -393,7 +393,9 @@
     "example13": "Computar métrica de TPA",
     "example14": "Computar métrica",
     "example15": "Comprobar en la respuesta",
-    "example16": "Mergear última PR"
+    "example16": "Mergear última PR",
+    "example17": "Comprobar en la respuesta 2",
+    "example18": "Eliminar archivo"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",

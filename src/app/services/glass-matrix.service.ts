@@ -101,6 +101,10 @@ export class GlassmatrixService {
     return this.http.post(`${this.url}/github/createFile/${repoName}`, { fileName, fileContent });
   }
 
+  deleteGithubFile(repoName: string, fileName: string): Observable<any> {
+    return this.http.delete(`${this.url}/github/deleteFile/${repoName}/${fileName}`);
+  }
+
   pushChanges(repoName: string): Observable<any> {
     return this.http.post(`${this.url}/github/push/${repoName}`, {});
   }

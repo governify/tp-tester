@@ -1281,11 +1281,11 @@ app.post(apiName + '/github/changeBranch/:repoName/:branchName', async (req, res
 
   try {
     const { stdout, stderr } = await exec(`git checkout ${branchName}`, { cwd: repoPath });
-    if (stderr && !stderr.includes('Switched to branch')) {
+    if (stderr && !stderr.includes('Already on')) {
       console.error('Error changing branch:', stderr);
       res.status(500).send('Error changing branch: ' + stderr);
     } else {
-      res.json({ message: `Switched to branch ${branchName} successfully` });
+      res.json({ message: `Switched to branch ${branchName}` });
     }
   } catch (err) {
     console.error('Error executing git command:', err);
@@ -1449,6 +1449,21 @@ app.post(apiName + '/github/createFile/:repoName', (req, res) => {
       res.status(500).send('Error creating file: ' + err.message);
     } else {
       res.json({ message: 'File created successfully' });
+    }
+  });
+});
+
+app.delete(apiName + '/github/deleteFile/:repoName/:fileName', (req, res) => {
+  const { repoName, fileName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+  const filePath = path.join(repoPath, fileName);
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      res.status(500).send('Error deleting file: ' + err.message);
+    } else {
+      res.json({ message: 'File deleted successfully' });
     }
   });
 });
