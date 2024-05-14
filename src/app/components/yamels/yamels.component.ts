@@ -128,6 +128,7 @@ export class YamelsComponent implements OnInit {
       id: 'example14',
       content: `- uses: "bluejay/compute/metric"
       with:
+        actualTime: "true/false"
         collector: "EVENTS"
         metric: "additions_metric.json"
       method: "POST"`
@@ -158,6 +159,25 @@ export class YamelsComponent implements OnInit {
         owner: "Antoniiosc7"
         mergeMessage: "mergedPR"
       method: "POST"`
+    },
+    {
+      id: 'example17',
+      content: `- uses: "bluejay/findCheck"
+      with:
+        values:
+          - value: 1
+            computationCount: 1
+            evidences:
+              login: "Antoniiosc7"
+              bodyText: "wip"
+      method: "TEST"`
+    },
+    {
+      id: 'example18',
+      content: `- uses: "github/deleteFile"
+      with:
+        repoName: "tp-testbench"
+        fileName: "2323232323"`
     }
   ];
 

@@ -229,7 +229,50 @@ app.get(apiName+ '/getData/:field', (req, res) => {
     }
   });
 });
+/**
+ * @swagger
+ * /glassmatrix/api/v1/bluejay/findCheck:
+ *  post:
+ *    tags: [Bluejay]
+ *    description: Use to check for evidence in the database
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.post(apiName + '/bluejay/findCheck', (req, res) => {
+  const { values } = req.body;
 
+  // Miro las evidencias que tengo que buscar
+  const evidences = values.flatMap(value => value.evidences);
+
+  // Construyo una query para llamar al db.find
+  const query = {
+    'computations.value': { $in: values.map(value => value.value) },
+    $or: evidences.map(evidence => {
+      const evidenceQuery = {};
+      for (const key in evidence) {
+        if (key === 'login') {
+          evidenceQuery[`computations.evidences.author.${key}`] = evidence[key];
+        } else if (key === 'bodyText') {
+          evidenceQuery[`computations.evidences.comments.nodes.${key}`] = evidence[key];
+        } else {
+          evidenceQuery[`computations.evidences.${key}`] = evidence[key];
+        }
+      }
+      return evidenceQuery;
+    })
+  };
+
+  // Execute the query on the database
+  db.find(query, (err, docs) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while querying the database.' });
+    } else {
+      res.json(docs);
+    }
+  });
+});
 /**
  * @swagger
  * /api/config:
@@ -1238,11 +1281,11 @@ app.post(apiName + '/github/changeBranch/:repoName/:branchName', async (req, res
 
   try {
     const { stdout, stderr } = await exec(`git checkout ${branchName}`, { cwd: repoPath });
-    if (stderr && !stderr.includes('Switched to branch')) {
+    if (stderr && !stderr.includes('Already on')) {
       console.error('Error changing branch:', stderr);
       res.status(500).send('Error changing branch: ' + stderr);
     } else {
-      res.json({ message: `Switched to branch ${branchName} successfully` });
+      res.json({ message: `Switched to branch ${branchName}` });
     }
   } catch (err) {
     console.error('Error executing git command:', err);
@@ -1406,6 +1449,21 @@ app.post(apiName + '/github/createFile/:repoName', (req, res) => {
       res.status(500).send('Error creating file: ' + err.message);
     } else {
       res.json({ message: 'File created successfully' });
+    }
+  });
+});
+
+app.delete(apiName + '/github/deleteFile/:repoName/:fileName', (req, res) => {
+  const { repoName, fileName } = req.params;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+  const filePath = path.join(repoPath, fileName);
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      res.status(500).send('Error deleting file: ' + err.message);
+    } else {
+      res.json({ message: 'File deleted successfully' });
     }
   });
 });
