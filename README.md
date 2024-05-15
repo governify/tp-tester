@@ -1,5 +1,7 @@
 # Bluejay - TP Tester
-This project is an extension of Bluejay. The official documentation for Bluejay can be found at: [docs.bluejay.governify.io](https://docs.bluejay.governify.io/). Being an extension of Bluejay, it is essential for the full operation of Bluejay-Tester.# Index
+This project is an extension of Bluejay. The official documentation for Bluejay can be found at: [docs.bluejay.governify.io](https://docs.bluejay.governify.io/). Being an extension of Bluejay, it is essential for the full operation of Bluejay-Tester.
+
+# Index
 - [Bluejay - TP Tester](#bluejay---tp-tester)
   - [Introduction](#introduction)
     - [What is Bluejay?](#what-is-bluejay)
@@ -7,18 +9,27 @@ This project is an extension of Bluejay. The official documentation for Bluejay 
   - [Getting started](#getting-started)
     - [Development mode](#development-mode)
     - [With docker](#with-docker)
-- [Testing TPAs](#testing-tpas)
-- [Testing metrics](#testing-metrics)
-  - [Editing metrics](#editing-metrics)
-- [Testing repositories](#testing-repositories)
-- [Interaction with the GitHub API](#interaction-with-the-github-api)
-  - [Creating a personal access token](#creating-a-personal-access-token)
-- [Interaction with the Bluejay API](#interaction-with-the-bluejay-api)
-- [GlassMatrix API](#glassmatrix-api)
-  - [API functionalities](#api-functionalities)
-  - [API documentation with Swagger](#api-documentation-with-swagger)
-  - [Usage examples](#usage-examples)
-- [Translations](#translations)
+- [TPA Management](#tpa-management)
+  - [TPA Page](#tpa-page)
+  - [TPA Edit](#tpa-edit)
+- [Metrics](#metrics)
+  - [Metrics Loader](#metrics-loader)
+  - [Metrics Viewer](#metrics-viewer)
+  - [Metrics Executor](#metrics-executor)
+- [Manual Testing Page](#manual-testing-page)
+  - [Clone New Repository](#clone-new-repository)
+  - [Cloned Repository](#cloned-repository)
+- [Automated Testing](#automated-testing)
+  - [Page Structure](#page-structure)
+  - [YAML File Loading](#yaml-file-loading)
+  - [Test Execution](#test-execution)
+  - [Results Visualization](#results-visualization)
+  - [Test Results](#test-results)
+  - [Variables to Use](#variables-to-use)
+- [Configuration Page](#configuration-page)
+  - [Get Github Token](#get-github-token)
+  - [Swagger API Documentation](#swagger-api-documentation)
+  - [Translations](#translations)
 
 ## Introduction
 ### What is Bluejay?
@@ -42,8 +53,8 @@ To lift Bluejay-TP Tester with docker, follow these steps:
 3. Run `npm run docker`.
 
 With this, we would have the project lifted on port 6011 the angular web, and the express server on port 6012.# TPA Management
-
-The TPA Management page is a central hub for managing TPAs (Third Party Applications) in the application. It provides a user-friendly interface for viewing, creating, and managing TPAs.
+# TPA PAGE
+The TPA management page allows you to visualize and interact with those TPAs that are within Bluejay. 
 
 ### Existing TPAs
 
@@ -51,10 +62,10 @@ This section displays a table of all existing TPAs. Each row in the table repres
 
 There are also several action buttons for each TPA:
 
-- The **Copy** button allows you to copy the content of a TPA.
+- The **Copy** button allows you to copy the content of a TPA intro the lower textarea.
 - The **View** button navigates to a detailed view of the TPA.
 - The **Edit** button navigates to a page where you can edit the TPA.
-- The **Delete** button navigates to a page where you can delete the TPA.
+- The **Delete** button navigates the TPA from the Bluejay DB.
 
 ### Create TPA
 
@@ -65,43 +76,28 @@ There are two buttons:
 - The **Create TPA** button creates a new TPA with the content you've inputted in the text area.
 - The **Copy Default TPA** button fills the text area with the content of a default TPA, which you can then modify and create as a new TPA.
 
-Notifications are displayed in this section to inform you whether the creation of the TPA was successful or not.
-
-The corresponding TypeScript component `TpaManagementComponent` handles the logic for fetching the TPAs, creating a new TPA, and copying the content of a TPA or a default TPA. It interacts with the `BluejayService` and `FilesService` to perform these operations.
 ## TPA Edit
 
-The TPA Edit page allows you to modify the details of a specific TPA. It displays the current JSON representation of the TPA and provides an interface for editing the metrics and guarantees of the TPA.
+When you click on the edit button of a TPA, you will enter a subpage that will give you access to two other subpages. 
 
-### TPA JSON
+- One where you can edit the entire TPA.
+- And another where you can edit the TPA by sections.
+### EDIT ENTIRE TPA
+Here you will be able to edit the TPA Content in a textarea with the current content of the TPA and a save button that will update that content
 
-This section displays the current JSON representation of the TPA. This JSON is read-only and is updated in real-time as you make changes in the other sections.
+### EDIT TPA BY SECTIONS
+In this page you can edit the TPA by sections, editing or deleting each metric and guarantee of the TPA. And you can also add new metrics and guarantees. If you select the "more" button, it will generate an individual metric for you to review and test, and it will redirect you to the new page with that created metric.
 
-### Create
-
-This section allows you to add new metrics and guarantees to the TPA. For each metric or guarantee, you can input a name and content. There are also buttons to create the new metric or guarantee and to copy an example metric or guarantee.
-
-The corresponding TypeScript component `SectionsComponent` handles the logic for fetching the TPA, updating the TPA, and adding new metrics and guarantees. It interacts with the `BluejayService`, `FilesService`, and `GlassmatrixService` to perform these operations.
-
-## TPA Delete
-
-The TPA Delete page allows you to delete a specific TPA. It displays the current JSON representation of the TPA and provides a button to confirm the deletion.
-
-The corresponding TypeScript component `TpaDeleteComponent` handles the logic for fetching the TPA and deleting the TPA. It interacts with the `BluejayService` to perform these operations.
-
-## TPA View
-
-The TPA View page allows you to view the details of a specific TPA. It displays the current JSON representation of the TPA and lists out all the metrics and guarantees of the TPA.
-
-The corresponding TypeScript component `TpaViewComponent` handles the logic for fetching the TPA. It interacts with the `BluejayService` to perform this operation.
-
+![TPA Sections.png](src/assets/images/tpaSectionEdit.png)
 
 # Metrics
 
 The Metrics Loader page is designed to manage and test metrics. It provides a user-friendly interface for viewing, creating, and managing metrics.
 
 ### Existing metrics
+Here you can see all the saved metrics, classified into two large tables. One table consists of those saved from the TPA section, which will be related to the TPA they belonged to. The other table contains saved individual metrics, which are not related to any specific TPA.
 
-This section displays a table of all existing metrics. Each row in the table represents a single metric, displaying its name and providing action buttons:
+Each row in the table represents a single metric, displaying its name and providing action buttons:
 - The **View** button navigates to a detailed view of the metric.
 - The **Execute/Edit** button navigates to a page where you can execute or edit the metric.
 - The **Delete** button deletes the metric.
@@ -113,18 +109,17 @@ There are two buttons:
 - The **Post** button posts the content you've inputted in the text area to the Bluejay API for computation.
 - The **Get Computation** button retrieves the computation results from the Bluejay API.
 
-Notifications are displayed in this section to inform you whether the posting of the metric was successful or not.
+![img.png](src/assets/images/metric-computation.png)
 
-The corresponding TypeScript component MetricsLoaderComponent handles the logic for fetching the metrics, creating a new metric, and deleting a metric. It interacts with the GlassmatrixService, FilesService, and BluejayService to perform these operations.
+In this section, you can also view a tutorial that will guide you through the process of creating a new metric. Also, you can save your metric as a JSON file.
 
 ## Metrics Viewer
 The Metrics Viewer page allows you to view the details of a specific metric. It displays the current JSON representation of the metric.  
 
-The corresponding TypeScript component ViewerComponent handles the logic for fetching the metric. It interacts with the FilesService to perform this operation.
-
 ## Metrics Executor
 The Metrics Executor page allows you to execute a specific metric. It provides a user-friendly interface for viewing and modifying the metric's details, and for executing the metric.
 
+![img.png](src/assets/images/metric-execution.png)
 ### Metric Details
 This section displays the details of the metric. It provides several input fields where you can modify the metric's details:
 
@@ -154,86 +149,190 @@ There are also several buttons:
 - The **Post** button posts the metric to the Bluejay API for computation.
 - The **Get Computation** button retrieves the computation results from the Bluejay API.
 
-Notifications are displayed in this section to inform you whether the execution of the metric was successful or not.  
-
-The corresponding TypeScript component ExecutorComponent handles the logic for fetching the metric, updating the metric, executing the metric, and saving the metric as a JSON file. It interacts with the FilesService, BluejayService, and GlassmatrixService to perform these operations.
-
 
 # Manual Testing Page
 
 The Manual Testing page provides a user-friendly interface for testing the functionality of the application. It provides two main options: creating a new repository or working with a cloned repository.
 
-## New Repository
+![img.png](src/assets/images/img.png)
+## Clone New Repository
 
-This section allows you to create a new repository. It provides a brief description of the process and a button to start the creation process.
-### Local Page
+Here you can see all the repositories that the entered token has access to.
 
-The Local page displays a list of all cloned repositories. Each row in the table represents a single repository, displaying its name, the number of branches, the last update time, and providing action buttons for viewing, editing, and deleting the repository.
-
-The corresponding TypeScript component `LocalComponent` handles the logic for fetching the list of repositories, deleting a repository, and navigating back to the previous page.
+Each repository will also have two buttons: the "View" button, which will redirect you to the GitHub page of the repository, and the "Edit" button, which will take you to the clone page.
 
 ### Clone Page
 
 The Clone page allows you to clone a specific repository. It displays the details of the repository, including its name, description, owner, creation time, update time, language, visibility, and a list of all branches. It also provides a button to clone the repository.
 
-The corresponding TypeScript component `RepositoryComponent` handles the logic for fetching the repository details, fetching the list of branches, and cloning the repository.
-
 ## Cloned Repository
 
 This section allows you to work with a cloned repository. It provides a brief description of the process and a button to start working with the cloned repository.
 
-The corresponding TypeScript component `GhSimulatorComponent` handles the logic for navigating to the appropriate pages for creating a new repository or working with a cloned repository.
-
-### Actions Page
-
-The Actions page provides a user-friendly interface for managing a repository. It provides options to view the available branches, change the current branch, create a new file, create a new commit, push changes, view files in the repository, and manage issues.
-
-The corresponding TypeScript component `ActionsComponent` handles the logic for fetching the branches, changing the current branch, creating a new file, creating a new commit, pushing changes, fetching the files in the repository, and managing issues.
+![img_1.png](src/assets/images/clonedRepos.png)
 
 ### Branches Page
 
-The Branches page provides a user-friendly interface for managing the branches of a repository. It provides options to view the branches, create a new branch, delete a branch, and change the current branch.
-
-The corresponding TypeScript component `BranchesComponent` handles the logic for fetching the branches, creating a new branch, deleting a branch, and changing the current branch.
+The page allows you to manage the branches of a repository. It provides options to view the branches, create a new branch, delete a branch, and change the current branch.
 
 ### Pull Requests Page
 
 The Pull Requests page provides a user-friendly interface for managing the pull requests of a repository. It provides options to create a new pull request, view the open pull requests, and merge a pull request.
 
-The corresponding TypeScript component `PullRequestComponent` handles the logic for creating a new pull request, fetching the open pull requests, and merging a pull request.
+### Actions Page
 
-# Automated testing
-The Automated Testing page provides a user-friendly interface for managing and executing YAML tests. It provides options to view the available YAML files, load the content of a file, view a file, edit a file, delete a file, save a YAML test, set a default format for the YAML test, execute a YAML test, and view the test results.
-
-The corresponding TypeScript component `TestsComponent` handles the logic for loading the YAML files, saving a YAML file, deleting a YAML file, loading the content of a file, executing a YAML test, and managing the test results.
-
-The page is divided into two main sections:
-
-1. The first section displays a table of available YAML files. Each row in the table represents a YAML file and provides options to load the content of the file, view the file, edit the file, and delete the file.
-
-2. The second section provides an interface for executing a YAML test. It includes an input field for the file name, a button to save the YAML test, a button to set a default format for the YAML test, a textarea for the YAML content, a button to execute the YAML test, and a textarea for the test results. It also displays any error messages or save status messages.
-
-The page also includes a loading overlay that is displayed while the YAML test is being executed.
+The Actions page interface for managing a repository. It provides options to view the available branches, change the current branch, create a new file, create a new commit, push changes, view files in the repository, and manage issues.
 
 
-## View saved yaml
+este subindice no funciona correctamente:
+# Automated Testing
+- [YAML File Loading](#yaml-file-loading)
+- [Test Execution](#test-execution)
+  - [GET Methods](#get-methods)
+  - [POST Methods](#post-methods)
+  - [PUT Methods](#put-methods)
+  - [DELETE Methods](#delete-methods)
+  - [TEST Methods](#test-methods)
+- [Results Visualization](#results-visualization)
+- [Test Results](#test-results)
+- [Variables to Use](#variables-to-use)
+  - [actualTime](#actualtime)
+  - [value](#value)
+  - [minExpectedValue](#minexpectedvalue)
+  - [maxExpectedValue](#maxexpectedvalue)
+  - [expectedValue](#expectedvalue)
 
-The "View Saved Yamels" page provides a user-friendly interface for viewing the content of a saved YAML file. It displays the content of the selected YAML file in a read-only text area.
+## Page Structure
+This page is a user interface for running and testing scripts. These scripts will have a .yaml format, and will interact with the GitHub API and Repositories to test already created metrics. The page is divided into several sections:
 
-The corresponding TypeScript component `YamlViewComponent` handles the logic for loading the content of the selected YAML file. It uses the `loadYAMLFile` method of the `GlassmatrixService` to fetch the content of the YAML file. The content is then converted to a string using the `stringify` method of the `yaml` library and displayed in the text area.
+## YAML File Loading
+At the top of the page, there is a table that displays all available YAML files. Users can copy the file content, view the file, edit the file, or delete the file.
 
-## Edit saved yaml
-The "Edit Saved Yamels" page provides a user-friendly interface for editing and executing a saved YAML file. It provides options to set a default format for the YAML content, update the YAML content, and execute the YAML content. It also displays any error messages or save status messages.
+## Test Execution
+In the execution section, users can enter the name of the YAML file they want to execute. They can also save the current content of the text box (it must follow the example format and the calls will be executed sequentially),
 
-The corresponding TypeScript component `YamlEditComponent` handles the logic for setting a default format for the YAML content, updating the YAML content, and executing the YAML content. It uses the `setDefaultFormat`, `updateYaml`, and `executeYaml` methods respectively to perform these operations. The component also handles the display of error messages and save status messages.
+Users will be able to follow a series of "steps". The "steps" are actions that can be performed in the system. These steps are predefined and perform HTTP methods (like 'GET', 'POST', 'PUT', 'DELETE') to the corresponding actions. Here are the possible steps:
 
-The page also includes a section for displaying the test results. Each test result is displayed in an alert box. The color of the alert box indicates whether the test was successful (green) or failed (red). The user can remove a test result by clicking the close button in the alert box.
+1. GET Methods
+  - `github/getIssue`: This step gets the issues from a specific repository on GitHub.
+  - `github/getOpenPR`: This step gets the open pull requests from a specific repository on GitHub.
+  - `github/pullCurrentBranch`: This step performs a pull of the current branch in a specific repository.
+  - `github/listRepos`: This step lists all repositories.
+  - `github/getBranches`: This step gets all the branches from a specific repository.
+  - `github/getRepoInfo`: This step gets information about a specific repository and a specific branch.
 
+2. POST Methods
+  - `github/mergeLastOpenPR`: This step merges the last open pull request in a specific repository on GitHub.
+  - `bluejay/compute/tpa`: This step loads the data from a file and then performs a computation on the data.
+  - `bluejay/compute/metric`: This step loads the data from a file and then performs a computation on the data.
+  - `bluejay/checkContain`: This step (which is marked as deprecated) checks if a specific value is present in the data obtained from an API.
+  - `github/createIssue`: This step creates a new issue in a specific repository on GitHub.
+  - `github/createPR`: This step creates a new pull request in a specific repository on GitHub.
+  - `github/cloneRepo`: This step clones a specific repository.
+  - `github/createBranch`: This step creates a new branch in a specific repository.
+  - `github/createFile`: This step creates a new file in a specific repository.
+  - `github/createCommit`: This step creates a new commit in a specific repository.
+  - `github/commitAllChanges`: This step commits all changes in a specific repository.
+  - `github/pushChanges`: This step pushes all changes in a specific repository.
+
+3. PUT Methods
+  - `github/mergePR`: This step merges a specific pull request in a specific repository on GitHub.
+  - `github/changeBranch`: This step changes to a specific branch in a specific repository.
+
+4. DELETE Methods
+  - `github/deleteRepo`: This step deletes a specific repository.
+  - `github/deleteBranch`: This step deletes a specific branch from a repository.
+  - `github/deleteFile`: This step deletes a specific file from a repository.
+
+5. TEST Methods
+  - `bluejay/check`: This step performs a series of checks on the data obtained from an API. It checks if the value of a specific key meets certain conditions (like a minimum expected value, a maximum expected value, or an exact expected value).
+  - `bluejay/findCheck`: This step is similar to `bluejay/check` but it has a different format which allows you to check more fields at once.
+    Each step is executed based on the data provided in the text box that is being processed.
+
+## Results Visualization
+After running the test block, the results are displayed in a read-only text area. If the script performed a computation, the results of that computation are also displayed in a read-only text area.
+
+## Test Results
+In the right column of the page, users can see the results of the tests that have been run. Each test result is displayed on its own card, and users can delete individual test results.
+
+![img.png](src/assets/images/testResult.png)
+
+## Variables to Use
+### actualTime
+To compute the metric with the current time, you should add actualTime: "true" to the "bluejay/compute/metric" method. If, on the other hand, you want it to use the original time of the metric, you can delete "actualTime" or set it to "false".
+
+```yaml
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      collector: "EVENTS"
+      metric: "additions_metric.json"
+      actualTime: "true"
+    method: "POST"
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    method: "TEST"
+```
+
+### value
+If there are multiple results, you can use the "value" metric to only check those evidences that have the "value" field in the set value.
+
+```yaml
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      collector: "EVENTS"
+      metric: "additions_metric.json"
+    method: "POST"
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          minExpectedValue: "5"
+```
+
+### minExpectedValue
+The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric and is greater than 5.
+
+```yaml
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          minExpectedValue: "5"
+```
+
+### maxExpectedValue
+The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric and is less than 12.
+
+```yaml
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          maxExpectedValue: "12"
+```
+
+### expectedValue
+The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric or not and is exactly equal to the expected value.
+
+```yaml
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    method: "TEST"
+```
 
 # Configuration page
 The Configuration page provides a user-friendly interface for managing the configuration of the application. It provides options to view the active Docker containers, update the application's configuration, view the Swagger documentation, and view the application's documentation.
-
-The corresponding TypeScript component `ConfigComponent` handles the logic for fetching the active Docker containers, fetching the current configuration, updating the configuration, and opening the Github help dialog.
 
 The page is divided into several sections:
 
@@ -247,7 +346,6 @@ The page is divided into several sections:
 
 5. The Documentation section provides an embedded PDF viewer for viewing the application's documentation. There is also a button to open the documentation in a new tab.
 
-The component uses the `HttpClient` service to make HTTP requests to the application's API. It uses the `DomSanitizer` service to sanitize the URL for the PDF viewer. It uses the `MatDialog` service to open the Github help dialog. It uses the `ViewportScroller` service to get the current scroll position for positioning the Github help dialog.
 ## Get github token
 This is a step-by-step guide on how to create a personal access token on GitHub:
 
@@ -293,5 +391,5 @@ This is a snippet of how the language .json works:
   "VIEWER": {
     "VIEWING": "fileName."
   }
-}
+},
 ```
