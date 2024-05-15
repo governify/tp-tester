@@ -1,202 +1,395 @@
-# Bluejay - TP  Tester
-Este proyecto es una extensión de Bluejay. La documentación oficial de Bluejay se puede encontrar en: [docs.bluejay.governify.io](https://docs.bluejay.governify.io/). Al ser una extensión de Bluejay, es imprescindible para el completo funcionamiento de Bluejay-Tester.
-# Índice
+# Bluejay - TP Tester
+This project is an extension of Bluejay. The official documentation for Bluejay can be found at: [docs.bluejay.governify.io](https://docs.bluejay.governify.io/). Being an extension of Bluejay, it is essential for the full operation of Bluejay-Tester.
+
+# Index
 - [Bluejay - TP Tester](#bluejay---tp-tester)
-  - [Introducción](#introducción)
-    - [¿Qué es Bluejay?](#qué-es-bluejay)
-    - [¿Para qué sirve Bluejay-TP Tester?](#para-qué-sirve-bluejay-tp-tester)
-  - [Puesta en marcha](#puesta-en-marcha)
-    - [Modo desarrollo](#modo-desarrollo)
-    - [Con docker](#con-docker)
-- [Testear TPAs](#testear-tpas)
-- [Testear métricas](#testear-métricas)
-  - [Edición de métricas](#edición-de-métricas)
-- [Testeo de repositorios](#testeo-de-repositorios)
-- [Interacción con la API de GitHub](#interacción-con-la-api-de-github)
-  - [Crear un token de acceso personal](#crear-un-token-de-acceso-personal)
-- [Interacción con la API de Bluejay](#interacción-con-la-api-de-bluejay)
-- [GlassMatrix API](#glassmatrix-api)
-  - [Funcionalidades de la API](#funcionalidades-de-la-api)
-  - [Documentación de la API con Swagger](#documentación-de-la-api-con-swagger)
-  - [Ejemplos de uso](#ejemplos-de-uso)
-- [Traducciones](#traducciones)
+  - [Introduction](#introduction)
+    - [What is Bluejay?](#what-is-bluejay)
+    - [What is the purpose of Bluejay-TP Tester?](#what-is-the-purpose-of-bluejay-tp-tester)
+  - [Getting started](#getting-started)
+    - [Development mode](#development-mode)
+    - [With docker](#with-docker)
+- [TPA Management](#tpa-management)
+  - [TPA Page](#tpa-page)
+  - [TPA Edit](#tpa-edit)
+- [Metrics](#metrics)
+  - [Metrics Loader](#metrics-loader)
+  - [Metrics Viewer](#metrics-viewer)
+  - [Metrics Executor](#metrics-executor)
+- [Manual Testing Page](#manual-testing-page)
+  - [Clone New Repository](#clone-new-repository)
+  - [Cloned Repository](#cloned-repository)
+- [Automated Testing](#automated-testing)
+  - [Page Structure](#page-structure)
+  - [YAML File Loading](#yaml-file-loading)
+  - [Test Execution](#test-execution)
+  - [Results Visualization](#results-visualization)
+  - [Test Results](#test-results)
+  - [Variables to Use](#variables-to-use)
+- [Configuration Page](#configuration-page)
+  - [Get Github Token](#get-github-token)
+  - [Swagger API Documentation](#swagger-api-documentation)
+  - [Translations](#translations)
 
-## Introducción
-### ¿Qué es Bluejay?
-Bluejay Infrastructure es una infraestructura basada en Governify que permite auditar equipos ágiles de manera sencilla. Está compuesta por un subconjunto de microservicios de Governify que pueden ser desplegados ya sea en una sola máquina o en un clúster. Bluejay accede a múltiples fuentes para recopilar información sobre los equipos de desarrollo, como GitLab, Jira, Slack, etc., y utiliza esta información para verificar si esos equipos cumplen con un Acuerdo de Prácticas de Equipo (TPA) que incluye métricas y garantías relacionadas con la metodología ágil.
+## Introduction
+### What is Bluejay?
+Bluejay Infrastructure is a Governify-based infrastructure that allows for easy auditing of agile teams. It is composed of a subset of Governify microservices that can be deployed either on a single machine or on a cluster. Bluejay accesses multiple sources to gather information about development teams, such as GitLab, Jira, Slack, etc., and uses this information to verify whether these teams comply with a Team Practice Agreement (TPA) that includes metrics and guarantees related to agile methodology.
 
-### ¿Para qué sirve Bluejay-TP Tester?
-El objetivo de este TP-Tester es, como dice su nombre, poder probar en primer lugar las métricas que componen los TPs (Team Practices). Una vez comprobadas que estas métricas funcionan correctamente, TP-Tester te permite comprobar que todo el TPA (Team Practice Agreement) funcione correctamente. Para ello, se pueden añadir, eliminar, o modificar TPAs que se encuentran directmanente en Bluejay desde este TP Tester.
-## Puesta en marcha
-### Modo desarrollo
-Para levantar Bluejay-TP Tester en modo desarrollo, sigue los siguientes pasos:
-1. Clona el repositorio de Bluejay-TP Tester.
-2. Instala las dependencias con `npm install`.
-3. Levanta el proyecto con `npm start`.
+### What is the purpose of Bluejay-TP Tester?
+The purpose of this TP-Tester is, as its name suggests, to first test the metrics that make up the TPs (Team Practices). Once these metrics have been verified to work correctly, TP-Tester allows you to check that the entire TPA (Team Practice Agreement) works correctly. To do this, you can add, delete, or modify TPAs that are directly in Bluejay from this TP Tester.
+## Getting started
+### Development mode
+To lift Bluejay-TP Tester in development mode, follow these steps:
+1. Clone the Bluejay-TP Tester repository.
+2. Install the dependencies with `npm install`.
+3. Lift the project with `npm start`.
 
-Con esto bastaría ya que el proyecto utiliza concurrently y levanta a la vez el servidor express y angular. El servidor Express (GlassMatrix API) se levanta en el puerto 6012 y la aplicación Angular en el puerto 4200.
+This would be enough since the project uses concurrently and lifts both the express server and angular at the same time. The Express server (GlassMatrix API) is lifted on port 6012 and the Angular application on port 4200.
 
-### Con docker
-Para levantar Bluejay-TP Tester con docker, sigue los siguientes pasos:
-1. Clona el repositorio de Bluejay-TP Tester.
-2. Instala las dependencias con `npm install`.
-3. Ejecuta `npm run docker`.
+### With docker
+To lift Bluejay-TP Tester with docker, follow these steps:
+1. Clone the Bluejay-TP Tester repository.
+2. Install the dependencies with `npm install`.
+3. Run `npm run docker`.
 
-Con esto ya tendríamos el proyecto levantado en el puerto 6011 la web angular, y el servidor express en el puerto 6012.
+With this, we would have the project lifted on port 6011 the angular web, and the express server on port 6012.# TPA Management
+# TPA PAGE
+The TPA management page allows you to visualize and interact with those TPAs that are within Bluejay. 
 
-# Testear TPAs
-Esta seccion permite visualizar los TPAs que ya se encuentran cargados dentro de Bluejay.
+### Existing TPAs
 
-<p align="center">
-  <img src="src/assets/images/existingTPA.png" alt="Existing TPA" width="400">
-</p>
+This section displays a table of all existing TPAs. Each row in the table represents a single TPA, displaying its ID, project, and class.
 
-Si seleccionamos la opción de editar, se podrá editar todo el TPA o se podrá usar un editor que permite editar métrica a métrica o añadir una nueva métrica al TPA fácilando así la edicición del TPA. En esta tabla también podemos encontrar la opción de simplemente ver el TPA o borrarlo (Esto lo borraría de Bluejay directamente).
+There are also several action buttons for each TPA:
 
-# Testear métricas
-Para testear métricas, en primer lugar habrá que acceder a la página de metrics tester. En primer lugar hay una sección en donde podemos realizar acciones con las métricas ya guardadas. En la parte inferior, podemos testear una nueva métrica.
+- The **Copy** button allows you to copy the content of a TPA intro the lower textarea.
+- The **View** button navigates to a detailed view of the TPA.
+- The **Edit** button navigates to a page where you can edit the TPA.
+- The **Delete** button navigates the TPA from the Bluejay DB.
 
-Por defecto, habrá una métrica en la zona de crear nueva metrica. Esta métrica es simplemente un ejemplo y es totalmente editable o directamente se puede borrar y usar una nueva.
+### Create TPA
 
-<p align="center">
-  <img src="src/assets/images/newMetric.png" alt="Post Metrics" width="400">
-</p>
+This section allows you to create a new TPA. It provides a text area where you can input the content of the new TPA.
 
-Una vez que hemos introduccido la métrica que queremos testear, hay que darle a publicar. Esto interactuará con el endpoint de Bluejay y tras obtener la computación inicial, se desbloqueará el botón de obtener cálculo. Esto tardará unos segundos y devolverá los valores de las métricas que estamos testando en ese repositorio.
+There are two buttons:
 
-<p align="center">
-  <img src="src/assets/images/postmetrics.png" alt="Post Metrics" width="200">
-</p>
+- The **Create TPA** button creates a new TPA with the content you've inputted in the text area.
+- The **Copy Default TPA** button fills the text area with the content of a default TPA, which you can then modify and create as a new TPA.
 
-Una vez que hemos comprobado la métrica (o antes si lo deseas) también habrá un botón para guardar la métrica y tenerla siempre a mano en el repostiorio local con el nombre que queramos. Cuando la tengamos guardada, ya se podrá acceder a ella desde la seccion superior y podremos volver ejecutarla, editarla o borrarla.
+## TPA Edit
 
-<p align="center">
-  <img src="src/assets/images/guardarMetrica.png" alt="Guardar Metrica" width="200">
-</p>
+When you click on the edit button of a TPA, you will enter a subpage that will give you access to two other subpages. 
 
-## Edición de métricas
-Si en la primera seccion accedemos a editar métrícas entraremos en una página como la inferior. Esta página tiene la opción de utilizar la hora actual (utilizará como fecha de inicio el comienzo de la hora actual, si son las 18:27, la hora de inicio será las 18:00 y la hora de final de computación serán las 18:59 del día en el que se realice). Si se guarda la métrica desde esta sección, se guardará con el periódo de calculo utilizado.
+- One where you can edit the entire TPA.
+- And another where you can edit the TPA by sections.
+### EDIT ENTIRE TPA
+Here you will be able to edit the TPA Content in a textarea with the current content of the TPA and a save button that will update that content
 
-<p align="center">
-  <img src="src/assets/images/editmetrics.png" alt="Guardar Metrica" width="400">
-</p>
+### EDIT TPA BY SECTIONS
+In this page you can edit the TPA by sections, editing or deleting each metric and guarantee of the TPA. And you can also add new metrics and guarantees. If you select the "more" button, it will generate an individual metric for you to review and test, and it will redirect you to the new page with that created metric.
 
-Tras esta sección de edición volverá a estar disponible la opción de probar la métrica interactuando con Bluejay
+![TPA Sections.png](src/assets/images/tpaSectionEdit.png)
 
-# Testeo de repositorios
-Al entrar en la pantalla, vamos a poder elegir entre dos subpantallas.
+# Metrics
 
-<p align="center">
-  <img src="src/assets/images/ghtester1.png" alt="Pantallas github tester" width="400">
-</p>
+The Metrics Loader page is designed to manage and test metrics. It provides a user-friendly interface for viewing, creating, and managing metrics.
 
-La primera de ella será la página para clonar un nuevo repositorio. En ella, al inicio hay una sección para añadir o editar el token de github y tras introducir un token válido aparecen todos los repositorios a los que tiene acceso con ese token. Además cada repositorio que aparezca listado tendrá dos opciones, verlo en github para asegurarnos de que es el repositorio que queremos clonar y otra pantalla opción es la de editar que permite clonar el repositorio en local.
+### Existing metrics
+Here you can see all the saved metrics, classified into two large tables. One table consists of those saved from the TPA section, which will be related to the TPA they belonged to. The other table contains saved individual metrics, which are not related to any specific TPA.
 
-<p align="center">
-  <img src="src/assets/images/ghtester2.png" alt="Tokens y repositorios" width="400">
-</p>
+Each row in the table represents a single metric, displaying its name and providing action buttons:
+- The **View** button navigates to a detailed view of the metric.
+- The **Execute/Edit** button navigates to a page where you can execute or edit the metric.
+- The **Delete** button deletes the metric.
 
-Por otro lado, si en la pantalla principal de Repository Tester accedemos a repositorios clonados, listará todos los repositorios que hayamos clonado ya, y para cada uno de ellos tendremos 3 opciones, una para crear / eliminar o cambiar de rama. Otra opción para realizar pull requests y otra opción que permitirá crear archivos y realizar commits y pushes.
+### Create new metric
+This section allows you to create a new metric. It provides a text area where you can input the content of the new metric.
 
-A continuación se pueden ver como son las vistas de las 3 opciones:
+There are two buttons:
+- The **Post** button posts the content you've inputted in the text area to the Bluejay API for computation.
+- The **Get Computation** button retrieves the computation results from the Bluejay API.
 
-<p align="center">
-  <img src="src/assets/images/slider1.png" alt="Pantalla rammas" width="400">
-</p>
+![img.png](src/assets/images/metric-computation.png)
 
-<p align="center">
-  <img src="src/assets/images/slider2.png" alt="Pantalla PR" width="400">
-</p>
+In this section, you can also view a tutorial that will guide you through the process of creating a new metric. Also, you can save your metric as a JSON file.
 
-<p align="center">
-  <img src="src/assets/images/slider3.png" alt="Pantalla commit/push" width="400">
-</p>
+## Metrics Viewer
+The Metrics Viewer page allows you to view the details of a specific metric. It displays the current JSON representation of the metric.  
 
-# Interacción con la API de GitHub
-Para que esta API funcione correctamente, es necesario introducir el token de GitHub mediante la GlassMatrix API. Solo podrás ver los repositorios a los que tu usuario tenga acceso con ese token.
+## Metrics Executor
+The Metrics Executor page allows you to execute a specific metric. It provides a user-friendly interface for viewing and modifying the metric's details, and for executing the metric.
 
-Este proyecto utiliza la API de GitHub para interactuar con repositorios de GitHub. Esto se hace a través de un servicio Angular llamado GithubService. Aquí hay una descripción de cómo se utilizan algunas de las funciones en este servicio:
+![img.png](src/assets/images/metric-execution.png)
+### Metric Details
+This section displays the details of the metric. It provides several input fields where you can modify the metric's details:
 
-- **createTpa:** Crea un nuevo acuerdo con el contenido proporcionado.
-- **getTps:** Obtiene una lista de todos los acuerdos.
-- **getTpa:** Obtiene un acuerdo específico por su ID.
-- **deleteTpa:** Elimina un acuerdo específico por su ID.
-- **postComputation:** Realiza una petición POST a la API de cálculos con los datos proporcionados.
-- **getComputation:** Obtiene los resultados de un cálculo específico a través de su URL.
+- The **Projects** field allows you to specify the project associated with the metric.
+- The **Class** field allows you to specify the class associated with the metric.
+- The **Period** field allows you to specify the period for the metric.
 
-## Crear un token de acceso personal
-1. En la esquina superior derecha de cualquier página, haz clic en la foto de tu perfil, luego haz clic en Configuración.
-<p align="center">
-  <img src="https://docs.github.com/assets/cb-65929/mw-1440/images/help/settings/userbar-account-settings.webp" alt="Configuración de cuenta" width="400">
-</p>
+### Computation Search
 
-2. En la barra lateral izquierda, haz clic en Configuración del desarrollador.
-3. En la barra lateral izquierda, haz clic en Tokens de acceso personal.
-4. Haz clic en Generar nuevo token.
-5. En el campo "Nota", dale a tu token un nombre descriptivo.
-6. Para darle una caducidad a tu token, selecciona Expiración, luego elige una opción predeterminada o haz clic en Personalizado para ingresar una fecha.
-7. Selecciona los ámbitos que te gustaría otorgar a este token. Para usar tu token para acceder a repositorios desde la línea de comandos, selecciona repo. Un token sin ámbitos asignados solo puede acceder a información pública. Para más información, consulta "Ámbitos para aplicaciones OAuth".
-8. Haz clic en Generar token.
-9. Opcionalmente, para copiar el nuevo token a tu portapapeles, haz clic en el icono de dos cuadrados superpuestos.
-<p align="center">
-  <img src="https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp" alt="Tokens de acceso personal" width="400">
-</p>
-Para más información, visita [la documentación oficial de GitHub](https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+This section allows you to specify the parameters for the computation of the metric. It provides several input fields:
 
-# Interacción con la API de Bluejay
-Este proyecto utiliza la API de Bluejay para interactuar con acuerdos. Esto se hace a través de un servicio Angular llamado BluejayService. Aquí hay una descripción de cómo se utilizan algunas de las funciones en este servicio:
+- The **Type** field allows you to specify the type of computation.
+- The **Period** field allows you to specify the period for the computation.
+- The **Initial** field allows you to specify the initial date for the computation.
+- The **From** field allows you to specify the starting date for the computation.
+- The **End** field allows you to specify the ending date for the computation.
+- The **Timezone** field allows you to specify the timezone for the computation.
 
-Para el funcionamiento de todos estas llamadas y de las páginas TPA-Management y Metrics Tester es necesario que esté levantado toda la estructura de Bluejay. Para más información sobre esto, visita [la documentación oficial de Bluejay](http://docs.bluejay.governify.io).
+There are also several buttons:  
+- The **Set to Current Hour** button sets the computation parameters to the current hour.
+- The **Save as JSON** button saves the metric and its details as a JSON file.
+- The **Tutorial** button opens a tutorial dialog.
 
-- **createTpa:** Crea un nuevo acuerdo con el contenido proporcionado.
-- **getTps:** Obtiene una lista de todos los acuerdos.
-- **getTpa:** Obtiene un acuerdo específico por su ID.
-- **deleteTpa:** Elimina un acuerdo específico por su ID.
-- **postComputation:** Realiza una petición POST a la API de cálculos con los datos proporcionados.
-- **getComputation:** Obtiene los resultados de un cálculo específico a través de su URL.
+### Execution Section
+This section allows you to execute the metric. It provides a text area where you can view the JSON representation of the metric.  
+There are also several buttons:  
+- The **Post** button posts the metric to the Bluejay API for computation.
+- The **Get Computation** button retrieves the computation results from the Bluejay API.
 
-# GlassMatrix API
 
-Este proyecto tiene su propia API. Esta api se usa tanto para interactuar con la infraestrctura de Bluejay, que permite crear TPAs, probar métricas como para realizar acciones de github en local como clonar repositorios, crear ramas, moverte de ramas, hacer commits o pushes.
+# Manual Testing Page
 
-## Funcionalidades de la API
+The Manual Testing page provides a user-friendly interface for testing the functionality of the application. It provides two main options: creating a new repository or working with a cloned repository.
 
-- **Interacción con Bluejay:** Permite crear TPAs y probar métricas.
-- **Acciones de GitHub en local:** Permite clonar repositorios, crear ramas, cambiar de ramas, hacer commits y pushes.
-- **Guardado Token Github:** Para que tanto las acciones de github en local, como las llamadas a la propia API de github funcione correctamente, es necesario tener un token válido de github. Por tanto, Glassmatrix API tiene un método por almacenar este token en el repositorio local (está en un .gitignore) y además permite añadirlo, modificarlo y borrarlo gráficamente. Esta opcion se encuentra disponible en GH Tester -> Clonar nuevo repositorio.
+![img.png](src/assets/images/img.png)
+## Clone New Repository
 
-<p align="center">
-  <img src="src/assets/images/tokengh.png" alt="Github token" width="400">
-</p>
+Here you can see all the repositories that the entered token has access to.
 
-## Documentación de la API con Swagger
+Each repository will also have two buttons: the "View" button, which will redirect you to the GitHub page of the repository, and the "Edit" button, which will take you to the clone page.
 
-Esta API implementa Swagger para tener siempre de una forma todos los endpoints de la API junto con una pequeña documentación del funcionamiento de cada Endpoint. Gracias a Swagger se pueden visualizar todos los endpoints y probarlos en su interfaz gráfica que está disponible en: [http://localhost:6012/api-docs/](http://localhost:6012/api-docs/)
+### Clone Page
 
-## Ejemplos de uso
+The Clone page allows you to clone a specific repository. It displays the details of the repository, including its name, description, owner, creation time, update time, language, visibility, and a list of all branches. It also provides a button to clone the repository.
 
-A continuación, se presentan algunos ejemplos de como se ve API a través de swagger en donde se pueden ejecutar directamente las llamadas:
+## Cloned Repository
+
+This section allows you to work with a cloned repository. It provides a brief description of the process and a button to start working with the cloned repository.
+
+![img_1.png](src/assets/images/clonedRepos.png)
+
+### Branches Page
+
+The page allows you to manage the branches of a repository. It provides options to view the branches, create a new branch, delete a branch, and change the current branch.
+
+### Pull Requests Page
+
+The Pull Requests page provides a user-friendly interface for managing the pull requests of a repository. It provides options to create a new pull request, view the open pull requests, and merge a pull request.
+
+### Actions Page
+
+The Actions page interface for managing a repository. It provides options to view the available branches, change the current branch, create a new file, create a new commit, push changes, view files in the repository, and manage issues.
+
+
+este subindice no funciona correctamente:
+# Automated Testing
+- [YAML File Loading](#yaml-file-loading)
+- [Test Execution](#test-execution)
+  - [GET Methods](#get-methods)
+  - [POST Methods](#post-methods)
+  - [PUT Methods](#put-methods)
+  - [DELETE Methods](#delete-methods)
+  - [TEST Methods](#test-methods)
+- [Results Visualization](#results-visualization)
+- [Test Results](#test-results)
+- [Variables to Use](#variables-to-use)
+  - [actualTime](#actualtime)
+  - [value](#value)
+  - [minExpectedValue](#minexpectedvalue)
+  - [maxExpectedValue](#maxexpectedvalue)
+  - [expectedValue](#expectedvalue)
+
+## Page Structure
+This page is a user interface for running and testing scripts. These scripts will have a .yaml format, and will interact with the GitHub API and Repositories to test already created metrics. The page is divided into several sections:
+
+## YAML File Loading
+At the top of the page, there is a table that displays all available YAML files. Users can copy the file content, view the file, edit the file, or delete the file.
+
+## Test Execution
+In the execution section, users can enter the name of the YAML file they want to execute. They can also save the current content of the text box (it must follow the example format and the calls will be executed sequentially),
+
+Users will be able to follow a series of "steps". The "steps" are actions that can be performed in the system. These steps are predefined and perform HTTP methods (like 'GET', 'POST', 'PUT', 'DELETE') to the corresponding actions. Here are the possible steps:
+
+1. GET Methods
+  - `github/getIssue`: This step gets the issues from a specific repository on GitHub.
+  - `github/getOpenPR`: This step gets the open pull requests from a specific repository on GitHub.
+  - `github/pullCurrentBranch`: This step performs a pull of the current branch in a specific repository.
+  - `github/listRepos`: This step lists all repositories.
+  - `github/getBranches`: This step gets all the branches from a specific repository.
+  - `github/getRepoInfo`: This step gets information about a specific repository and a specific branch.
+
+2. POST Methods
+  - `github/mergeLastOpenPR`: This step merges the last open pull request in a specific repository on GitHub.
+  - `bluejay/compute/tpa`: This step loads the data from a file and then performs a computation on the data.
+  - `bluejay/compute/metric`: This step loads the data from a file and then performs a computation on the data.
+  - `bluejay/checkContain`: This step (which is marked as deprecated) checks if a specific value is present in the data obtained from an API.
+  - `github/createIssue`: This step creates a new issue in a specific repository on GitHub.
+  - `github/createPR`: This step creates a new pull request in a specific repository on GitHub.
+  - `github/cloneRepo`: This step clones a specific repository.
+  - `github/createBranch`: This step creates a new branch in a specific repository.
+  - `github/createFile`: This step creates a new file in a specific repository.
+  - `github/createCommit`: This step creates a new commit in a specific repository.
+  - `github/commitAllChanges`: This step commits all changes in a specific repository.
+  - `github/pushChanges`: This step pushes all changes in a specific repository.
+
+3. PUT Methods
+  - `github/mergePR`: This step merges a specific pull request in a specific repository on GitHub.
+  - `github/changeBranch`: This step changes to a specific branch in a specific repository.
+
+4. DELETE Methods
+  - `github/deleteRepo`: This step deletes a specific repository.
+  - `github/deleteBranch`: This step deletes a specific branch from a repository.
+  - `github/deleteFile`: This step deletes a specific file from a repository.
+
+5. TEST Methods
+  - `bluejay/check`: This step performs a series of checks on the data obtained from an API. It checks if the value of a specific key meets certain conditions (like a minimum expected value, a maximum expected value, or an exact expected value).
+  - `bluejay/findCheck`: This step is similar to `bluejay/check` but it has a different format which allows you to check more fields at once.
+    Each step is executed based on the data provided in the text box that is being processed.
+
+## Results Visualization
+After running the test block, the results are displayed in a read-only text area. If the script performed a computation, the results of that computation are also displayed in a read-only text area.
+
+## Test Results
+In the right column of the page, users can see the results of the tests that have been run. Each test result is displayed on its own card, and users can delete individual test results.
+
+![img.png](src/assets/images/testResult.png)
+
+## Variables to Use
+### actualTime
+To compute the metric with the current time, you should add actualTime: "true" to the "bluejay/compute/metric" method. If, on the other hand, you want it to use the original time of the metric, you can delete "actualTime" or set it to "false".
+
+```yaml
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      collector: "EVENTS"
+      metric: "additions_metric.json"
+      actualTime: "true"
+    method: "POST"
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    method: "TEST"
+```
+
+### value
+If there are multiple results, you can use the "value" metric to only check those evidences that have the "value" field in the set value.
+
+```yaml
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      collector: "EVENTS"
+      metric: "additions_metric.json"
+    method: "POST"
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          minExpectedValue: "5"
+```
+
+### minExpectedValue
+The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric and is greater than 5.
+
+```yaml
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          minExpectedValue: "5"
+```
+
+### maxExpectedValue
+The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric and is less than 12.
+
+```yaml
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          maxExpectedValue: "12"
+```
+
+### expectedValue
+The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric or not and is exactly equal to the expected value.
+
+```yaml
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    method: "TEST"
+```
+
+# Configuration page
+The Configuration page provides a user-friendly interface for managing the configuration of the application. It provides options to view the active Docker containers, update the application's configuration, view the Swagger documentation, and view the application's documentation.
+
+The page is divided into several sections:
+
+1. The Docker Active section displays a table of active Docker containers. Each row in the table represents a Docker container and provides information about the container's ID, name, URL, and port.
+
+2. The Github Token section provides instructions on how to get a Github token. It also includes a button to open a dialog with additional help.
+
+3. The Constants section provides a form for updating the application's configuration. The form includes fields for the base URL, default collector, collector events URL, agreements URL, and scopes URL. There is a button to submit the form and update the configuration.
+
+4. The Swagger section provides a link to the Swagger documentation.
+
+5. The Documentation section provides an embedded PDF viewer for viewing the application's documentation. There is also a button to open the documentation in a new tab.
+
+## Get github token
+This is a step-by-step guide on how to create a personal access token on GitHub:
+
+1. In the upper right corner of any page, click on your profile photo, then click on Settings.
+2. In the left sidebar, click on Developer Settings.
+3. In the left sidebar, click on Personal Access Tokens.
+4. Click on Generate new token.
+5. In the "Note" field, give your token a descriptive name.
+6. To give your token an expiration, select Expiration, then choose a default option or click on Custom to enter a date.
+7. Select the scopes you would like to grant to this token. To use your token to access repositories from the command line, select repo. A token without assigned scopes can only access public information. For more information, see "Scopes for OAuth applications".
+8. Click on Generate token.
+9. Optionally, to copy the new token to your clipboard, click on the icon of two overlapping squares.
+
+For more information, visit [the official GitHub documentation](https://docs.github.com/en/enterprise-server@3.9/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+
+## Swagger API Documentation
+
+This API implements Swagger to always have all the API endpoints in one place along with a small documentation of the operation of each Endpoint. Thanks to Swagger, you can view all the endpoints and test them in its graphical interface that is available at: [http://localhost:6012/api-docs/](http://localhost:6012/api-docs/)
+
+### Usage Examples
+
+Below are some examples of how the API looks through swagger where you can directly execute the calls:
 
 <p align="center">
   <img src="src/assets/images/swagger.png" alt="Swagger" width="400">
 </p>
 
-# Traducciones
+## Translations
 
-Gracias a la libreria ngx-translate ([github.com/ngx-translate/core](https://github.com/ngx-translate/core)). Por defecto, TP Tester, estará en el idioma del navegador. Esta libreria permite además añadir traducciones de una forma sencilla ya que bastaría con traducir el Json de un idioma a otro y no habría que modificar ningún otro tipo de fichero.
+Thanks to the ngx-translate library ([github.com/ngx-translate/core](https://github.com/ngx-translate/core)). By default, TP Tester will be in the browser's language. This library also allows adding translations in a simple way as it would be enough to translate the Json from one language to another and there would be no need to modify any other type of file.
 
-Este es un fragmento de cómo funciona el .json de lenguaje:
+This is a snippet of how the language .json works:
 
 ```json
 "METRICS_LOADER": {
-  "TITULO1": "Métricas guardadas",
-  "TITULO2": "Crear nueva métrica",
-  "MESSAGE_TEXT": "No hay métricas guardadas",
-  "FILE_NAME": "Nombre del archivo",
-  "VIEW_FILE": "Ver archivo",
-  "EXECUTE_EDIT_FILE": "Ejecutar / Editar archivo",
-  "DELETE_FILE": "Eliminar archivo",
+  "TITULO1": "Saved metrics",
+  "TITULO2": "Create new metric",
+  "MESSAGE_TEXT": "There are no saved metrics",
+  "FILE_NAME": "File name",
+  "VIEW_FILE": "View file",
+  "EXECUTE_EDIT_FILE": "Execute / Edit file",
+  "DELETE_FILE": "Delete file",
   "VIEWER": {
     "VIEWING": "fileName."
   }
-}
+},
+```
