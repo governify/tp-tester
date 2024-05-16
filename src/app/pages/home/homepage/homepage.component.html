@@ -1,25 +1,27 @@
-<h1>{{ 'HOME.HOMEPAGE.TITLE' | translate }}</h1>
-<p [innerHTML]="'HOME.HOMEPAGE.INTRO_PARAGRAPH' | translate"></p>
-<h2>{{ 'HOME.HOMEPAGE.INTRODUCTION_TITLE' | translate }}</h2>
-<h3>{{ 'HOME.HOMEPAGE.WHAT_IS_BLUEJAY_TITLE' | translate }}</h3>
-<p>{{ 'HOME.HOMEPAGE.WHAT_IS_BLUEJAY_DESCRIPTION' | translate }}</p>
-<h3>{{ 'HOME.HOMEPAGE.WHAT_IS_TPT_TITLE' | translate }}</h3>
-<p>{{ 'HOME.HOMEPAGE.WHAT_IS_TPT_DESCRIPTION' | translate }}</p>
 
-<h2>{{ 'HOME.HOMEPAGE.GETTING_STARTED_TITLE' | translate }}</h2>
-<h3>{{ 'HOME.HOMEPAGE.DEVELOPMENT_MODE_TITLE' | translate }}</h3>
-<p>{{ 'HOME.HOMEPAGE.DEVELOPMENT_MODE_STEPS' | translate }}</p>
-<ol>
-  <li>{{ 'HOME.HOMEPAGE.DEVELOPMENT_MODE_STEP_1' | translate }}</li>
-  <li>{{ 'HOME.HOMEPAGE.DEVELOPMENT_MODE_STEP_2' | translate }}</li>
-  <li>{{ 'HOME.HOMEPAGE.DEVELOPMENT_MODE_STEP_3' | translate }}</li>
-</ol>
-<p>{{ 'HOME.HOMEPAGE.DEVELOPMENT_MODE_DESCRIPTION' | translate }}</p>
+<h1>Bluejay - TP Tester</h1>
+<p>This project is an extension of Bluejay. The official documentation for Bluejay can be found at: <a href="https://docs.bluejay.governify.io/">docs.bluejay.governify.io</a>. Being an extension of Bluejay, it is essential for the full operation of Bluejay-Tester.</p>
+<h2>Introduction</h2>
+<h3>What is Bluejay?</h3>
+<p>Bluejay Infrastructure is a Governify-based infrastructure that allows for easy auditing of agile teams. It is composed of a subset of Governify microservices that can be deployed either on a single machine or on a cluster. Bluejay accesses multiple sources to gather information about development teams, such as GitLab, Jira, Slack, etc., and uses this information to verify whether these teams comply with a Team Practice Agreement (TPA) that includes metrics and guarantees related to agile methodology.</p>
+<h3>What is the purpose of Bluejay-TP Tester?</h3>
+<p>The purpose of this TP-Tester is, as its name suggests, to first test the metrics that make up the TPs (Team Practices). Once these metrics have been verified to work correctly, TP-Tester allows you to check that the entire TPA (Team Practice Agreement) works correctly. To do this, you can add, delete, or modify TPAs that are directly in Bluejay from this TP Tester.</p>
+<h2>Getting started</h2>
 
-<h3>{{ 'HOME.HOMEPAGE.DOCKER_MODE_TITLE' | translate }}</h3>
-<p>{{ 'HOME.HOMEPAGE.DOCKER_MODE_STEPS' | translate }}</p>
+<h3>Development mode</h3>
+<p>To lift Bluejay-TP Tester in development mode, follow these steps:</p>
 <ol>
-  <li>{{ 'HOME.HOMEPAGE.DOCKER_MODE_STEP_1' | translate }}</li>
-  <li>{{ 'HOME.HOMEPAGE.DOCKER_MODE_STEP_2' | translate }}</li>
+  <li>Clone the Bluejay-TP Tester repository.</li>
+  <li>Install the dependencies with <code>npm install</code>.</li>
+  <li>Lift the project with <code>npm start</code>.</li>
 </ol>
-<p>{{ 'HOME.HOMEPAGE.DOCKER_MODE_DESCRIPTION' | translate }}</p>
+<p>This would be enough since the project uses concurrently and lifts both the express server and angular at the same time. The Express server (GlassMatrix API) is lifted on port 6012 and the Angular application on port 4200.</p>
+
+<h3>With docker</h3>
+<p>To lift Bluejay-TP Tester with docker, follow these steps:</p>
+<ol>
+  <li>Clone the Bluejay-TP Tester repository.</li>
+  <li>Install the dependencies with <code>npm install</code>.</li>
+  <li>Run <code>npm run docker</code>.</li>
+</ol>
+<p>With this, we would have the project lifted on port 6011 the angular web, and the express server on port 6012.</p>

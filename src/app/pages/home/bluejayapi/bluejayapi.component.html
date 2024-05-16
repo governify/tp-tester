@@ -1,11 +1,169 @@
-<h1>{{ 'HOME.BLUEJAY.TITLE' | translate }}</h1>
-<p>{{ 'HOME.BLUEJAY.PARAGRAPH1' | translate }}</p>
+<h1>Automated Testing</h1>
 <ul>
-  <li><strong>createTpa:</strong> {{ 'HOME.BLUEJAY.FUNCTIONS.createTpa' | translate }}</li>
-  <li><strong>getTps:</strong> {{ 'HOME.BLUEJAY.FUNCTIONS.getTps' | translate }}</li>
-  <li><strong>getTpa:</strong> {{ 'HOME.BLUEJAY.FUNCTIONS.getTpa' | translate }}</li>
-  <li><strong>deleteTpa:</strong> {{ 'HOME.BLUEJAY.FUNCTIONS.deleteTpa' | translate }}</li>
-  <li><strong>postComputation:</strong> {{ 'HOME.BLUEJAY.FUNCTIONS.postComputation' | translate }}</li>
-  <li><strong>getComputation:</strong> {{ 'HOME.BLUEJAY.FUNCTIONS.getComputation' | translate }}</li>
+  <li><a href="#yaml-file-loading">YAML File Loading</a></li>
+  <li><a href="#test-execution">Test Execution</a></li>
+  <ul>
+    <li><a href="#get-methods">GET Methods</a></li>
+    <li><a href="#post-methods">POST Methods</a></li>
+    <li><a href="#put-methods">PUT Methods</a></li>
+    <li><a href="#delete-methods">DELETE Methods</a></li>
+    <li><a href="#test-methods">TEST Methods</a></li>
+  </ul>
+  <li><a href="#results-visualization">Results Visualization</a></li>
+  <li><a href="#test-results">Test Results</a></li>
+  <li><a href="#variables-to-use">Variables to Use</a></li>
+  <ul>
+    <li><a href="#actualtime">actualTime</a></li>
+    <li><a href="#value">value</a></li>
+    <li><a href="#minexpectedvalue">minExpectedValue</a></li>
+    <li><a href="#maxexpectedvalue">maxExpectedValue</a></li>
+    <li><a href="#expectedvalue">expectedValue</a></li>
+  </ul>
 </ul>
-<p>{{ 'HOME.BLUEJAY.PARAGRAPH2' | translate }} <a [href]="'HOME.BLUEJAY.DOCS_LINK' | translate" target="_blank">{{ 'HOME.BLUEJAY.DOCS_LINK_TEXT' | translate }}</a>.</p>
+
+<h2 id="page-structure">Page Structure</h2>
+<p>This page is a user interface for running and testing scripts. These scripts will have a .yaml format, and will interact with the GitHub API and Repositories to test already created metrics. The page is divided into several sections:</p>
+
+<h2 id="yaml-file-loading">YAML File Loading</h2>
+<p>At the top of the page, there is a table that displays all available YAML files. Users can copy the file content, view the file, edit the file, or delete the file.</p>
+
+<h2 id="test-execution">Test Execution</h2>
+<p>In the execution section, users can enter the name of the YAML file they want to execute. They can also save the current content of the text box (it must follow the example format and the calls will be executed sequentially),</p>
+<p>Users will be able to follow a series of "steps". The "steps" are actions that can be performed in the system. These steps are predefined and perform HTTP methods (like 'GET', 'POST', 'PUT', 'DELETE') to the corresponding actions. Here are the possible steps:</p>
+
+<h3 id="get-methods">GET Methods</h3>
+<p>These are the GET methods that can be used:</p>
+<ul>
+  <li>github/getIssue: This step gets the issues from a specific repository on GitHub.</li>
+  <li>github/getOpenPR: This step gets the open pull requests from a specific repository on GitHub.</li>
+  <li>github/pullCurrentBranch: This step performs a pull of the current branch in a specific repository.</li>
+  <li>github/listRepos: This step lists all repositories.</li>
+  <li>github/getBranches: This step gets all the branches from a specific repository.</li>
+  <li>github/getRepoInfo: This step gets information about a specific repository and a specific branch.</li>
+</ul>
+
+<h3 id="post-methods">POST Methods</h3>
+<p>These are the POST methods that can be used:</p>
+<ul>
+  <li>github/mergeLastOpenPR: This step merges the last open pull request in a specific repository on GitHub.</li>
+  <li>bluejay/compute/tpa: This step loads the data from a file and then performs a computation on the data.</li>
+  <li>bluejay/compute/metric: This step loads the data from a file and then performs a computation on the data.</li>
+  <li>bluejay/checkContain: This step (which is marked as deprecated) checks if a specific value is present in the data obtained from an API.</li>
+  <li>github/createIssue: This step creates a new issue in a specific repository on GitHub.</li>
+  <li>github/createPR: This step creates a new pull request in a specific repository on GitHub.</li>
+  <li>github/cloneRepo: This step clones a specific repository.</li>
+  <li>github/createBranch: This step creates a new branch in a specific repository.</li>
+  <li>github/createFile: This step creates a new file in a specific repository.</li>
+  <li>github/createCommit: This step creates a new commit in a specific repository.</li>
+  <li>github/commitAllChanges: This step commits all changes in a specific repository.</li>
+  <li>github/pushChanges: This step pushes all changes in a specific repository.</li>
+</ul>
+
+<h3 id="put-methods">PUT Methods</h3>
+<p>These are the PUT methods that can be used:</p>
+<ul>
+  <li>github/mergePR: This step merges a specific pull request in a specific repository on GitHub.</li>
+  <li>github/changeBranch: This step changes to a specific branch in a specific repository.</li>
+</ul>
+
+<h3 id="delete-methods">DELETE Methods</h3>
+<p>These are the DELETE methods that can be used:</p>
+<ul>
+  <li>github/deleteRepo: This step deletes a specific repository.</li>
+  <li>github/deleteBranch: This step deletes a specific branch from a repository.</li>
+  <li>github/deleteFile: This step deletes a specific file from a repository.</li>
+</ul>
+
+<h3 id="test-methods">TEST Methods</h3>
+<p>These are the TEST methods that can be used:</p>
+<ul>
+  <li>bluejay/check: This step performs a series of checks on the data obtained from an API. It checks if the value of a specific key meets certain conditions (like a minimum expected value, a maximum expected value, or an exact expected value).</li>
+  <li>bluejay/findCheck: This step is similar to bluejay/check but it has a different format which allows you to check more fields at once.</li>
+</ul>
+
+<h2 id="results-visualization">Results Visualization</h2>
+<p>After running the test block, the results are displayed in a read-only text area. If the script performed a computation, the results of that computation are also displayed in a read-only text area.</p>
+
+<h2 id="test-results">Test Results</h2>
+<p>In the right column of the page, users can see the results of the tests that have been run. Each test result is displayed on its own card, and users can delete individual test results.</p>
+<img src="assets/images/testResult.png" alt="Test Results">
+
+<h2 id="variables-to-use">Variables to Use</h2>
+
+<h3 id="actualtime">actualTime</h3>
+<p>To compute the metric with the current time, you should add actualTime: "true" to the "bluejay/compute/metric" method. If, on the other hand, you want it to use the original time of the metric, you can delete "actualTime" or set it to "false".</p>
+<pre>
+<code>
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      collector: "EVENTS"
+      metric: "additions_metric.json"
+      actualTime: "true"
+    method: "POST"
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    method: "TEST"
+</code>
+</pre>
+
+<h3 id="value">value</h3>
+<p>If there are multiple results, you can use the "value" metric to only check those evidences that have the "value" field in the set value.</p>
+<pre>
+<code>
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      collector: "EVENTS"
+      metric: "additions_metric.json"
+    method: "POST"
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          minExpectedValue: "5"
+</code>
+</pre>
+
+<h3 id="minexpectedvalue">minExpectedValue</h3>
+<p>The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric and is greater than 5.</p>
+<pre>
+<code>
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          minExpectedValue: "5"
+</code>
+</pre>
+
+<h3 id="maxexpectedvalue">maxExpectedValue</h3>
+<p>The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric and is less than 12.</p>
+<pre>
+<code>
+  - uses: "bluejay/check"
+    value: "1"
+    with:
+      - key: "additions"
+        conditions:
+          maxExpectedValue: "12"
+</code>
+</pre>
+
+<h3 id="expectedvalue">expectedValue</h3>
+<p>The test will be successful if there is any field called like the key field, in this case "additions" whose value is numeric or not and is exactly equal to the expected value.</p>
+<pre>
+<code>
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    method: "TEST"
+</code>
+</pre>
