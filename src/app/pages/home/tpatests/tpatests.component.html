@@ -1,5 +1,34 @@
-<h1>{{ 'HOME.TPATESTS.TITLE' | translate }}</h1>
-<p>{{ 'HOME.TPATESTS.PARAGRAPH1' | translate }}</p>
-<img class="center" src="assets/images/existingTPA.png" alt="Existing TPA">
-<br>
-<p>{{ 'HOME.TPATESTS.PARAGRAPH2' | translate }}</p>
+<h2>TPA PAGE</h2>
+<p>The TPA management page allows you to visualize and interact with those TPAs that are within Bluejay.</p>
+
+<h3>Existing TPAs</h3>
+<p>This section displays a table of all existing TPAs. Each row in the table represents a single TPA, displaying its ID, project, and class.</p>
+<p>There are also several action buttons for each TPA:</p>
+<ul>
+  <li>The <strong>Copy</strong> button allows you to copy the content of a TPA intro the lower textarea.</li>
+  <li>The <strong>View</strong> button navigates to a detailed view of the TPA.</li>
+  <li>The <strong>Edit</strong> button navigates to a page where you can edit the TPA.</li>
+  <li>The <strong>Delete</strong> button navigates the TPA from the Bluejay DB.</li>
+</ul>
+
+<h3>Create TPA</h3>
+<p>This section allows you to create a new TPA. It provides a text area where you can input the content of the new TPA.</p>
+<p>There are two buttons:</p>
+<ul>
+  <li>The <strong>Create TPA</strong> button creates a new TPA with the content you've inputted in the text area.</li>
+  <li>The <strong>Copy Default TPA</strong> button fills the text area with the content of a default TPA, which you can then modify and create as a new TPA.</li>
+</ul>
+
+<h2>TPA Edit</h2>
+<p>When you click on the edit button of a TPA, you will enter a subpage that will give you access to two other subpages.</p>
+<ul>
+  <li>One where you can edit the entire TPA.</li>
+  <li>And another where you can edit the TPA by sections.</li>
+</ul>
+
+<h3>EDIT ENTIRE TPA</h3>
+<p>Here you will be able to edit the TPA Content in a textarea with the current content of the TPA and a save button that will update that content</p>
+
+<h3>EDIT TPA BY SECTIONS</h3>
+<p>In this page you can edit the TPA by sections, editing or deleting each metric and guarantee of the TPA. And you can also add new metrics and guarantees. If you select the "more" button, it will generate an individual metric for you to review and test, and it will redirect you to the new page with that created metric.</p>
+<img src="assets/images/tpaSectionEdit.png" alt="TPA Sections">

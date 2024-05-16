@@ -1,16 +1,62 @@
-<h1>{{ 'HOME.METRICSTESTS.TITLE' | translate }}</h1>
-<p>{{ 'HOME.METRICSTESTS.PARAGRAPH1' | translate }}</p>
-<p>{{ 'HOME.METRICSTESTS.PARAGRAPH2' | translate }}</p>
-<img class="center" src="assets/images/newMetric.png" alt="Post Metrics">
-<br>
-<p>{{ 'HOME.METRICSTESTS.PARAGRAPH3' | translate }}</p>
-<img src="assets/images/postmetrics.png" alt="Post Metrics">
-<p>{{ 'HOME.METRICSTESTS.PARAGRAPH4' | translate }}</p>
-<img src="assets/images/guardarMetrica.png" alt="Guardar Metrica">
-<br><br>
-<h3>{{ 'HOME.METRICSTESTS.SUBTITLE' | translate }}</h3>
-<p>{{ 'HOME.METRICSTESTS.PARAGRAPH5' | translate }}</p>
-<img class="center" src="assets/images/editmetrics.png" alt="Guardar Metrica">
-<br>
-<p>{{ 'HOME.METRICSTESTS.PARAGRAPH6' | translate }}</p>
-<br>
+<h2>Metrics</h2>
+
+<h3>The Metrics Loader page</h3>
+<p>The Metrics Loader page is designed to manage and test metrics. It provides a user-friendly interface for viewing, creating, and managing metrics.</p>
+
+<h4>Existing metrics</h4>
+<p>Here you can see all the saved metrics, classified into two large tables. One table consists of those saved from the TPA section, which will be related to the TPA they belonged to. The other table contains saved individual metrics, which are not related to any specific TPA.</p>
+<p>Each row in the table represents a single metric, displaying its name and providing action buttons:</p>
+<ul>
+  <li>The <strong>View</strong> button navigates to a detailed view of the metric.</li>
+  <li>The <strong>Execute/Edit</strong> button navigates to a page where you can execute or edit the metric.</li>
+  <li>The <strong>Delete</strong> button deletes the metric.</li>
+</ul>
+
+<h4>Create new metric</h4>
+<p>This section allows you to create a new metric. It provides a text area where you can input the content of the new metric.</p>
+<p>There are two buttons:</p>
+<ul>
+  <li>The <strong>Post</strong> button posts the content you've inputted in the text area to the Bluejay API for computation.</li>
+  <li>The <strong>Get Computation</strong> button retrieves the computation results from the Bluejay API.</li>
+</ul>
+<img src="assets/images/metric-computation.png" alt="Metric Computation">
+
+<h2>Metrics Viewer</h2>
+<p>The Metrics Viewer page allows you to view the details of a specific metric. It displays the current JSON representation of the metric.</p>
+
+<h2>Metrics Executor</h2>
+<p>The Metrics Executor page allows you to execute a specific metric. It provides a user-friendly interface for viewing and modifying the metric's details, and for executing the metric.</p>
+<img src="assets/images/metric-execution.png" alt="Metric Execution">
+
+<h3>Metric Details</h3>
+<p>This section displays the details of the metric. It provides several input fields where you can modify the metric's details:</p>
+<ul>
+  <li>The <strong>Projects</strong> field allows you to specify the project associated with the metric.</li>
+  <li>The <strong>Class</strong> field allows you to specify the class associated with the metric.</li>
+  <li>The <strong>Period</strong> field allows you to specify the period for the metric.</li>
+</ul>
+
+<h3>Computation Search</h3>
+<p>This section allows you to specify the parameters for the computation of the metric. It provides several input fields:</p>
+<ul>
+  <li>The <strong>Type</strong> field allows you to specify the type of computation.</li>
+  <li>The <strong>Period</strong> field allows you to specify the period for the computation.</li>
+  <li>The <strong>Initial</strong> field allows you to specify the initial date for the computation.</li>
+  <li>The <strong>From</strong> field allows you to specify the starting date for the computation.</li>
+  <li>The <strong>End</strong> field allows you to specify the ending date for the computation.</li>
+  <li>The <strong>Timezone</strong> field allows you to specify the timezone for the computation.</li>
+</ul>
+<p>There are also several buttons:</p>
+<ul>
+  <li>The <strong>Set to Current Hour</strong> button sets the computation parameters to the current hour.</li>
+  <li>The <strong>Save as JSON</strong> button saves the metric and its details as a JSON file.</li>
+  <li>The <strong>Tutorial</strong> button opens a tutorial dialog.</li>
+</ul>
+
+<h3>Execution Section</h3>
+<p>This section allows you to execute the metric. It provides a text area where you can view the JSON representation of the metric.</p>
+<p>There are also several buttons:</p>
+<ul>
+  <li>The <strong>Post</strong> button posts the metric to the Bluejay API for computation.</li>
+  <li>The <strong>Get Computation</strong> button retrieves the computation results from the Bluejay API.</li>
+</ul>

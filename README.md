@@ -184,7 +184,6 @@ The Pull Requests page provides a user-friendly interface for managing the pull 
 The Actions page interface for managing a repository. It provides options to view the available branches, change the current branch, create a new file, create a new commit, push changes, view files in the repository, and manage issues.
 
 
-este subindice no funciona correctamente:
 # Automated Testing
 - [YAML File Loading](#yaml-file-loading)
 - [Test Execution](#test-execution)
