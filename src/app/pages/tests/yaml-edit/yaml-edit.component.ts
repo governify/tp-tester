@@ -283,17 +283,11 @@ export class YamlEditComponent implements OnInit {
         return this.githubService.undoLastMergedPullRequest(this.token, step.with['owner'], step.with['repoName']).toPromise();
       },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
-        // Leer el contenido del archivo
         const tpa = step.with['tpa'];
         const metric = step.with['metric'];
         const time = step.with['actualTime'] === 'true';
         return this.loadData(tpa, metric, time).toPromise().then((data) => {
-          // Imprimir los datos devueltos por loadData
-          console.log(data);
-
-          // Ejecutar postComputation
           this.postContent().subscribe(response => {
-            // Esperar 10 segundos y luego llamar a getComputation
             setTimeout(() => {
               this.getComputation();
             }, 1000);

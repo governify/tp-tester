@@ -148,10 +148,8 @@ export class SectionsComponent implements OnInit {
     }
     const metricContent = this.metricsJson[metricKey];
 
-    // Parsear el contenido del textarea a un objeto JSON
     const parsedMetricContent = JSON.parse(metricContent);
 
-    // Extraer el contenido de githubGQL
     const githubGQL = parsedMetricContent.measure.event.githubGQL;
 
     let parts = this.tpaId.split('-');
@@ -187,7 +185,6 @@ export class SectionsComponent implements OnInit {
       }
     }
 
-    // Convertir el nuevo objeto JSON a una cadena JSON
     const newMetricContentString = JSON.stringify(newMetricContent, null, 2);
 
     this.glassmatrixService.saveTPAMetricToJson(metricKey, this.tpaId, newMetricContentString).subscribe(() => {
@@ -210,10 +207,8 @@ export class SectionsComponent implements OnInit {
           return of(false);
         }
         if (retryCount >= 2) {
-          // Si ya hemos intentado 3 veces, dejamos de intentarlo y devolvemos false
           return of(false);
         } else {
-          // Si no, intentamos de nuevo sin registrar nada en la consola
           return this.fileExists(tpaId, metricKey, retryCount + 1);
         }
       })
