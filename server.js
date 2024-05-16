@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const simpleGit = require('simple-git');
 const git = simpleGit();
 const app = express();
-const rimraf = require('rimraf'); // Add this at the top of your file
+const rimraf = require('rimraf');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const util = require('util');
@@ -132,7 +132,6 @@ app.post(apiName + '/saveData', (req, res) => {
  *         description: Error occurred while deleting data
  */
 app.delete(apiName + '/deleteData', (req, res) => {
-  // Utiliza el método 'remove' de NeDB para eliminar todos los documentos
   db.remove({}, { multi: true }, function (err, numRemoved) {
     if (err) {
       res.status(500).send(err);
@@ -224,7 +223,7 @@ app.get(apiName+ '/getData/:field', (req, res) => {
       } else {
         let response = {};
         response[field] = "not found";
-        res.status(200).send([response]); // Envía la respuesta como un array
+        res.status(200).send([response]);
       }
     }
   });
@@ -404,8 +403,6 @@ app.post(apiName + '/tpa/save', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
-      // Create a hash of the content
-      // Write the hashed content to a new file
       fs.writeFile(hashedFilePath, JSON.stringify(data.content, null, 2), (err) => {
         if (err) {
           console.error(err);
@@ -584,9 +581,6 @@ app.post(apiName + '/tpa/saveTPAMetric', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while saving the file.' });
     } else {
-      // Create a hash of the content
-
-      // Write the hashed content to a new file
       const hashedFilePath = path.join(dirPath, `${data.fileName}_hash.yaml`);
       fs.writeFile(hashedFilePath, data.content, (err) => {
         if (err) {
@@ -676,7 +670,6 @@ app.post(apiName + '/tpa/updateTPAMetric', (req, res) => {
  *      '200':
  *        description: A successful response
  */
-// Método GET para obtener todos los archivos .json en la carpeta de assets
 app.get(apiName + '/tpa/indifivualFiles', (req, res) => {
   const dirPath = path.join(__dirname, '/src/assets/savedMetrics/individualMetrics');
   fs.readdir(dirPath, (err, files) => {
@@ -773,11 +766,9 @@ app.get(apiName + '/tpa/loadFolders/:subdirectory/:file', (req, res) => {
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       if (err.code === 'ENOENT') {
-        // Manejar específicamente el error 'no such file or directory'
         console.log(`File ${file} not found in subdirectory ${subdirectory}`);
         res.status(404).json({ message: 'File not found.' });
       } else {
-        // Manejar otros errores
         console.error(err);
         res.status(500).json({ message: 'An error occurred while reading the file.' });
       }
@@ -854,7 +845,6 @@ app.delete(apiName + '/tpa/files/:fileName', (req, res) => {
           console.error('An error occurred while deleting the file:', err);
           res.status(500).json({ message: 'An error occurred while deleting the file.' });
         } else {
-          // Delete the hashed file
           fs.unlink(hashedFilePath, (err) => {
             if (err) {
               console.error('An error occurred while deleting the hashed file:', err);
@@ -905,11 +895,9 @@ app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) =>
           console.error('An error occurred while deleting the file:', err);
           res.status(500).json({ message: 'An error occurred while deleting the file.' });
         } else {
-          // Delete the hashed file
           fs.unlink(hashedFilePath, (err) => {
             if (err) {
               console.error('An error occurred while deleting the hashed file:', err);
-              // Don't send a response here, as we've already sent a response
             }
           });
           res.json({ message: 'File and hashed file deleted successfully.' });
@@ -1032,7 +1020,6 @@ app.post(apiName + '/github/cloneRepo', (req, res) => {
   const repoUrl = `https://github.com/${owner}/${repoName}.git`;
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
-  // Delete the directory before cloning
   rimraf(repoPath, (err) => {
     if (err) {
       res.status(500).send('Error deleting directory: ' + err.message);

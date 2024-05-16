@@ -28,6 +28,7 @@ export class TpaExecutorComponent implements OnInit {
   messageClass3 = '';
   tpa!:string;
   hashAreEqual = false;
+  showTextMessage = true;
   scope = {
     project: '',
     class: '',
@@ -260,21 +261,15 @@ export class TpaExecutorComponent implements OnInit {
   }
 
   sameHash(){
-    // 1. Carga el contenido del archivo original
     this.glassmatrixService.loadFileContent(this.tpa, this.fileName).subscribe((response: any) => {
       const originalContent = response;
-      // 2. Calcula el hash SHA256 del contenido original
       this.glassmatrixService.calculateSHA({ content: originalContent }).subscribe((response: any) => {
         const originalHash = response.sha256;
-        // 3. Carga el contenido del archivo de hash
         const hashFileName = this.fileName.replace('.json', '_hash.yaml');
         this.glassmatrixService.loadFileContent(this.tpa, hashFileName).subscribe((response: any) => {
           const hashContent = response;
-
-          // 4. Calcula el hash SHA256 del contenido del archivo de hash
           this.glassmatrixService.calculateSHA({ content: hashContent }).subscribe((response: any) => {
             const hashFileHash = response.sha256;
-            // 5. Compara los dos hashes y guarda el resultado en una variable booleana
             this.hashAreEqual = originalHash === hashFileHash;
             console.log(this.hashAreEqual);
           });

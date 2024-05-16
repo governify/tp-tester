@@ -1,21 +1,30 @@
 <body>
 <div class="row">
-  <div class="col-8">
-    <div class="modified">
-      <div class="btn-edit-2" [ngClass]="hashAreEqual ? 'btn-hash-equal' : 'btn-hash-different'" style="display: inline-flex; align-items: center; justify-content: center; padding: 15px; border-radius: 10px;">
-        <p *ngIf="hashAreEqual" style="margin: 0;">Same content as TPA</p>
-        <p *ngIf="!hashAreEqual" style="margin: 0;">The metric has been modified</p>
-      </div>
-    </div>
-  </div>
   <div class="col-4 text-right">
     <button class="btn btn-outline-primary" id="volver" (click)="goBack()">{{ 'COMMON.BACK' | translate }}</button>
   </div>
 </div>
 <div class="row" id="context">
-  <div>{{ 'METRICS_LOADER.EXECUTOR.EXECUTING' | translate:{fileName: fileName} }}</div>
+  <div>This metric is <strong>{{ fileName }}</strong> from <strong>{{tpa}}</strong></div></div>
+<div class="alert alert-warning" role="alert" *ngIf="hashAreEqual && showTextMessage" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 15px 10px 15px; border-radius: 10px; text-align: center; margin: auto; max-width: 60%;">
+  <button style="align-self: flex-end; background-color: transparent; border: 1px solid black; color: black;" (click)="showTextMessage = false">X</button>
+  <div>
+    <h3 style="margin-top: -10px;">Same content as TPA</h3>
+  </div>
+  <div>
+    <p style="text-align: center; margin-top: -10px;">This indicates that the content<br>of this metric is the same as the one in the TPA {{tpa}}</p>
+  </div>
 </div>
-
+<div class="alert alert-danger" role="alert" *ngIf="!hashAreEqual && showTextMessage" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 15px 10px 15px; border-radius: 10px; text-align: center; margin: auto; max-width: 60%;">
+  <button style="align-self: flex-end; background-color: transparent; border: 1px solid black; color: black;" (click)="showTextMessage = false">X</button>
+  <div>
+    <h3 style="margin-top: -10px;">This TPA content has been modified</h3>
+  </div>
+  <div>
+    <p style="text-align: center; margin-top: -10px;">This indicates that the content<br>of this metric is not the same as the one in the TPA {{tpa}}</p>
+  </div>
+</div>
+<br>
 <form>
   <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.CONTEXT_SECTION' | translate }}</h2>
   <div class="row">
@@ -68,7 +77,6 @@
   <button class="btn btn-blue" (click)="openGuideDialog($event)">Tutorial</button>
   <p [ngClass]="messageClass">{{message}}</p>
 </form>
-
 <div class="row">
   <h2 style="display: flex; justify-content: center; align-items: center;">{{ 'METRICS_LOADER.EXECUTOR.EXECUTION_SECTION' | translate }}</h2>
 

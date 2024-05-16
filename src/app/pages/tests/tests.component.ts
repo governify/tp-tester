@@ -113,12 +113,10 @@ export class TestsComponent implements OnInit {
         createdAt?: string,
         authorLogin?: string
       }) => {
-        // Hacer una solicitud GET al endpoint '/getData/:key' para cada key
         return Promise.all(step.with.map(({key, conditions}) => {
           return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
               this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
-                // Comprueba si el campo especificado existe en los datos devueltos
                 if (data) {
                   data.forEach((item: any) => {
                     // Si 'value' no está definido en el paso, o si es igual al 'value' en el objeto de datos, entonces procesa el objeto
@@ -196,7 +194,7 @@ export class TestsComponent implements OnInit {
             const headers = {'Authorization': `Bearer ${this.token}`};
 
             return this.http.post(url, {values: step.with.values}, {headers}).toPromise().then((response: any) => {
-              // Agrega la respuesta a la respuesta existente
+              // Agrega la respuesta a la respuesta existe
               this.response += 'bluejay/findCheck ' + JSON.stringify(response, null, 2) + '\n\n';
 
               // Comprueba si se encontraron los valores esperados y agrega los resultados a testStatuses
@@ -282,17 +280,11 @@ export class TestsComponent implements OnInit {
         return this.githubService.undoLastMergedPullRequest(this.token, step.with['owner'], step.with['repoName']).toPromise();
       },
       'bluejay/compute/tpa': (step: { with: { [x: string]: string; }; }) => {
-        // Leer el contenido del archivo
         const tpa = step.with['tpa'];
         const metric = step.with['metric'];
         const time = step.with['actualTime'] === 'true';
         return this.loadData(tpa, metric, time).toPromise().then((data) => {
-          // Imprimir los datos devueltos por loadData
-          console.log(data);
-
-          // Ejecutar postComputation
           this.postContent().subscribe(response => {
-            // Esperar 10 segundos y luego llamar a getComputation
             setTimeout(() => {
               this.getComputation();
             }, 1000);
@@ -300,7 +292,6 @@ export class TestsComponent implements OnInit {
         });
       },
       'bluejay/compute/metric': (step: { with: { [x: string]: string; }; }) => {
-        // Leer el contenido del archivo
         const metric = step.with['metric'];
         const time = step.with['actualTime'] === 'true';
         return new Promise<void>((resolve, reject) => {
