@@ -40,15 +40,22 @@ export class MetricsLoaderComponent implements OnInit {
   ngOnInit(): void {
     this.loadIndividualFiles();
     this.loadFolders();
-    this.filesService.getBasicMetric().subscribe(data => {
-      this.data = JSON.stringify(data, null, 2); // Convierte el objeto a una cadena JSON
-    });
+
   }
 
   goBack(): void {
     this.location.back();
   }
 
+  copyDefault(){
+    this.filesService.getBasicMetric().subscribe(data => {
+      this.data = JSON.stringify(data, null, 2);
+    });
+  }
+
+  clearData(): void {
+    this.data = '';
+  }
   deleteFile(fileName: string): void {
     this.glassmatrixService.deleteFile(fileName).subscribe(
       () => {

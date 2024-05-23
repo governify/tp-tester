@@ -6,8 +6,7 @@
 </div>
 <div class="row" id="context">
   <div>This metric is <strong>{{ fileName }}</strong> from <strong>{{tpa}}</strong></div></div>
-<div class="alert alert-warning" role="alert" *ngIf="hashAreEqual && showTextMessage" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 15px 10px 15px; border-radius: 10px; text-align: center; margin: auto; max-width: 60%;">
-  <button style="align-self: flex-end; background-color: transparent; border: 1px solid black; color: black;" (click)="showTextMessage = false">X</button>
+<div class="alert alert-warning" role="alert" *ngIf="hashAreEqual && showTextMessage" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 15px 10px 15px; border-radius: 10px; text-align: center; margin: auto; max-width: 30%;">
   <div>
     <h3 style="margin-top: -10px;">Same content as TPA</h3>
   </div>
@@ -15,8 +14,7 @@
     <p style="text-align: center; margin-top: -10px;">This indicates that the content<br>of this metric is the same as the one in the TPA {{tpa}}</p>
   </div>
 </div>
-<div class="alert alert-danger" role="alert" *ngIf="!hashAreEqual && showTextMessage" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 15px 10px 15px; border-radius: 10px; text-align: center; margin: auto; max-width: 60%;">
-  <button style="align-self: flex-end; background-color: transparent; border: 1px solid black; color: black;" (click)="showTextMessage = false">X</button>
+<div class="alert alert-danger" role="alert" *ngIf="!hashAreEqual && showTextMessage" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 15px 10px 15px; border-radius: 10px; text-align: center; margin: auto; max-width: 30%;">
   <div>
     <h3 style="margin-top: -10px;">This TPA content has been modified</h3>
   </div>

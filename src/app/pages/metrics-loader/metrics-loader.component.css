@@ -219,3 +219,7 @@ button.btn-danger:enabled {
 .folder-table {
   margin-bottom: 20px;
 }
+
+#papelera{
+  background-color: #bd2929!important;
+}
