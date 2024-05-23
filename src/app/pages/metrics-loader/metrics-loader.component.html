@@ -99,6 +99,8 @@
   <input id="filename" type="text" [(ngModel)]="fileName" placeholder="{{ 'METRICS_TESTER.ENTER_FILE_NAME' | translate }}">
   <button id="filename2" class="btn btn-save" (click)="saveToJson()">{{ 'METRICS_TESTER.SAVE_AS_JSON' | translate }}</button>
   <button class="btn btn-blue" (click)="openGuideDialog($event)">Tutorial</button>
+  <button class="btn btn-blue" (click)="copyDefault()">Copy example metric</button>
+  <button class="btn btn-blue" id="papelera" (click)="clearData()"><i class="fas fa-times"></i></button>
   <textarea id="dataTextarea" class="fullwidth" [(ngModel)]="data"></textarea>
 
 
