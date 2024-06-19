@@ -81,7 +81,7 @@ export class YamelsComponent implements OnInit {
         repoName: "tp-testbench"
         owner: "Antoniiosc7"
         prNumber: "1"
-        mergeMessage: "mergead"
+        mergeMessage: "merged"
       method: "PUT"`
     },
     {
@@ -97,7 +97,8 @@ export class YamelsComponent implements OnInit {
       with:
         repoName: "tp-testbench"
         fileName: "file.txt"
-        fileContent: "content"`
+        fileContent: "content"
+      method: "POST"`
     },
     {
       id: 'example11',
@@ -177,7 +178,60 @@ export class YamelsComponent implements OnInit {
       content: `- uses: "github/deleteFile"
       with:
         repoName: "tp-testbench"
-        fileName: "2323232323"`
+        fileName: "name_of_file"
+      method: "DELETE"`
+    },
+    {
+      id: 'example19',
+      content: `- uses: "github/deleteRepo"
+      with:
+        repoName: "tp-testbench"
+      method: "DELETE"`
+    },
+    {
+      id: 'example20',
+      content: `- uses: "github/changeBranch"
+      with:
+        repoName: "tp-testbench"
+        branchToChangeTo: "branch2"
+      method: "PUT"`
+    },
+    {
+      id: 'example21',
+      content: `uses: "github/createBranch"
+      with:
+        repoName: "tp-testbench"
+        branchName: "branch2"
+      method: "POST"`
+    },
+    {
+      id: 'example22',
+      content: `- uses: "bluejay/checkContain"
+      with:
+        key: "additions"
+        minExpectedValue: "5"
+      method: "POST"`
+    },
+    {
+      id: 'example23',
+      content: `- uses: "github/cloneRepo"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+      method: "POST"`
+    },
+    {
+      id: 'example24',
+      content: `- uses: "github/getRepoInfo"
+      with:
+        repoName: "tp-testbench"
+        branchName: "main"
+      method: "GET"`
+    },
+    {
+      id: 'example25',
+      content: `- uses: "github/listRepos"
+      method: "GET"`
     }
   ];
 

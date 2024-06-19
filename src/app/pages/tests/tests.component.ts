@@ -370,7 +370,7 @@ export class TestsComponent implements OnInit {
       this.response = '';
       data.steps.reduce((prevPromise, step: Step) => {
         return prevPromise.then(() => {
-          return new Promise(resolve => setTimeout(resolve, 3000)) // Agregar retraso de 5 segundos aquí
+          return new Promise(resolve => setTimeout(resolve, 3000))
             .then(() => {
               // @ts-ignore
               const handler = this.stepHandlers[step.method][step.uses];
@@ -393,7 +393,7 @@ export class TestsComponent implements OnInit {
         });
       }, Promise.resolve()).then(
         () => {
-          this.isLoading = false; // Mover esta línea aquí
+          this.isLoading = false;
         }
       ).catch(error => {
         console.error(error);
