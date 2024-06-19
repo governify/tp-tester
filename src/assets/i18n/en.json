@@ -207,7 +207,7 @@
       "VIEWING": "You are viewing {{fileName}}."
     },
     "EXECUTOR": {
-      "EXECUTING": "You are executing {{fileName}}.",
+      "EXECUTING": "You are editing the file: {{fileName}}.",
       "SAVE_AS_JSON": "Save as json",
       "CONTEXT_SECTION": "Context Section",
       "SCOPE_INFORMATION": "Scope Information",
@@ -395,7 +395,14 @@
     "example15": "Check in response",
     "example16": "Merge last created PR",
     "example17": "Check in response 2",
-    "example18": "Delete file"
+    "example18": "Delete file",
+    "example19": "Delete repository",
+    "example20": "Change branch",
+    "example21": "Create new branch",
+    "example22": "Old check in response",
+    "example23": "Clone repository",
+    "example24": "Info from a repository",
+    "example25": "List of repositories"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",
