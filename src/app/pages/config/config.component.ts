@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {GithubhelpComponent} from "../../components/dialogs/githubhelp/githubhelp.component";
@@ -43,7 +43,8 @@ export class ConfigComponent implements OnInit {
 
   ngOnInit(): void {
     const portsToHandle = ['3000/tcp', '80/tcp', '8086/tcp', '27017/tcp', '5173/tcp', '6379/tcp'];
-    this.http.get<any[]>(`${BASE_URL}:6012/api/containers`).subscribe(containers => {
+    const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
+    this.http.get<any[]>(`${BASE_URL}:6012/api/containers`, { headers }).subscribe(containers => {
       // @ts-ignore
       this.containers = containers.flatMap(container => {
         const ports = container.NetworkSettings.Ports;
@@ -64,13 +65,15 @@ export class ConfigComponent implements OnInit {
     });
   }
   getConfig() {
-    this.http.get(`${BASE_URL}:6012/glassmatrix/api/v1/config`).subscribe((config: any) => {
+    const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
+    this.http.get(`${BASE_URL}:6012/glassmatrix/api/v1/config`, { headers }).subscribe((config: any) => {
       this.config = config;
     });
   }
 
   updateConfig() {
-    this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/config`, this.config).subscribe(() => {
+    const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
+    this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/config`, this.config, { headers }).subscribe(() => {
       alert('Config updated successfully');
     });
   }

@@ -1,0 +1,20 @@
+
+<div class="token-section">
+    <div>
+      <p *ngIf="key !== 'Key not found'">{{ 'GH_SIMULATOR.CLONE_PAGE.KEY_FOUND' | translate }}</p>
+      <button *ngIf="key !== 'Key not found' && !showKey" (click)="showKey = true">{{ 'GH_SIMULATOR.CLONE_PAGE.VIEW_KEY' | translate }}</button>
+      <div *ngIf="showKey">
+        <p>{{ 'GH_SIMULATOR.CLONE_PAGE.KEY' | translate:{key: key} }}</p>
+        <button (click)="showEdit = true">{{ 'GH_SIMULATOR.CLONE_PAGE.EDIT_KEY' | translate }}</button>
+      </div>
+      <div *ngIf="showEdit">
+        <input [(ngModel)]="newKey" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.ENTER_NEW_KEY' | translate }}">
+        <button (click)="updateKey()">{{ 'GH_SIMULATOR.CLONE_PAGE.UPDATE_KEY' | translate }}</button>
+      </div>
+      <div *ngIf="key === 'Key not found'">
+        <input [(ngModel)]="newKey" placeholder="{{ 'GH_SIMULATOR.CLONE_PAGE.ENTER_NEW_KEY' | translate }}">
+        <button (click)="saveKey()">{{ 'GH_SIMULATOR.CLONE_PAGE.SAVE_KEY' | translate }}</button>
+      </div>
+    </div>
+  </div>
+  

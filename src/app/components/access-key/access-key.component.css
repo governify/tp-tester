@@ -1,0 +1,27 @@
+.token-section div {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 20px 10%;
+  }
+  
+  .token-section p {
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .token-section button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .token-section button:hover {
+    background-color: #0056b3;
+  }
+  

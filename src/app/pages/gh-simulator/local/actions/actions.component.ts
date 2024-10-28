@@ -41,7 +41,7 @@ export class ActionsComponent {
   getToken(): void {
     this.glassmatrixService.getToken().subscribe(
       response => {
-        this.token = response.token;
+        this.token = response.token[0];
         this.githubService.getUserName(this.token).subscribe(
           owner => {
             this.owner = owner;

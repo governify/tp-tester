@@ -42,6 +42,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { BluejayUiComponent } from './components/dialogs/bluejay-ui/bluejay-ui.component';
 import { ConfigComponent } from './pages/config/config.component';
 import { TokenComponent } from './components/token/token.component';
+import { GlTokenComponent } from './components/token/gl-token.component';
+import { JiraTokenComponent } from './components/token/jira-token.component';
+import { AccessKeyComponent } from './components/access-key/access-key.component';
 import { GithubhelpComponent } from './components/dialogs/githubhelp/githubhelp.component';
 import { TpaViewerComponent } from './pages/metrics-loader/tpa-viewer/tpa-viewer.component';
 import { TpaExecutorComponent } from './pages/metrics-loader/tpa-executor/tpa-executor.component';
@@ -53,6 +56,7 @@ import {NgxPaginationModule} from "ngx-pagination";
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './services/error.interceptor';
+import { FixedwindowhelpComponent } from './components/dialogs/fixedwindowhelp/fixedwindowhelp.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -91,7 +95,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     BluejayUiComponent,
     ConfigComponent,
     TokenComponent,
+    GlTokenComponent,
+    JiraTokenComponent,
+    AccessKeyComponent,
     GithubhelpComponent,
+    FixedwindowhelpComponent,
     TpaViewerComponent,
     TpaExecutorComponent,
     TestsComponent,

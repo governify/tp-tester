@@ -7,6 +7,7 @@ import {Location} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {ScriptInfoComponent} from "../../../components/dialogs/script-info/script-info.component";
 import {BASE_URL} from "../../../../../lockedConfig";
+import { COLLECTOR_EVENTS_URL } from '../../../../../lockedConfig';
 
 @Component({
   selector: 'app-tpa-executor',
@@ -119,7 +120,7 @@ export class TpaExecutorComponent implements OnInit {
     this.bluejayService.postComputation(dataCopy).subscribe(
       (response: any) => {
         this.response = JSON.stringify(response, null, 2);
-        this.computationUrl = `${BASE_URL}:5500${response.computation}`;
+        this.computationUrl = `${COLLECTOR_EVENTS_URL}${response.computation.replace('/api/v2/computations', '')}`;
         this.isLoading = false;
       },
       (error: any) => {
@@ -198,7 +199,8 @@ export class TpaExecutorComponent implements OnInit {
       if(data.metric.scope){
         data.metric.scope.project = this.scope.project;
         data.metric.scope.class = this.scope.class;
-        data.metric.scope.member = this.scope.member;
+        if (this.scope.member && this.scope.member != "") data.metric.scope.member = this.scope.member;
+        else if (data.metric.scope.member == "") delete data.metric.scope.member;
       } else if (data.metric.window) {
         data.metric.window.type = this.window.type;
         data.metric.window.period = this.window.period;

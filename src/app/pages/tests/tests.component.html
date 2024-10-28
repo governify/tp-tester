@@ -72,6 +72,7 @@
       </div>
     </div>
     <div class="col-4">
+      <h3> {{ 'TESTS.fixed' | translate }}: <em *ngIf="!fixedWindow">{{ 'TESTS.no' | translate }}</em><em *ngIf="fixedWindow">{{ 'TESTS.yes' | translate }}</em><button class="btn btn-info" (click)="openFixedwindowDialog()">?</button></h3>
       <h3> {{ 'TESTS.ejemplos' | translate }} </h3>
       <app-yamels></app-yamels>
       <h3>Test Results</h3>

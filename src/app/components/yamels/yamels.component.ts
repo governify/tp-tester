@@ -232,6 +232,193 @@ export class YamelsComponent implements OnInit {
       id: 'example25',
       content: `- uses: "github/listRepos"
       method: "GET"`
+    },
+    {
+      id: 'example26',
+      content:
+        `- uses: "gitlab/getBranches"
+      with:
+        repoName: "tp-testbench"
+      method: "GET"`
+    },
+    {
+      id: 'example27',
+      content:
+        `- uses: "gitlab/createBranch"
+      with:
+        repoName: "tp-testbench"
+        branchName: "branchNameHere"
+      method: "POST"`
+    },
+    {
+      id: 'example28',
+      content: `- uses: "gitlab/deleteBranch"
+      with:
+        repoName: "tp-testbench"
+        branchName: "branchNameHere"
+      method: "DELETE"`
+    },
+    {
+      id: 'example29',
+      content: `- uses: "jira/getIssues"
+      with:
+        domain: "localhost:8080"
+      method: "GET"`
+    },
+    {
+      id: 'example30',
+      content: `- uses: "jira/createIssue"
+      with:
+        domain: "localhost:8080"
+        assignee: "Antoniiosc7"
+        summary: "summaryText"
+        projectkey: "KAN"
+        issuetype: "10001"
+      method: "POST"`
+    },
+    {
+      id: 'example31',
+      content: `- uses: "gitlab/createMR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        title: "title1"
+        target: "main"
+        source: "branchX"
+        description: "descriptionText"
+      method: "POST"`
+    },
+    {
+      id: 'example32',
+      content: `- uses: "gitlab/getOpenMR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+      method: "GET"`
+    },
+    {
+      id: 'example33',
+      content: `- uses: "gitlab/mergeMR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        mrIid: "1"
+        mergeMessage: "merged"
+      method: "PUT"`
+    },
+    {
+      id: 'example34',
+      content: `- uses: "gitlab/pullCurrentBranch"
+      with:
+        repoName: "tp-testbench"
+      method: "GET"`
+    },
+    {
+      id: 'example35',
+      content: `- uses: "gitlab/createFile"
+      with:
+        repoName: "tp-testbench"
+        fileName: "file.txt"
+        fileContent: "content"
+      method: "POST"`
+    },
+    {
+      id: 'example36',
+      content: `- uses: "gitlab/commitAllChanges"
+      with:
+        repoName: "tp-testbench"
+        commitMessage: "commit message"
+      method: "POST"`
+    },
+    {
+      title: '',
+      id: 'example37',
+      content: `- uses: "gitlab/pushChanges"
+      with:
+        repoName: "tp-testbench"
+      method: "POST"`
+    },
+    {
+      id: 'example38',
+      content: `uses: "gitlab/mergeLastOpenMR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        mergeMessage: "mergedPR"
+      method: "POST"`
+    },
+    {
+      id: 'example39',
+      content: `- uses: "gitlab/deleteFile"
+      with:
+        repoName: "tp-testbench"
+        fileName: "name_of_file"
+      method: "DELETE"`
+    },
+    {
+      id: 'example40',
+      content: `- uses: "gitlab/deleteRepo"
+      with:
+        repoName: "tp-testbench"
+      method: "DELETE"`
+    },
+    {
+      id: 'example41',
+      content: `- uses: "gitlab/changeBranch"
+      with:
+        repoName: "tp-testbench"
+        branchToChangeTo: "branch2"
+      method: "PUT"`
+    },
+    {
+      id: 'example42',
+      content: `uses: "gitlab/createBranch"
+      with:
+        repoName: "tp-testbench"
+        branchName: "branch2"
+      method: "POST"`
+    },
+    {
+      id: 'example43',
+      content: `- uses: "gitlab/cloneRepo"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+      method: "POST"`
+    },
+    {
+      id: 'example44',
+      content: `- uses: "gitlab/getRepoInfo"
+      with:
+        repoName: "tp-testbench"
+        branchName: "main"
+      method: "GET"`
+    },
+    {
+      id: 'example45',
+      content: `- uses: "gitlab/listRepos"
+      method: "GET"`
+    },
+    {
+      id: 'example46',
+      content: `- uses: "jira/editIssue"
+      with:
+        domain: "localhost:8080"
+        issueid: "KAN-1"
+        assignee: "Antoniiosc7"
+        summary: "summaryText"
+        projectkey: "KAN"
+        issuetype: "10001"
+      method: "PUT"`
+    },
+    {
+      id: 'example47',
+      content: `- uses: "jira/moveIssue"
+      with:
+        domain: "localhost:8080"
+        issueid: "KAN-1"
+        transition: "21"
+      method: "POST"`
     }
   ];
 

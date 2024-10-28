@@ -150,36 +150,33 @@ export class SectionsComponent implements OnInit {
 
     const parsedMetricContent = JSON.parse(metricContent);
 
-    const githubGQL = parsedMetricContent.measure.event.githubGQL;
+    const actualMetric = parsedMetricContent.measure;
 
     let parts = this.tpaId.split('-');
     let restOfParts = parts.slice(1);
     let restOfString = restOfParts.join('-');
-    let className = parts[1];
+    let projectName = parsedMetricContent.measure.scope.project.default;
+    let className = parsedMetricContent.measure.scope.class.default;
     // Crear un nuevo objeto JSON con la plantilla
     const newMetricContent = {
       "config": {
         "scopeManager": SCOPES_URL
       },
       "metric": {
-        "computing": "actual",
-        "element": "number",
-        "event": {
-
-          githubGQL
-
-        },
+        "computing": actualMetric.computing,
+        "element": actualMetric.element,
+        "event": actualMetric.event,
         "scope": {
-          "project": `${restOfString}`,
-          "class": `${className}`,
-          "member": "*"
+          "project": `${projectName}`,
+          "class": `${className}`
+          //"member": "*"
         },
         "window": {
           "type": "static",
-          "period": "hourly",
-          "initial": "2024-04-01T00:00:00.000Z",
-          "from": "2024-04-01T00:00:00.000Z",
-          "end": "2024-04-01T23:59:59.999Z",
+          "period": "weekly",
+          "initial": "2024-09-23T00:00:00.000Z",
+          "from": "2024-09-23T00:00:00.000Z",
+          "end": "2024-09-29T23:59:59.999Z",
           "timeZone": "America/Los_Angeles"
         }
       }

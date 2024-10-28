@@ -26,18 +26,70 @@ const swaggerOptions = {
       contact: {
         name: 'github.com/antoniiosc7'
       },
-      servers: [`${BASE_URL}://localhost:6012`]
+      servers: [`${BASE_URL}:6012`]
     }
   },
   // ['.routes/*.js']
   apis: ['server.js']
 };
+
+function checkAccessKey (req, res, next) {
+  const accessKey = req.header('x-access-key');
+
+  if (!accessKey || accessKey !== process.env['TESTER_ACCESS_KEY']) {
+    res.sendStatus(403);
+  } else {
+    next();
+  }
+}
+
 app.use(cors());
 app.use(bodyParser.json());
 
+const apiName = '/glassmatrix/api/v1';
+
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-const apiName = '/glassmatrix/api/v1';
+
+/**
+ * @swagger
+ * /glassmatrix/api/v1/documentation:
+ *  get:
+ *    tags: [documentation]
+ *    description: Use to get the documentation PDF
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.get(apiName + '/documentation', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'documentation.pdf');
+  res.sendFile(filePath);
+});
+
+/**
+ * @swagger
+ * /glassmatrix/api/v1/pdf:
+ *  get:
+ *    tags: [documentation]
+ *    description: Use to get the documentation PDF
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.get(apiName + '/pdf', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'documentation.pdf');
+  res.sendFile(filePath);
+});
+
+app.get('/api', (req, res) => {
+  res.redirect('/api-docs');
+});
+
+app.get('/docs', (req, res) => {
+  res.redirect('/api-docs');
+});
+
+app.use(checkAccessKey);
 
 app.use((req, res, next) => {
   console.log(`Inicio de petición: ${req.method} ${req.path}`);
@@ -84,6 +136,10 @@ function deepSearch(obj, key) {
   }
   return null;
 }
+
+app.get(apiName + '/checkAccessKey', (req, res) => {
+  res.sendStatus(204);
+});
 
 /**
  * @swagger
@@ -204,13 +260,26 @@ app.get(apiName+ '/getData/:field', (req, res) => {
           doc.computations.forEach(computation => {
             if (computation.evidences && Array.isArray(computation.evidences)) {
               computation.evidences.forEach(evidence => {
-                if (evidence[field] !== undefined) {
-                  fieldDocs.push({
-                    value: computation.value,
-                    [field]: evidence[field],
-                    createdAt: evidence.createdAt,
-                    authorLogin: evidence.author.login
-                  });
+                if (Array.isArray(evidence)) {
+                  evidence.forEach(evid => {
+                    if (evid[field] !== undefined) {
+                      fieldDocs.push({
+                        value: computation.value,
+                        [field]: evid[field],
+                        //createdAt: evidence.createdAt,
+                        //authorLogin: evidence.author.login
+                      });
+                    }
+                  })
+                } else {
+                  if (evidence[field] !== undefined) {
+                    fieldDocs.push({
+                      value: computation.value,
+                      [field]: evidence[field],
+                      //createdAt: evidence.createdAt,
+                      //authorLogin: evidence.author.login
+                    });
+                  }
                 }
               });
             }
@@ -321,35 +390,6 @@ app.post(apiName + '/config', (req, res) => {
 
   fs.writeFileSync(path.join(__dirname, 'config.js'), configData);
   res.json({ message: 'Config updated successfully' });
-});
-/**
- * @swagger
- * /glassmatrix/api/v1/documentation:
- *  get:
- *    tags: [documentation]
- *    description: Use to get the documentation PDF
- *    responses:
- *      '200':
- *        description: A successful response
- */
-app.get(apiName + '/documentation', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'documentation.pdf');
-  res.sendFile(filePath);
-});
-
-/**
- * @swagger
- * /glassmatrix/api/v1/pdf:
- *  get:
- *    tags: [documentation]
- *    description: Use to get the documentation PDF
- *    responses:
- *      '200':
- *        description: A successful response
- */
-app.get(apiName + '/pdf', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'documentation.pdf');
-  res.sendFile(filePath);
 });
 /**
  * @swagger
@@ -923,14 +963,15 @@ app.delete(apiName + '/tpa/files/tpaFile/:subdirectory/:fileName', (req, res) =>
  *        description: A successful response
  */
 app.post(apiName + '/github/token/save', (req, res) => {
-  const token = req.body.token;
+  const tokens = req.body.token;
   const filePath = path.join(__dirname, '/src/assets/token', 'code.json');
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (!err) {
       fs.unlinkSync(filePath);
     }
-    fs.writeFile(filePath, JSON.stringify({ token }, null, 2), (err) => {
+    const token = tokens.split(',').map(tkn => tkn.trim());
+    fs.writeFile(filePath, JSON.stringify({token: token}, null, 2), (err) => {
       if (err) {
         console.error(err);
         res.status(500).json({ message: 'An error occurred while saving the token.' });
@@ -995,6 +1036,182 @@ app.delete(apiName + '/github/token/delete', (req, res) => {
 
 /**
  * @swagger
+ *  /glassmatrix/api/v1/gitlab/token/save:
+ *  post:
+ *    tags: [Gitlab]
+ *    description: Use to save a token
+ *    parameters:
+ *      - name: token
+ *        description: Token to be saved
+ *        in: formData
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.post(apiName + '/gitlab/token/save', (req, res) => {
+  const tokens = req.body.token;
+  const filePath = path.join(__dirname, '/src/assets/gl-token', 'code.json');
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      fs.unlinkSync(filePath);
+    }
+    const token = tokens.split(',').map(tkn => tkn.trim());
+    fs.writeFile(filePath, JSON.stringify({token: token}, null, 2), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while saving the token.' });
+      } else {
+        res.json({ message: 'Token saved successfully.' });
+      }
+    });
+  });
+});
+/**
+ * @swagger
+ * /glassmatrix/api/v1/gitlab/token/get:
+ *  get:
+ *    tags: [Gitlab]
+ *    description: Use to get the saved token
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.get(apiName + '/gitlab/token/get', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/gl-token', 'code.json');
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the token.' });
+    } else {
+      const { token } = JSON.parse(data);
+      res.json({ token });
+    }
+  });
+});
+/**
+ * @swagger
+ * /glassmatrix/api/v1/gitlab/token/delete:
+ *  delete:
+ *    tags: [Gitlab]
+ *    description: Use to delete the saved token
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.delete(apiName + '/gitlab/token/delete', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/gl-token', 'code.json');
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File does not exist:', err);
+      res.status(404).json({ message: 'File does not exist.' });
+    } else {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('An error occurred while deleting the file:', err);
+          res.status(500).json({ message: 'An error occurred while deleting the file.' });
+        } else {
+          res.json({ message: 'File deleted successfully.' });
+        }
+      });
+    }
+  });
+});
+
+/**
+ * @swagger
+ *  /glassmatrix/api/v1/jira/token/save:
+ *  post:
+ *    tags: [Jira]
+ *    description: Use to save a token
+ *    parameters:
+ *      - name: token
+ *        description: Token to be saved
+ *        in: formData
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.post(apiName + '/jira/token/save', (req, res) => {
+  const tokens = req.body.token;
+  const filePath = path.join(__dirname, '/src/assets/jira-token', 'code.json');
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      fs.unlinkSync(filePath);
+    }
+    const token = tokens.split(',').map(tkn => tkn.trim());
+    fs.writeFile(filePath, JSON.stringify({token: token}, null, 2), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred while saving the token.' });
+      } else {
+        res.json({ message: 'Token saved successfully.' });
+      }
+    });
+  });
+});
+/**
+ * @swagger
+ * /glassmatrix/api/v1/jira/token/get:
+ *  get:
+ *    tags: [Jira]
+ *    description: Use to get the saved token
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.get(apiName + '/jira/token/get', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/jira-token', 'code.json');
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while reading the token.' });
+    } else {
+      const { token } = JSON.parse(data);
+      res.json({ token });
+    }
+  });
+});
+/**
+ * @swagger
+ * /glassmatrix/api/v1/jira/token/delete:
+ *  delete:
+ *    tags: [Jira]
+ *    description: Use to delete the saved token
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+app.delete(apiName + '/jira/token/delete', (req, res) => {
+  const filePath = path.join(__dirname, '/src/assets/jira-token', 'code.json');
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File does not exist:', err);
+      res.status(404).json({ message: 'File does not exist.' });
+    } else {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('An error occurred while deleting the file:', err);
+          res.status(500).json({ message: 'An error occurred while deleting the file.' });
+        } else {
+          res.json({ message: 'File deleted successfully.' });
+        }
+      });
+    }
+  });
+});
+
+/**
+ * @swagger
  * /glassmatrix/api/v1/github/cloneRepo:
  *  post:
  *    tags: [Github]
@@ -1037,6 +1254,52 @@ app.post(apiName + '/github/cloneRepo', (req, res) => {
     }
   });
 });
+
+/**
+ * @swagger
+ * /glassmatrix/api/v1/gitlab/cloneRepo:
+ *  post:
+ *    tags: [Gitlab]
+ *    description: Use to clone a GitLab repository
+ *    parameters:
+ *      - name: owner
+ *        description: Owner of the repository
+ *        in: formData
+ *        required: true
+ *        type: string
+ *      - name: repoName
+ *        description: Name of the repository to be cloned
+ *        in: formData
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+
+app.post(apiName + '/gitlab/cloneRepo', (req, res) => {
+  const { owner, repoName } = req.body;
+  const repoUrl = `https://gitlab.com/${owner}/${repoName}.git`;
+  const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
+
+  rimraf(repoPath, (err) => {
+    if (err) {
+      res.status(500).send('Error deleting directory: ' + err.message);
+    } else {
+      console.log(`Cloning repository ${repoName} into ${repoPath}`);
+      git.clone(repoUrl, repoPath)
+        .then(() => {
+          console.log('Repository cloned successfully');
+          res.json({ message: 'Repository cloned successfully' });
+        })
+        .catch((error) => {
+          console.error('Error cloning repository:', error);
+          res.status(500).send('Error cloning repository: ' + error.message);
+        });
+    }
+  });
+});
+
 /**
  * @swagger
  * /glassmatrix/api/v1/github/listRepos:
@@ -1229,12 +1492,18 @@ app.delete(apiName + '/github/deleteBranch/:repoName/:branchName', async (req, r
   try {
     await exec(`git checkout main`, { cwd: repoPath });
 
-    const { stdout, stderr } = await exec(`git branch -d ${branchName}`, { cwd: repoPath });
-    if (stderr) {
+    const { stdout, stderr } = await exec(`git branch -d ${decodeURIComponent(branchName)}`, { cwd: repoPath });
+    if (stderr && !stderr.includes('warning')) {
       console.error('Error deleting branch:', stderr);
       res.status(500).send('Error deleting branch: ' + stderr);
     } else {
-      res.json({ message: `Branch ${branchName} deleted successfully` });
+      const { stdoutRemote, stderrRemote } = await exec(`git push origin -d ${decodeURIComponent(branchName)}`, { cwd: repoPath });
+      if (stderr) {
+        console.error('Error deleting branch:', stderrRemote);
+        res.status(500).send('Error deleting branch: ' + stderrRemote);
+      } else {
+        res.json({ message: `Branch ${decodeURIComponent(branchName)} deleted successfully` });
+      }
     }
   } catch (err) {
     console.error('Error executing git command:', err);
@@ -1267,12 +1536,12 @@ app.post(apiName + '/github/changeBranch/:repoName/:branchName', async (req, res
   const repoPath = path.join(__dirname, 'assets', 'repositories', repoName);
 
   try {
-    const { stdout, stderr } = await exec(`git checkout ${branchName}`, { cwd: repoPath });
+    const { stdout, stderr } = await exec(`git checkout ${decodeURIComponent(branchName)}`, { cwd: repoPath });
     if (stderr && !stderr.includes('Already on')) {
       console.error('Error changing branch:', stderr);
       res.status(500).send('Error changing branch: ' + stderr);
     } else {
-      res.json({ message: `Switched to branch ${branchName}` });
+      res.json({ message: `Switched to branch ${decodeURIComponent(branchName)}` });
     }
   } catch (err) {
     console.error('Error executing git command:', err);
@@ -1505,11 +1774,4 @@ app.post('/api/convertYaml', async (req, res) => {
   }
 });
 
-app.get('/api', (req, res) => {
-  res.redirect('/api-docs');
-});
-
-app.get('/docs', (req, res) => {
-  res.redirect('/api-docs');
-});
 app.listen(6012, () => console.log('Server is running on port 6012'));

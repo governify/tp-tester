@@ -8,6 +8,7 @@ textarea {
   width: 100%;
   height: 600px;
   resize: none;
+  font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 button:enabled {
   background-color: green;

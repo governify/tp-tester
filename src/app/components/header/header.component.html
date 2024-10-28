@@ -5,6 +5,8 @@
   <button class="config-button" routerLink="/config">
     <i class="fa fa-cog"></i>
   </button>
+  <div class="backend-status" *ngIf="isBackendEnabled"><span class="dot" style="background-color: lightgreen;"></span>{{ 'GH_SIMULATOR.CLONE_PAGE.BE_ENABLED' | translate }}</div>
+  <div class="backend-status" *ngIf="!isBackendEnabled"><span class="dot" style="background-color: red;"></span>{{ 'GH_SIMULATOR.CLONE_PAGE.BE_DISABLED' | translate }}</div>
   <div class="language-buttons">
     <button (click)="changeLanguage('en')">
       <img src="assets/flags/uk.png" alt="English">

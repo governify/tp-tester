@@ -33,7 +33,7 @@ export class CloneComponent implements OnInit {
   getToken(): void {
     this.glassmatrixService.getToken().subscribe(
       response => {
-        this.token = response.token;
+        this.token = response.token[0];
         this.getRepos();
       },
       () => this.token = 'Token not found'

@@ -26,6 +26,9 @@
 </table>
 <br>
 <hr>
+<h3>{{ 'CONFIG.ACCESS_KEY' | translate }}</h3>
+<app-access-key></app-access-key>
+<hr>
 <h3>{{ 'CONFIG.GITHUB_TOKEN' | translate }}</h3>
 <div class="alert alert-info alert-dismissible fade show custom-alert" role="alert" *ngIf="showWarningHelp">
   <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -37,6 +40,14 @@
   </button>
 </div>
 <app-token></app-token>
+<br>
+<hr>
+<h3>{{ 'CONFIG.GITLAB_TOKEN' | translate }}</h3>
+<app-gl-token></app-gl-token>
+<br>
+<hr>
+<h3>{{ 'CONFIG.JIRA_TOKEN' | translate }}</h3>
+<app-jira-token></app-jira-token>
 <br>
 <hr>
 <h3>{{ 'CONFIG.CONSTANTS' | translate }}</h3>

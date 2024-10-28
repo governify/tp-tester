@@ -5,7 +5,7 @@ import {GlassmatrixService} from "../../../services/glass-matrix.service";
 import * as yaml from 'json-to-pretty-yaml';
 import {BASE_URL} from "../../../../../lockedConfig";
 import {GithubService} from "../../../services/github.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, tap, throwError} from "rxjs";
 import {BluejayService} from "../../../services/bluejay.service";
 import {FilesService} from "../../../services/files.service";
@@ -85,7 +85,7 @@ export class YamlEditComponent implements OnInit {
   getToken(): void {
     this.glassmatrixService.getToken().subscribe(
       response => {
-        this.token = response.token;
+        this.token = response.token[0];
       },
       () => this.token = 'Token not found'
     );
@@ -118,7 +118,8 @@ export class YamlEditComponent implements OnInit {
         return Promise.all(step.with.map(({key, conditions}) => {
           return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
-              this.http.get<any>(`http://localhost:6012/glassmatrix/api/v1/getData/${key}`, {}).subscribe((data: any) => {
+              const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
+              this.http.get<any>(`${BASE_URL}:6012/glassmatrix/api/v1/getData/${key}`, { headers }).subscribe((data: any) => {
                 // Comprueba si el campo especificado existe en los datos devueltos
                 if (data) {
                   data.forEach((item: any) => {
@@ -370,7 +371,8 @@ export class YamlEditComponent implements OnInit {
 
   executeYaml(): void {
     this.isLoading = true;
-    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }).subscribe(data => {
+    const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
+    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }, { headers }).subscribe(data => {
       this.response = '';
       data.steps.reduce((prevPromise, step: Step) => {
         return prevPromise.then(() => {
@@ -451,10 +453,11 @@ export class YamlEditComponent implements OnInit {
               this.computationResponse += JSON.stringify(response, null, 2) + '\n\n';
 
               // Eliminar todos los datos existentes en la base de datos
-              this.http.delete(`${BASE_URL}:6012/glassmatrix/api/v1/deleteData`).subscribe(
+              const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
+              this.http.delete(`${BASE_URL}:6012/glassmatrix/api/v1/deleteData`, { headers }).subscribe(
                 () => {
                   // Guardar la respuesta en la base de datos a través del servidor Express
-                  this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/saveData`, response).subscribe(
+                  this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/saveData`, response, { headers }).subscribe(
                     (res) => console.log('Data saved successfully'),
                     (err) => console.error('Error saving data:', err)
                   );

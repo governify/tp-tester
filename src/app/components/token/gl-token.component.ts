@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {GlassmatrixService} from "../../services/glass-matrix.service";
 
 @Component({
-  selector: 'app-token',
+  selector: 'app-gl-token',
   templateUrl: './token.component.html',
   styleUrls: ['./token.component.css']
 })
-export class TokenComponent implements OnInit {
+export class GlTokenComponent implements OnInit {
   token!: string[];
   showToken = false;
   showEdit = false;
@@ -19,7 +19,7 @@ export class TokenComponent implements OnInit {
   }
 
   getToken(): void {
-    this.glassmatrixService.getToken().subscribe(
+    this.glassmatrixService.getGLToken().subscribe(
       response => {
         this.token = response.token;
       },
@@ -28,7 +28,7 @@ export class TokenComponent implements OnInit {
   }
 
   saveToken(): void {
-    this.glassmatrixService.saveToken(this.newToken).subscribe(
+    this.glassmatrixService.saveGLToken(this.newToken).subscribe(
       () => {
         this.token = this.newToken;
         this.newToken = [''];
@@ -39,7 +39,7 @@ export class TokenComponent implements OnInit {
   }
 
   updateToken(): void {
-    this.glassmatrixService.deleteToken().subscribe(
+    this.glassmatrixService.deleteGLToken().subscribe(
       () => {
         this.saveToken();
         this.showEdit = false;

@@ -1,10 +1,7 @@
-FROM node:14 as build
+FROM node:20-alpine as build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm run build
-
-FROM nginx:1.19
-COPY --from=build /app/dist/my-app /usr/share/nginx/html
-COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
+RUN apk add --no-cache git
+CMD ["npm", "run", "server"]

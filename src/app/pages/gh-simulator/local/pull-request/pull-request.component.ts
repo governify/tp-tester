@@ -36,7 +36,7 @@ export class PullRequestComponent implements OnInit {
   getToken(): void {
     this.glassmatrixService.getToken().subscribe(
       response => {
-        this.token = response.token;
+        this.token = response.token[0];
         this.owner = this.githubService.getUserName(this.token);
         this.getBranches();
         this.getOpenPullRequests();
