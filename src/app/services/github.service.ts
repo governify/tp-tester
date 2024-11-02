@@ -14,12 +14,12 @@ export class GithubService {
     this.octokit = new Octokit();
   }
   listBranchesForRepo(owner: string, repo: string): Observable<any> {
-    return this.http.get(`https://api.github.com/repos/${owner}/${repo}/branches`);
+    return this.http.get(`${this.apiUrl}/repos/${owner}/${repo}/branches`);
   }
 
   getUserName(token: string): Observable<string> {
     const headers = new HttpHeaders({ Authorization: `token ${token}` });
-    return this.http.get<{login: string}>('https://api.github.com/user', { headers })
+    return this.http.get<{login: string}>(`${this.apiUrl}/user`, { headers })
       .pipe(map(user => user.login));
   }
 
@@ -27,7 +27,7 @@ export class GithubService {
     const headers = new HttpHeaders({ Authorization: `token ${token}` });
     return this.getUserName(token).pipe(
       switchMap(userName =>
-        this.http.get<any[]>('https://api.github.com/user/repos', { headers }).pipe(
+        this.http.get<any[]>(`${this.apiUrl}/user/repos`, { headers }).pipe(
           map((repos: any[]) => repos.filter(repo => !repo.private && repo.owner.login === userName)),
           catchError(error => {
             console.error('Error getting repos:', error);
@@ -39,7 +39,7 @@ export class GithubService {
   }
 
   getRepoInfo(owner: string, repo: string): Observable<any> {
-    return this.http.get(`https://api.github.com/repos/${owner}/${repo}`);
+    return this.http.get(`${this.apiUrl}/repos/${owner}/${repo}`);
   }
 
   createPullRequest(token: string, owner: string, repo: string, prTitle: string, prHead: string, prBase: string, prBody: string): Observable<any> {
@@ -152,5 +152,71 @@ export class GithubService {
     };
 
     return this.http.post(url, issue, { headers });
+  }
+
+  createBranch(token: string, owner: string, repo: string, branchName: string, baseBranch: string): Observable<any> {
+    return this.getBranches(token, owner, repo).pipe(
+      switchMap((branches: any[]) => {
+        if (branches.length > 0) {
+          const foundBranch = branches.find(brnch => brnch.name === baseBranch);
+          if (!foundBranch) throw new Error('Base branch not found');
+
+          const url = `${this.apiUrl}/repos/${owner}/${repo}/git/refs`;
+          const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json'
+          };
+          const data = {ref: `refs/heads/${branchName}`, sha: foundBranch.commit.sha};
+
+          return this.http.post(url, data, {headers});
+        } else {
+          throw new Error('No branches found');
+        }
+      })
+    );
+  }
+
+  createFile(token: string, owner: string, repo: string, fileName: string, file: {message: string, content: string, branch: string}): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/contents/${fileName}`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+
+    return this.http.put(url, file, { headers });
+  }
+
+  getFile(token: string, owner: string, repo: string, fileName: string, branch: string): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/contents/${fileName}?ref=${branch}`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+
+    return this.http.get(url, { headers });
+  }
+
+  deleteFile(token: string, owner: string, repo: string, fileName: string, file: {message: string, branch: string}): Observable<any> {
+    return this.getFile(token, owner, repo, fileName, file.branch).pipe(
+      switchMap((foundFile: any) => {
+        if (!foundFile) throw new Error('File not found');
+        const url = `${this.apiUrl}/repos/${owner}/${repo}/contents/${fileName}`;
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github+json'
+        };
+
+        return this.http.delete(url, { headers: headers, body: {message: file.message, sha: foundFile.sha, branch: file.branch} });
+      })
+    );
+  }
+
+  deleteBranch(token: string, owner: string, repo: string, branchName: string): Observable<any[]> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/git/refs/heads/${branchName}`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+    return this.http.delete<any[]>(url, { headers });
   }
 }

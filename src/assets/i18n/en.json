@@ -433,7 +433,15 @@
     "example44": "Info from a GitLab repository",
     "example45": "List of GitLab repositories",
     "example46": "Edit a Jira issue",
-    "example47": "Move a Jira issue"
+    "example47": "Move a Jira issue",
+    "example48": "Create branch with API",
+    "example49": "Delete branch with API",
+    "example50": "Create file with API",
+    "example51": "Delete file with API",
+    "example52": "Create GitLab branch with API",
+    "example53": "Delete GitLab branch with API",
+    "example54": "Create GitLab file with API",
+    "example55": "Delete GitLab file with API"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",

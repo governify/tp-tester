@@ -317,6 +317,7 @@ export class TestsComponent implements OnInit {
       'github/pullCurrentBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.pullCurrentBranch(step.with['repoName']).toPromise(),
       'github/listRepos': () => this.glassmatrixService.listRepos().toPromise(),
       'github/getBranches': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.getBranches(step.with['repoName']).toPromise(),
+      'github/getBranchesAPI': (step: { with: { [x: string]: string; }; }) => this.githubService.getBranches(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName']).toPromise(),
       'github/getRepoInfo': (step: { with: { [x: string]: string; }; }) => this.githubService.getRepoInfo(step.with['repoName'], step.with['branchName']).toPromise(),
       'gitlab/getOpenMR': (step: { with: { [x: string]: string; }; }) => this.gitlabService.getOpenMergeRequests(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName']).toPromise(),
       'gitlab/pullCurrentBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.pullCurrentBranch(step.with['repoName']).toPromise(),
@@ -400,7 +401,12 @@ export class TestsComponent implements OnInit {
         const branchFormValue = { branchName: step.with['branchName'] };
         return this.glassmatrixService.createBranch(step.with['repoName'], branchFormValue).toPromise();
       },
+      'github/createBranchAPI': (step: { with: { [x: string]: string; }; }) => this.githubService.createBranch(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['branchName'], step.with['baseBranch']).toPromise(),
       'github/createFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.createFile(step.with['repoName'], step.with['fileName'], step.with['fileContent']).toPromise(),
+      'github/createFileAPI': (step: { with: { [x: string]: string; }; }) => {
+        const file = { message: step.with['commitMessage'], content: btoa(step.with['fileContent']), branch: step.with['branch'] };
+        return this.githubService.createFile(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['fileName'], file).toPromise();
+      },
       'github/createCommit': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.createCommit(step.with['repoName'], step.with['fileContent'], step.with['commitMessage']).toPromise(),
       'github/commitAllChanges': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.commitAllChanges(step.with['repoName'], step.with['commitMessage']).toPromise(),
       'github/pushChanges': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.pushChanges(step.with['repoName']).toPromise(),
@@ -409,6 +415,7 @@ export class TestsComponent implements OnInit {
         const branchFormValue = { branchName: step.with['branchName'] };
         return this.glassmatrixService.createBranch(step.with['repoName'], branchFormValue).toPromise();
       },
+      'gitlab/createBranchAPI': (step: { with: { [x: string]: string; }; }) => this.gitlabService.createBranch(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['branchName'], step.with['baseBranch']).toPromise(),
       'gitlab/createBranchLastJiraIssue': (step: { with: { [x: string]: string; }; }) => {
         return this.jiraService.getIssues(this.jiratoken[this.tokenIndex], step.with['domain']).toPromise().then((data) => {
             // @ts-ignore
@@ -426,6 +433,10 @@ export class TestsComponent implements OnInit {
         )
       },
       'gitlab/createFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.createFile(step.with['repoName'], step.with['fileName'], step.with['fileContent']).toPromise(),
+      'gitlab/createFileAPI': (step: { with: { [x: string]: string; }; }) => {
+        const file = { commit_message: step.with['commitMessage'], content: step.with['fileContent'], branch: step.with['branch'] };
+        return this.gitlabService.createFile(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName'], encodeURIComponent(step.with['fileName']), file).toPromise();
+      },
       'gitlab/createCommit': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.createCommit(step.with['repoName'], step.with['fileContent'], step.with['commitMessage']).toPromise(),
       'gitlab/commitAllChanges': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.commitAllChanges(step.with['repoName'], step.with['commitMessage']).toPromise(),
       'gitlab/pushChanges': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.pushChanges(step.with['repoName']).toPromise(),
@@ -481,9 +492,15 @@ export class TestsComponent implements OnInit {
     'DELETE': {
       'github/deleteRepo': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteRepo(step.with['repoName']).toPromise(),
       'github/deleteBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteBranch(step.with['repoName'], step.with['branchName']).toPromise(),
+      'github/deleteBranchAPI': (step: { with: { [x: string]: string; }; }) => this.githubService.deleteBranch(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['branchName']).toPromise(),
       'github/deleteFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteGithubFile(step.with['repoName'], step.with['fileName']).toPromise(),
+      'github/deleteFileAPI': (step: { with: { [x: string]: string; }; }) => {
+        const file = { message: step.with['commitMessage'], branch: step.with['branch'] };
+        return this.githubService.deleteFile(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['fileName'], file).toPromise();
+      },
       'gitlab/deleteRepo': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteRepo(step.with['repoName']).toPromise(),
       'gitlab/deleteBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteBranch(step.with['repoName'], encodeURIComponent(step.with['branchName'])).toPromise(),
+      'gitlab/deleteBranchAPI': (step: { with: { [x: string]: string; }; }) => this.gitlabService.deleteBranch(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName'], encodeURIComponent(step.with['branchName'])).toPromise(),
       'gitlab/deleteBranchLastJiraIssue': (step: { with: { [x: string]: string; }; }) => {
         return this.jiraService.getIssues(this.jiratoken[this.tokenIndex], step.with['domain']).toPromise().then((data) => {
             // @ts-ignore
@@ -498,7 +515,11 @@ export class TestsComponent implements OnInit {
           }
         )
       },
-      'gitlab/deleteFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteGithubFile(step.with['repoName'], step.with['fileName']).toPromise()
+      'gitlab/deleteFile': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.deleteGithubFile(step.with['repoName'], step.with['fileName']).toPromise(),
+      'gitlab/deleteFileAPI': (step: { with: { [x: string]: string; }; }) => {
+        const file = { commit_message: step.with['commitMessage'], branch: step.with['branch'] };
+        return this.gitlabService.deleteFile(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName'], encodeURIComponent(step.with['fileName']), file).toPromise();
+      }
     }
   };
 

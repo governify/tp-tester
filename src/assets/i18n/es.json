@@ -433,7 +433,15 @@
     "example44": "Información de un repositorio de GitLab",
     "example45": "Lista de repositorios de GitLab",
     "example46": "Editar incidencia de Jira",
-    "example47": "Mover incidencia de Jira"
+    "example47": "Mover incidencia de Jira",
+    "example48": "Crear rama con API",
+    "example49": "Borrar rama con API",
+    "example50": "Crear archivo con API",
+    "example51": "Borrar archivo con API",
+    "example52": "Crear rama de GitLab con API",
+    "example53": "Borrar rama de GitLab con API",
+    "example54": "Crear archivo de GitLab con API",
+    "example55": "Borrar archivo de GitLab con API"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",

@@ -117,11 +117,31 @@ export class GitlabService {
   }
 
   createBranch(token: string, owner: string, repo: string, brName: string, brSource: string): Observable<any> {
-    const url = `${this.apiUrl}/projects/${owner}%2F${repo}/repository/branches`;
+    const url = `${this.apiUrl}/projects/${owner}%2F${repo}/repository/branches?branch=${brName}&ref=${brSource}`;
     const headers = { "PRIVATE-TOKEN": `${token}` };
-    const data = { branch: brName, ref: brSource};
 
-    return this.http.post(url, data, { headers });
+    return this.http.post(url, null, { headers });
+  }
+
+  createFile(token: string, owner: string, repo: string, fileName: string, file: {branch: string, content: string, commit_message: string}): Observable<any> {
+    const url = `${this.apiUrl}/projects/${owner}%2F${repo}/repository/files/${fileName}`;
+    const headers = { "PRIVATE-TOKEN": `${token}` };
+
+    return this.http.post(url, file, { headers });
+  }
+
+  deleteFile(token: string, owner: string, repo: string, fileName: string, file: {branch: string, commit_message: string}): Observable<any> {
+    const url = `${this.apiUrl}/projects/${owner}%2F${repo}/repository/files/${fileName}`;
+    const headers = { "PRIVATE-TOKEN": `${token}` };
+
+    return this.http.delete(url, { headers: headers, body: file });
+  }
+
+  deleteBranch(token: string, owner: string, repo: string, brName: string): Observable<any> {
+    const url = `${this.apiUrl}/projects/${owner}%2F${repo}/repository/branches/${brName}`;
+    const headers = { "PRIVATE-TOKEN": `${token}` };
+
+    return this.http.delete(url, { headers });
   }
 
   /*getBranches(token: string, owner: string, repo: string): Observable<any[]> {

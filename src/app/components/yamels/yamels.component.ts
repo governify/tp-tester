@@ -419,6 +419,90 @@ export class YamelsComponent implements OnInit {
         issueid: "KAN-1"
         transition: "21"
       method: "POST"`
+    },
+    {
+      id: 'example48',
+      content: `uses: "github/createBranchAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        branchName: "branch2"
+        baseBranch: "main"
+      method: "POST"`
+    },
+    {
+      id: 'example49',
+      content: `- uses: "github/deleteBranchAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        branchName: "branchNameHere"
+      method: "DELETE"`
+    },
+    {
+      id: 'example50',
+      content: `- uses: "github/createFileAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        fileName: "file.txt"
+        fileContent: "content"
+        commitMessage: "Commit message"
+        branch: "branchNameHere"
+      method: "POST"`
+    },
+    {
+      id: 'example51',
+      content: `- uses: "github/deleteFileAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        fileName: "name_of_file"
+        commitMessage: "Commit message"
+        branch: "branchNameHere"
+      method: "DELETE"`
+    },
+    {
+      id: 'example52',
+      content: `uses: "gitlab/createBranchAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        branchName: "branch2"
+        baseBranch: "main"
+      method: "POST"`
+    },
+    {
+      id: 'example53',
+      content: `- uses: "gitlab/deleteBranchAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        branchName: "branchNameHere"
+      method: "DELETE"`
+    },
+    {
+      id: 'example54',
+      content: `- uses: "gitlab/createFileAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        fileName: "file.txt"
+        fileContent: "content"
+        commitMessage: "Commit message"
+        branch: "branchNameHere"
+      method: "POST"`
+    },
+    {
+      id: 'example55',
+      content: `- uses: "gitlab/deleteFileAPI"
+      with:
+        owner: "Antoniiosc7"
+        repoName: "tp-testbench"
+        fileName: "name_of_file"
+        commitMessage: "Commit message"
+        branch: "branchNameHere"
+      method: "DELETE"`
     }
   ];
 
