@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost';
+const BASE_URL = 'https://tester.pompeia.governify.io';
 const DEFAULT_COLLECTOR = 'EVENTS';
 const COLLECTOR_EVENTS_URL = 'https://collector.pompeia.governify.io/api/v2/computations';
 const AGREEMENTS_URL = 'https://registry.pompeia.governify.io/api/v6/agreements';
