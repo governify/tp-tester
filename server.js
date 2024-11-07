@@ -26,7 +26,7 @@ const swaggerOptions = {
       contact: {
         name: 'github.com/antoniiosc7'
       },
-      servers: [`${BASE_URL}:6012`]
+      servers: [`${BASE_URL}`]
     }
   },
   // ['.routes/*.js']

@@ -158,7 +158,7 @@ export class TestsComponent implements OnInit {
           return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
               const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-              this.http.get<any>(`${BASE_URL}:6012/glassmatrix/api/v1/getData/${key}`, { headers }).subscribe((data: any) => {
+              this.http.get<any>(`${BASE_URL}/glassmatrix/api/v1/getData/${key}`, { headers }).subscribe((data: any) => {
                 if (data) {
                   let tempTestStatuses: { text: string, success: boolean }[] = [];
                   data.forEach((item: any) => {
@@ -237,7 +237,7 @@ export class TestsComponent implements OnInit {
       'bluejay/findCheck': (step: { with: { values: any[]; }; }) => {
         return new Promise(resolve => setTimeout(resolve, 1000))
           .then(() => {
-            const url = `${BASE_URL}:6012/glassmatrix/api/v1/bluejay/findCheck`;
+            const url = `${BASE_URL}/glassmatrix/api/v1/bluejay/findCheck`;
             const headers = {'Authorization': `Bearer ${this.token[this.tokenIndex]}`};
 
             return this.http.post(url, {values: step.with.values}, {headers}).toPromise().then((response: any) => {
@@ -526,7 +526,7 @@ export class TestsComponent implements OnInit {
   executeYaml(): void {
     this.isLoading = true;
     const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-    this.http.post<YamlData>(`${BASE_URL}:6012/api/convertYaml`, { yaml: this.yamlContent }, { headers }).subscribe(data => {
+    this.http.post<YamlData>(`${BASE_URL}/api/convertYaml`, { yaml: this.yamlContent }, { headers }).subscribe(data => {
       this.response = '';
       if (data.config && data.config.useFixedWindow) this.fixedWindow = true;
       else this.fixedWindow = false;
@@ -632,10 +632,10 @@ export class TestsComponent implements OnInit {
 
               // Eliminar todos los datos existentes en la base de datos
               const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-              this.http.delete(`${BASE_URL}:6012/glassmatrix/api/v1/deleteData`, { headers }).subscribe(
+              this.http.delete(`${BASE_URL}/glassmatrix/api/v1/deleteData`, { headers }).subscribe(
                 () => {
                   // Guardar la respuesta en la base de datos a través del servidor Express
-                  this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/saveData`, response, { headers }).subscribe(
+                  this.http.post(`${BASE_URL}/glassmatrix/api/v1/saveData`, response, { headers }).subscribe(
                     (res) => console.log('Data saved successfully'),
                     (err) => console.error('Error saving data:', err)
                   );

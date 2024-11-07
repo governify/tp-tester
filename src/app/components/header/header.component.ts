@@ -14,7 +14,7 @@ import { GlassmatrixService } from 'src/app/services/glass-matrix.service';
 export class HeaderComponent implements OnInit {
   isElectron: boolean;
   isBackendEnabled: boolean = false;
-  private url = `${BASE_URL}:6012/glassmatrix/api/v1`;
+  private url = `${BASE_URL}/glassmatrix/api/v1`;
 
   constructor(private translate: TranslateService, public dialog: MatDialog, private glassmatrixService: GlassmatrixService) {
     // @ts-ignore

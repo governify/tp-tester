@@ -7,7 +7,7 @@ import { BASE_URL} from "../../../lockedConfig";
   providedIn: 'root'
 })
 export class GlassmatrixService {
-  private url = `${BASE_URL}:6012/glassmatrix/api/v1`;
+  private url = `${BASE_URL}/glassmatrix/api/v1`;
   public getBackendEnabled = new Subject<boolean>();
   constructor(private http: HttpClient) { }
 

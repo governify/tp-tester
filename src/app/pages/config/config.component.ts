@@ -38,13 +38,13 @@ export class ConfigComponent implements OnInit {
     private dialog: MatDialog,
     private viewportScroller: ViewportScroller,) {
     this.getConfig()
-    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${BASE_URL}:6012/glassmatrix/api/v1/pdf#toolbar=0`);
+    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${BASE_URL}/glassmatrix/api/v1/pdf#toolbar=0`);
   }
 
   ngOnInit(): void {
     const portsToHandle = ['3000/tcp', '80/tcp', '8086/tcp', '27017/tcp', '5173/tcp', '6379/tcp'];
     const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-    this.http.get<any[]>(`${BASE_URL}:6012/api/containers`, { headers }).subscribe(containers => {
+    this.http.get<any[]>(`${BASE_URL}/api/containers`, { headers }).subscribe(containers => {
       // @ts-ignore
       this.containers = containers.flatMap(container => {
         const ports = container.NetworkSettings.Ports;
@@ -66,14 +66,14 @@ export class ConfigComponent implements OnInit {
   }
   getConfig() {
     const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-    this.http.get(`${BASE_URL}:6012/glassmatrix/api/v1/config`, { headers }).subscribe((config: any) => {
+    this.http.get(`${BASE_URL}/glassmatrix/api/v1/config`, { headers }).subscribe((config: any) => {
       this.config = config;
     });
   }
 
   updateConfig() {
     const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-    this.http.post(`${BASE_URL}:6012/glassmatrix/api/v1/config`, this.config, { headers }).subscribe(() => {
+    this.http.post(`${BASE_URL}/glassmatrix/api/v1/config`, this.config, { headers }).subscribe(() => {
       alert('Config updated successfully');
     });
   }
