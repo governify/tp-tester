@@ -48,6 +48,8 @@ app.use(bodyParser.json());
 
 const apiName = '/glassmatrix/api/v1';
 
+app.use(express.static(path.join(__dirname, 'dist')));
+
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

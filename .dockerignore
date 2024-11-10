@@ -37,16 +37,11 @@ testem.log
 Thumbs.db
 
 /src/assets/savedMetrics/**/*.json
-/src/assets/token/code.json
 /assets/repositories/**
 assets/repositories/
 /src/assets/savedMetrics/tpaMetrics/**/*.json
 /src/assets/savedMetrics/individualMetrics/**/*.json
 /src/assets/savedMetrics/tpaMetrics/**/*.yaml
 /src/assets/savedMetrics/individualMetrics/**/*.yaml
-src/assets/token/code.json
-src/assets/token/code_local.json
-src/assets/jira-token/code.json
-src/assets/gl-token/code.json
 src/assets/savedYAML/**/*.yaml
 myDatabase.db
