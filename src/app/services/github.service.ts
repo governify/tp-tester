@@ -219,4 +219,67 @@ export class GithubService {
     };
     return this.http.delete<any[]>(url, { headers });
   }
+
+  getProjectV2Data(token: string, owner: string, repo: string): Observable<any> {
+    const url = `${this.apiUrl}/graphql`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github.starfox-preview+json'
+    };
+    const data = {
+      query: `query {
+                  repository(owner: "${owner}", name: "${repo}") {
+                    id
+                    projectsV2(first: 1) {
+                      nodes {
+                        id
+                      }
+                    }
+                  }
+                }
+              }`
+    };
+    return this.http.post(url, data, { headers });
+  }
+
+  createIssueProject(token: string, owner: string, repo: string, issue: {title: string, body: string}): Observable<any> {
+    return this.getProjectV2Data(token, owner, repo).pipe(
+      switchMap((repoData: any) => {
+        const repoId = repoData.data?.repository?.id;
+        if (!repoId) throw new Error('Repo not found');
+        console.log(repoData);
+        const projectId = repoData.data.repository.projectsV2?.nodes[0]?.id;
+        if (!projectId) throw new Error('Project not found');
+        const url = `${this.apiUrl}/graphql`;
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.starfox-preview+json'
+        };
+        const data = {
+          query: `mutation {
+                    createIssue(input: { repositoryId: "${repoId}", title: "${issue.title}", body: "${issue.body}" }) {
+                      issue {
+                        id
+                      }
+                    }
+                  }`
+        };
+        return this.http.post(url, data, { headers }).pipe(
+          switchMap((issueData: any) => {
+            const issueId = issueData.data?.createIssue?.issue?.id;
+            const data2 = {
+              query: `mutation {
+                        addProjectV2ItemById(input: { projectId: "${projectId}", contentId: "${issueId}" }) {
+                          item {
+                            id
+                          }
+                        }
+                      }`
+            };
+            return this.http.post(url, data2, { headers })
+          })
+        );
+      })
+    )
+  }
 }

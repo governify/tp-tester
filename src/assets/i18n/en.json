@@ -441,7 +441,8 @@
     "example52": "Create GitLab branch with API",
     "example53": "Delete GitLab branch with API",
     "example54": "Create GitLab file with API",
-    "example55": "Delete GitLab file with API"
+    "example55": "Delete GitLab file with API",
+    "example56": "Create issues in a project"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",

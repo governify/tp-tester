@@ -441,7 +441,8 @@
     "example52": "Crear rama de GitLab con API",
     "example53": "Borrar rama de GitLab con API",
     "example54": "Crear archivo de GitLab con API",
-    "example55": "Borrar archivo de GitLab con API"
+    "example55": "Borrar archivo de GitLab con API",
+    "example56": "Crear incidencias en un proyecto"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",

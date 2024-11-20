@@ -503,7 +503,17 @@ export class YamelsComponent implements OnInit {
         commitMessage: "Commit message"
         branch: "branchNameHere"
       method: "DELETE"`
-    }
+    },
+    {
+      id: 'example56',
+      content: `- uses: "github/createIssueProject"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        title: "titleText"
+        body: "bodyText"
+      method: "POST"`
+    },
   ];
 
   constructor(private translate: TranslateService) { }
