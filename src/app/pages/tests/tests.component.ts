@@ -396,6 +396,10 @@ export class TestsComponent implements OnInit {
         const issue = { title: step.with['title'], body: step.with['body'] };
         return this.githubService.createIssueProject(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], issue).toPromise();
       },
+      'github/moveIssueProject': (step: { with: { [x: string]: string; }; }) => {
+        const issue = { title: step.with['title'], column: step.with['column'] };
+        return this.githubService.moveIssueProject(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], issue).toPromise();
+      },
       'github/createPR': (step: { with: { [x: string]: string; }; }) => {
         const pr = { title: step.with['title'], head: step.with['head'], base: step.with['base'], body: step.with['body'] };
         return this.githubService.createPullRequest(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], pr.title, pr.head, pr.base, pr.body).toPromise();

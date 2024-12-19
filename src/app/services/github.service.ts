@@ -282,4 +282,74 @@ export class GithubService {
       })
     )
   }
+
+  getColumnData(token: string, projectId: string): Observable<any> {
+    const url = `${this.apiUrl}/graphql`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github.starfox-preview+json'
+    };
+    const data = {
+      query: `query {
+        node(id: "${projectId}") {
+          ... on Project {
+            columns(first: 10) {
+              nodes {
+                id
+                name
+              }
+            }
+          }
+        }
+      }`
+    };
+    return this.http.post(url, data, { headers });
+  }
+
+  moveIssueProject(token: string, owner: string, repo: string, issue: {title: string, column: string}): Observable<any> {
+    return this.getProjectV2Data(token, owner, repo).pipe(
+      switchMap((repoData: any) => {
+        const repoId = repoData.data?.repository?.id;
+        if (!repoId) throw new Error('Repo not found');
+        console.log(repoData);
+        const projectId = repoData.data.repository.projectsV2?.nodes[0]?.id;
+        if (!projectId) throw new Error('Project not found');
+        return this.getColumnData(token, projectId).pipe(
+          switchMap((columnData: any) => {
+            const column = columnData.data?.node?.columns?.nodes.find((col: any) => col.name === issue.column);
+            if (!column) throw new Error(`Column '${issue.column}' not found`);
+            const columnId = column.id;
+            return this.getIssues(token, owner, repo).pipe(
+              switchMap((issueData: any[]) => {
+                const issueToMove = issueData.find((iss: any) => iss.title === issue.title);
+                if (!issueToMove) throw new Error(`Issue with title '${issue.title}' not found`);
+                const issueId = issueToMove.id;
+                const url = `${this.apiUrl}/graphql`;
+                const headers = {
+                  'Authorization': `Bearer ${token}`,
+                  'Accept': 'application/vnd.github.starfox-preview+json',
+                };
+                const mutation = {
+                  query: `
+                    mutation {
+                      moveProjectCard(input: { cardId: "${issueId}", columnId: "${columnId}" }) {
+                        cardEdge {
+                          node {
+                            id
+                          }
+                        }
+                      }
+                    }
+                  `,
+                };
+                return this.http.post(url, mutation, { headers });
+              })
+            );
+          })
+        );
+      })
+    )
+  }
 }
+
+

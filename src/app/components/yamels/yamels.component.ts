@@ -514,6 +514,16 @@ export class YamelsComponent implements OnInit {
         body: "bodyText"
       method: "POST"`
     },
+    {
+      id: 'example57',
+      content: `- uses: "github/moveIssueProject"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        title: "titleText"
+        column: "In Progress"
+      method: "POST"`
+    }
   ];
 
   constructor(private translate: TranslateService) { }
