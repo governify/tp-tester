@@ -25,11 +25,14 @@ This project is an extension of Bluejay. The official documentation for Bluejay 
   - [Test Execution](#test-execution)
   - [Results Visualization](#results-visualization)
   - [Test Results](#test-results)
-  - [Variables to Use](#variables-to-use)
+  - [Variables and Configurations to Use](#variables-and-configurations-to-use)
 - [Configuration Page](#configuration-page)
   - [Get Github Token](#get-github-token)
   - [Swagger API Documentation](#swagger-api-documentation)
   - [Translations](#translations)
+- [Step by step guide to test a metric](#step-by-step-guide-to-test-a-metric)
+- [Deployment](#deployment)
+- [Recommendations for committing to this repo](#recommendations-for-committing-to-this-repo)
 
 ## Introduction
 ### What is Bluejay?
@@ -42,18 +45,22 @@ The purpose of this TP-Tester is, as its name suggests, to first test the metric
 To lift Bluejay-TP Tester in development mode, follow these steps:
 1. Clone the Bluejay-TP Tester repository.
 2. Install the dependencies with `npm install`.
-3. Lift the project with `npm start`.
+3. Set the backend API key through the environment variable TESTER_ACCESS_KEY.
+4. Modify the `BASE_URL` variable within the `config.json` and `lockedConfig.ts` files to the URL where the backend will be available (usually, `http://localhost:6012`).
+5. Lift the project with `npm start`.
 
 This would be enough since the project uses concurrently and lifts both the express server and angular at the same time. The Express server (GlassMatrix API) is lifted on port 6012 and the Angular application on port 4200.
 
 ### With docker
 To lift Bluejay-TP Tester with docker, follow these steps:
 1. Clone the Bluejay-TP Tester repository.
-2. Install the dependencies with `npm install`.
-3. Run `npm run docker`.
+2. Modify the `BASE_URL` variable within the `config.json` and `lockedConfig.ts` files to the URL where the backend will be available (usually, `http://localhost:6012`).
+3. Run `docker build .` with any additional flags you may want to set.
 
-With this, we would have the project lifted on port 6011 the angular web, and the express server on port 6012.# TPA Management
-# TPA PAGE
+With this, we would have both frontend and backend available on port 6012.
+
+# TPA Management
+## TPA PAGE
 The TPA management page allows you to visualize and interact with those TPAs that are within Bluejay. 
 
 ### Existing TPAs
@@ -92,6 +99,7 @@ In this page you can edit the TPA by sections, editing or deleting each metric a
 
 # Metrics
 
+## Metrics Loader
 The Metrics Loader page is designed to manage and test metrics. It provides a user-friendly interface for viewing, creating, and managing metrics.
 
 ### Existing metrics
@@ -194,7 +202,7 @@ The Actions page interface for managing a repository. It provides options to vie
   - [TEST Methods](#test-methods)
 - [Results Visualization](#results-visualization)
 - [Test Results](#test-results)
-- [Variables to Use](#variables-to-use)
+- [Variables and Configurations to Use](#variables-and-configurations-to-use)
   - [actualTime](#actualtime)
   - [value](#value)
   - [minExpectedValue](#minexpectedvalue)
@@ -210,7 +218,7 @@ At the top of the page, there is a table that displays all available YAML files.
 ## Test Execution
 In the execution section, users can enter the name of the YAML file they want to execute. They can also save the current content of the text box (it must follow the example format and the calls will be executed sequentially),
 
-Users will be able to follow a series of "steps". The "steps" are actions that can be performed in the system. These steps are predefined and perform HTTP methods (like 'GET', 'POST', 'PUT', 'DELETE') to the corresponding actions. Here are the possible steps:
+Users will be able to follow a series of "steps". The "steps" are actions that can be performed in the system. These steps are predefined and perform HTTP methods (like 'GET', 'POST', 'PUT', 'DELETE') to the corresponding actions. Here are the possible steps **(TO BE UPDATED WITH NEW STEPS)**:
 
 1. GET Methods
   - `github/getIssue`: This step gets the issues from a specific repository on GitHub.
@@ -252,11 +260,11 @@ Users will be able to follow a series of "steps". The "steps" are actions that c
 After running the test block, the results are displayed in a read-only text area. If the script performed a computation, the results of that computation are also displayed in a read-only text area.
 
 ## Test Results
-In the right column of the page, users can see the results of the tests that have been run. Each test result is displayed on its own card, and users can delete individual test results.
+In the right column of the page, users can see the results of the tests that have been run. Each `bluejay/check` step appears as a separate collapsable block, and within each block, you can find the result of each individual test. A block may be given a specific name through the `testName` parameter of the `bluejay/check` step. Users can delete individual test results or entire blocks at once.
 
 ![img.png](src/assets/images/testResult.png)
 
-## Variables to Use
+## Variables and Configurations to Use
 ### actualTime
 To compute the metric with the current time, you should add actualTime: "true" to the "bluejay/compute/metric" method. If, on the other hand, you want it to use the original time of the metric, you can delete "actualTime" or set it to "false".
 
@@ -330,6 +338,56 @@ The test will be successful if there is any field called like the key field, in 
     method: "TEST"
 ```
 
+### useFixedWindow
+By default, the time windows of all metrics are automatically converted to the current time (e.g. the current day, the current week, the current month, etc.) To override this behavior and use the time windows that are indicated within the metrics, use this configuration option. This will apply to all computations throughout the entire test script.
+
+```yaml
+config:
+  useFixedWindow: true
+steps:
+  - uses: "bluejay/compute/metric"
+    with:
+      ...
+    method: "TEST"
+```
+
+### type
+By default, the `bluejay/check` steps requires all tests to pass for all evidences. If you need the entire test to pass if just a single test passes, use this option ans set it to `OR`.
+
+```yaml
+  - uses: "bluejay/check"
+    with:
+      - key: "additions"
+        conditions:
+          expectedValue: "49"
+    type: OR
+    method: "TEST"
+```
+
+### variables
+When a step returns a JSON object, you may extract the value of an attribute and save it into a variable. This variable can then be used in future steps. Note that only root attributes may be extracted, that is, nested attributes cannot be accessed. Additionally, variables are stored in memory, so they are reset if you exit the Automated Testing page. In the example below, the `number` attribute is stored in the `issueNumber` variable.
+
+```yaml
+  - uses: "github/createIssue"
+    with:
+      ...
+    variables:
+      - variable: "issueNumber"
+        key: "number"
+    method: "TEST"
+```
+
+To use the variable in another step, specify the variable name between dollar signs.
+
+```yaml
+  - uses: "bluejay/check"
+    with:
+      - key: "branchName"
+        conditions:
+          expectedValue: "newbranch/$issueNumber$"
+    method: "TEST"
+```
+
 # Configuration page
 The Configuration page provides a user-friendly interface for managing the configuration of the application. It provides options to view the active Docker containers, update the application's configuration, view the Swagger documentation, and view the application's documentation.
 
@@ -337,13 +395,19 @@ The page is divided into several sections:
 
 1. The Docker Active section displays a table of active Docker containers. Each row in the table represents a Docker container and provides information about the container's ID, name, URL, and port.
 
-2. The Github Token section provides instructions on how to get a Github token. It also includes a button to open a dialog with additional help.
+2. The backend API key. The API key needs to be set up using an environment variable named TESTER_ACCESS_KEY. Then, the key can be entered here to enable the backend. The current backend status (enabled or disabled) can be checked at the top left of the page header.
 
-3. The Constants section provides a form for updating the application's configuration. The form includes fields for the base URL, default collector, collector events URL, agreements URL, and scopes URL. There is a button to submit the form and update the configuration.
+4. The Github Token section provides instructions on how to get a Github token. It also includes a button to open a dialog with additional help. Note that you can enter multiple tokens, separated by commas.
 
-4. The Swagger section provides a link to the Swagger documentation.
+5. The GitLab Token section can be used to enter a GitLab token. You can enter multiple tokens, separated by commas.
 
-5. The Documentation section provides an embedded PDF viewer for viewing the application's documentation. There is also a button to open the documentation in a new tab.
+6. The Jira Token section can be used to save a Jira token. You can enter multiple tokens, separated by commas.
+
+7. The Constants section provides a form for updating the application's configuration. The form includes fields for the base URL, default collector, collector events URL, agreements URL, and scopes URL. There is a button to submit the form and update the configuration.
+
+8. The Swagger section provides a link to the Swagger documentation.
+
+9. The Documentation section provides an embedded PDF viewer for viewing the application's documentation. There is also a button to open the documentation in a new tab.
 
 ## Get github token
 This is a step-by-step guide on how to create a personal access token on GitHub:
@@ -392,3 +456,20 @@ This is a snippet of how the language .json works:
   }
 },
 ```
+
+# Step by step guide to test a metric
+TBD.
+
+# Deployment
+To deploy this application, we recommend using Docker. This way, all files and dependencies are asily bundled and distributed. To deploy the application using Docker, follow these steps:
+
+1. Ensure that no sensitive information, such as API tokens, TPAs or metrics, are included in the project. Note that the `code.json`, `gl-code.json` and `jira-code.json` files need to exist as they are not automatically created, but they should contain placeholders instead of real API tokens.
+
+2. Modify the configuration variables in the `config.json` and `lockedConfig.ts` files as required. This is not mandatory, but is strongly recommended. Set the `BASE_URL` variable to the URL where the backend will be available, including the port if needed. After the application is bundled and deployed, you are able to change the other variables through the Configurations page, and then restarting the Docker container. If you did not set the `BASE_URL` variable, you will need to manually modify both `config.json` and `lockedConfig.ts` files inside the container after deployment, and then restarting the Docker container.
+
+3. Build the Docker image using the `docker build .` command. Use any additional flags that you may want to set, such as the `--tag` flag to give a name to the image.
+
+4. Run the Docker image, either through regular `docker` commands or through `docker-compose`. In either case, set an API key for the backend using the TESTER_ACCESS_KEY environment variable. If the application is being deployed to a public server, it is strongly recommended to set a safe and complex API key, as it is used to access the stored API tokens.
+
+# Recommendations for committing to this repo
+When committing to this repo, make sure that you are not including any sensitive information, such as API tokens, TPAs or metrics. In particular, yo should not upload any changes to the `code.json`, `gl-code.json` and `jira-code.json` files, and no files should be included within the `src/assets/savedMetrics` and the `src/assets/savedMetrics/tpaMetrics` directories. Note that the three token files need to exist in the repo with placeholder tokens, as the application does not automatically create them if they do not exist and will throw an error if that happens. This behavior may be improved in a future update.
