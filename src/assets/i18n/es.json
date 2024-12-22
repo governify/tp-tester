@@ -442,7 +442,9 @@
     "example53": "Borrar rama de GitLab con API",
     "example54": "Crear archivo de GitLab con API",
     "example55": "Borrar archivo de GitLab con API",
-    "example56": "Crear incidencias en un proyecto"
+    "example56": "Crear incidencias en un proyecto",
+    "example57": "Aprobar una PR",
+    "example58": "Aprobar la última PR creada"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",
@@ -457,6 +459,7 @@
     "fixed": "Usando ventana fija",
     "yes": "Sí",
     "no": "No",
+    "passed": "Pasados",
     "FIXEDWINDOW_HELP": "Uso de ventana fija",
     "FIXEDWINDOW_EXPLANATION": "Por defecto, el tester automático de métricas cambia la ventana de tiempo de todas las métricas a la ventana actual, de acuerdo con el periodo de cada métrica (por ejemplo, la semana actual o el mes actual). Si quieres usar la ventana de tiempo original de la métrica, puedes cambiar este comportamiento añadiendo el siguiente fragmento al script de test:"
   },

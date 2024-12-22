@@ -79,12 +79,24 @@
       <div *ngIf="testStatuses.length === 0" class="alert alert-info">
         No test executed yet.
       </div>
-      <div *ngFor="let status of testStatuses; let i = index" class="alert" [ngClass]="{'alert-success': status.success, 'alert-danger': !status.success}">
-        {{ status.text }}
-        <button type="button" class="close float-right bg-transparent" (click)="removeStatus(i)">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let status of testStatuses; let i = index" class="alert" [ngClass]="{'alert-success': status.success, 'alert-danger': !status.success}">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ status.testName }} ({{ 'TESTS.passed' | translate }}: {{ status.passedTests }}/{{ status.totalTests }})
+              <button type="button" class="close float-right bg-transparent" (click)="removeStatus(i)">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngFor="let substatus of status.statuses; let j = index" class="alert" [ngClass]="{'alert-success': substatus.success, 'alert-danger': !substatus.success}">
+            {{ substatus.text }}
+            <button type="button" class="close float-right bg-transparent" (click)="removeSubstatus(i, j)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>      
     </div>
   </div>
 

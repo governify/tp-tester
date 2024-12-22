@@ -154,7 +154,7 @@ export class YamelsComponent implements OnInit {
     },
     {
       id: 'example16',
-      content: `uses: "github/mergeLastOpenPR"
+      content: `- uses: "github/mergeLastOpenPR"
       with:
         repoName: "tp-testbench"
         owner: "Antoniiosc7"
@@ -198,7 +198,7 @@ export class YamelsComponent implements OnInit {
     },
     {
       id: 'example21',
-      content: `uses: "github/createBranch"
+      content: `- uses: "github/createBranch"
       with:
         repoName: "tp-testbench"
         branchName: "branch2"
@@ -340,7 +340,7 @@ export class YamelsComponent implements OnInit {
     },
     {
       id: 'example38',
-      content: `uses: "gitlab/mergeLastOpenMR"
+      content: `- uses: "gitlab/mergeLastOpenMR"
       with:
         repoName: "tp-testbench"
         owner: "Antoniiosc7"
@@ -372,7 +372,7 @@ export class YamelsComponent implements OnInit {
     },
     {
       id: 'example42',
-      content: `uses: "gitlab/createBranch"
+      content: `- uses: "gitlab/createBranch"
       with:
         repoName: "tp-testbench"
         branchName: "branch2"
@@ -422,7 +422,7 @@ export class YamelsComponent implements OnInit {
     },
     {
       id: 'example48',
-      content: `uses: "github/createBranchAPI"
+      content: `- uses: "github/createBranchAPI"
       with:
         owner: "Antoniiosc7"
         repoName: "tp-testbench"
@@ -464,7 +464,7 @@ export class YamelsComponent implements OnInit {
     },
     {
       id: 'example52',
-      content: `uses: "gitlab/createBranchAPI"
+      content: `- uses: "gitlab/createBranchAPI"
       with:
         owner: "Antoniiosc7"
         repoName: "tp-testbench"
@@ -514,6 +514,25 @@ export class YamelsComponent implements OnInit {
         body: "bodyText"
       method: "POST"`
     },
+    {
+      id: 'example57',
+      content: `- uses: "github/approvePR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        prNumber: "1"
+        body: "Review body"
+      method: "PUT"`
+    },
+    {
+      id: 'example58',
+      content: `- uses: "github/approveLastOpenPR"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        body: "Review body"
+      method: "POST"`
+    }
   ];
 
   constructor(private translate: TranslateService) { }

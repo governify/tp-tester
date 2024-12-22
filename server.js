@@ -91,7 +91,7 @@ app.get('/docs', (req, res) => {
   res.redirect('/api-docs');
 });
 
-app.use(checkAccessKey);
+app.use(apiName, checkAccessKey);
 
 app.use((req, res, next) => {
   console.log(`Inicio de petición: ${req.method} ${req.path}`);

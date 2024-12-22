@@ -55,7 +55,7 @@ export class TestsComponent implements OnInit {
   data!: string;
   filename!: string;
   computationResponse!: any;
-  testStatuses: { text: string, success: boolean }[] = [];
+  testStatuses: { testName: string, passedTests: number, totalTests: number, success: boolean, statuses: { text: string, success: boolean }[] }[] = [];
   scope = {
     project: '',
     class: '',
@@ -151,16 +151,18 @@ export class TestsComponent implements OnInit {
         value?: string,
         type?: string,
         createdAt?: string,
-        authorLogin?: string
+        authorLogin?: string,
+        testName?: string
       }) => {
         let testSuccess = false;
+        let tempTestStatus: { testName: string, passedTests: number, totalTests: number, success: boolean, statuses: { text: string, success: boolean }[] } = {testName: step.testName ? step.testName : 'Test', passedTests: 0, totalTests: 0, success: false, statuses: []};
+        let tempTestStatuses: { text: string, success: boolean }[] = [];
         return Promise.all(step.with.map(({key, conditions}) => {
           return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
               const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
               this.http.get<any>(`${BASE_URL}/glassmatrix/api/v1/getData/${key}`, { headers }).subscribe((data: any) => {
                 if (data) {
-                  let tempTestStatuses: { text: string, success: boolean }[] = [];
                   data.forEach((item: any) => {
                     // Si 'value' no está definido en el paso, o si es igual al 'value' en el objeto de datos, entonces procesa el objeto
                     if (item[key] && (step.value === undefined || item['value'] == step.value)) {
@@ -218,12 +220,10 @@ export class TestsComponent implements OnInit {
                       }
                     }
                   });
-                  if (step.type === 'OR' && testSuccess) tempTestStatuses = tempTestStatuses.filter(stts => stts.success === true);
-                  this.testStatuses.push(...tempTestStatuses);
                   resolve();
                 } else {
                   // Si no hay datos, empuja un mensaje indicando que el test ha fallado a this.testStatuses
-                  this.testStatuses.push({
+                  tempTestStatus.statuses.push({
                     text: `Test failed. Field '${key}' not found in the database`,
                     success: false
                   });
@@ -232,9 +232,17 @@ export class TestsComponent implements OnInit {
               }, reject);
             }, 10000);
           });
-        }));
+        })).then(() => {
+          const passedTestStatuses = tempTestStatuses.filter(stts => stts.success === true);
+          if (step.type === 'OR' && testSuccess) tempTestStatuses = passedTestStatuses;
+          tempTestStatus.statuses.push(...tempTestStatuses);
+          tempTestStatus.passedTests = passedTestStatuses.length;
+          tempTestStatus.totalTests = tempTestStatuses.length;
+          if (passedTestStatuses.length == tempTestStatuses.length) tempTestStatus.success = true;
+          this.testStatuses.push(tempTestStatus);
+        });
       },
-      'bluejay/findCheck': (step: { with: { values: any[]; }; }) => {
+      /*'bluejay/findCheck': (step: { with: { values: any[]; }; }) => {
         return new Promise(resolve => setTimeout(resolve, 1000))
           .then(() => {
             const url = `${BASE_URL}/glassmatrix/api/v1/bluejay/findCheck`;
@@ -309,7 +317,7 @@ export class TestsComponent implements OnInit {
               });
             });
           });
-      },
+      },*/
     },
     'GET': {
       'github/getIssue': (step: { with: { [x: string]: string; }; }) => this.githubService.getIssues(this.token[this.tokenIndex], step.with['owner'], step.with['repoName']).toPromise(),
@@ -329,6 +337,9 @@ export class TestsComponent implements OnInit {
     'POST': {
       'github/mergeLastOpenPR': (step: { with: { [x: string]: string; }; }) => {
         return this.githubService.mergeLastOpenPullRequest(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['mergeMessage']).toPromise();
+      },
+      'github/approveLastOpenPR': (step: { with: { [x: string]: string; }; }) => {
+        return this.githubService.approveLastOpenPullRequest(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], step.with['body']).toPromise();
       },
       'github/undoLastMergedPR': (step: { with: { [x: string]: string; }; }) => {
         return this.githubService.undoLastMergedPullRequest(this.token[this.tokenIndex], step.with['owner'], step.with['repoName']).toPromise();
@@ -363,7 +374,7 @@ export class TestsComponent implements OnInit {
         });
       },
       //DEPRECADO
-      'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
+      /*'bluejay/checkContain': (step: { with: { [x: string]: string; }; }) => {
         console.warn("Deprecation Warning: 'bluejay/checkContain' has been deprecated. Please use 'TEST' method with 'bluejay/check' instead.");
         const key = step.with['key'];
         const minExpectedValue = Number(step.with['minExpectedValue']);
@@ -387,7 +398,7 @@ export class TestsComponent implements OnInit {
             }, reject);
           }, 10000);
         });
-      },
+      },*/
       'github/createIssue': (step: { with: { [x: string]: string; }; }) => {
         const issue = { title: step.with['title'], body: step.with['body'] };
         return this.githubService.createIssue(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], issue).toPromise();
@@ -467,6 +478,7 @@ export class TestsComponent implements OnInit {
     },
     'PUT': {
       'github/mergePR': (step: { with: { [x: string]: string; }; }) => this.githubService.mergePullRequest(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], Number(step.with['prNumber']), step.with['mergeMessage']).toPromise(),
+      'github/approvePR': (step: { with: { [x: string]: string; }; }) => this.githubService.approvePullRequest(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], Number(step.with['prNumber']), step.with['body']).toPromise(),
       'github/changeBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.changeBranch(step.with['repoName'], step.with['branchToChangeTo']).toPromise(),
       'gitlab/mergeMR': (step: { with: { [x: string]: string; }; }) => this.gitlabService.mergeMergeRequest(this.gltoken[this.tokenIndex], step.with['owner'], step.with['repoName'], Number(step.with['mrIid']), step.with['mergeMessage']).toPromise(),
       'gitlab/changeBranch': (step: { with: { [x: string]: string; }; }) => this.glassmatrixService.changeBranch(step.with['repoName'], encodeURIComponent(step.with['branchToChangeTo'])).toPromise(),
@@ -772,6 +784,11 @@ export class TestsComponent implements OnInit {
 
   removeStatus(index: number): void {
     this.testStatuses.splice(index, 1);
+  }
+
+  removeSubstatus(index1: number, index2: number): void {
+    this.testStatuses[index1].statuses.splice(index2, 1);
+    if (this.testStatuses[index1].statuses.length == 0) this.testStatuses.splice(index1, 1);
   }
 
   replaceVariables(text: string): string {

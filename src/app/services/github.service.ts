@@ -53,6 +53,39 @@ export class GithubService {
     return this.http.post(url, data, { headers });
   }
 
+  approvePullRequest(token: string, owner: string, repo: string, approvePrNumber: number, reviewBody: string): Observable<any> {
+    const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls/${approvePrNumber}/reviews`;
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+    const data = { event: 'APPROVE', body: reviewBody };
+
+    return this.http.post(url, data, { headers });
+  }
+
+  approveLastOpenPullRequest(token: string, owner: string, repo: string, reviewBody: string): Observable<any> {
+    return this.getOpenPullRequests(token, owner, repo).pipe(
+      switchMap((pullRequests: any[]) => {
+        if (pullRequests.length > 0) {
+          const lastOpenPr = pullRequests[pullRequests.length - 1];
+          const approvePrNumber = lastOpenPr.number;
+
+          const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls/${approvePrNumber}/reviews`;
+          const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json'
+          };
+          const data = {event: 'APPROVE', body: reviewBody};
+
+          return this.http.post(url, data, {headers});
+        } else {
+          throw new Error('No open pull requests found');
+        }
+      })
+    );
+  }
+
   getOpenPullRequests(token: string, owner: string, repo: string): Observable<any[]> {
     const url = `${this.apiUrl}/repos/${owner}/${repo}/pulls?state=open`;
     const headers = {
@@ -101,6 +134,7 @@ export class GithubService {
       })
     );
   }
+
   mergeLastOpenPullRequest(token: string, owner: string, repo: string, mergeCommitMessage: string): Observable<any> {
     return this.getOpenPullRequests(token, owner, repo).pipe(
       switchMap((pullRequests: any[]) => {

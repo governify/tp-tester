@@ -442,7 +442,9 @@
     "example53": "Delete GitLab branch with API",
     "example54": "Create GitLab file with API",
     "example55": "Delete GitLab file with API",
-    "example56": "Create issues in a project"
+    "example56": "Create issues in a project",
+    "example57": "Approve a PR",
+    "example58": "Approve last created PR"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",
@@ -457,6 +459,7 @@
     "fixed": "Using fixed window",
     "yes": "Yes",
     "no": "No",
+    "passed": "Passed",
     "FIXEDWINDOW_HELP": "Fixed window usage",
     "FIXEDWINDOW_EXPLANATION": "By default, the automated metric tester changes the time window of all metrics to the current window, according to the period of each metric (for example, the current week or the current month). If you want to use the original time window of the metric, you can change this behavior by adding the following fragment to the test script:"
   },
