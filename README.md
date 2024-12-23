@@ -33,6 +33,7 @@ This project is an extension of Bluejay. The official documentation for Bluejay 
 - [Step by step guide to test a metric](#step-by-step-guide-to-test-a-metric)
 - [Deployment](#deployment)
 - [Recommendations for committing to this repo](#recommendations-for-committing-to-this-repo)
+  - [Developing a new step](#developing-a-new-step)
 
 ## Introduction
 ### What is Bluejay?
@@ -56,6 +57,7 @@ To lift Bluejay-TP Tester with docker, follow these steps:
 1. Clone the Bluejay-TP Tester repository.
 2. Modify the `BASE_URL` variable within the `config.json` and `lockedConfig.ts` files to the URL where the backend will be available (usually, `http://localhost:6012`).
 3. Run `docker build .` with any additional flags you may want to set.
+4. Create and run a container, either using regular `docker` commands or `docker-compose`. In either case, set the backend API key through the environment variable `TESTER_ACCESS_KEY`.
 
 With this, we would have both frontend and backend available on port 6012.
 
@@ -208,6 +210,10 @@ The Actions page interface for managing a repository. It provides options to vie
   - [minExpectedValue](#minexpectedvalue)
   - [maxExpectedValue](#maxexpectedvalue)
   - [expectedValue](#expectedvalue)
+  - [useFixedWindow](#usefixedwindow)
+  - [type](#type)
+  - [tokenIndex](#tokenindex)
+  - [variables](#variables)
 
 ## Page Structure
 This page is a user interface for running and testing scripts. These scripts will have a .yaml format, and will interact with the GitHub API and Repositories to test already created metrics. The page is divided into several sections:
@@ -364,6 +370,17 @@ By default, the `bluejay/check` steps requires all tests to pass for all evidenc
     method: "TEST"
 ```
 
+### tokenIndex
+If you need different users to perform different steps (e.g. a user creates a pull request in GitHub and another user approves it), you may use this option to select different API tokens for each step. In the Configurations page, you can enter multiple tokens separated by commas. Then, use this option to choose which token to use in a specific step. This index starts at 0, meaning that the first token is represented as 0, the second one as 1, etc. If this option is not included in a step, the first token (with index 0) will be used by default.
+
+```yaml
+  - uses: "github/createPR"
+    with:
+      ...
+      tokenIndex: 1
+    method: "TEST"
+```
+
 ### variables
 When a step returns a JSON object, you may extract the value of an attribute and save it into a variable. This variable can then be used in future steps. Note that only root attributes may be extracted, that is, nested attributes cannot be accessed. Additionally, variables are stored in memory, so they are reset if you exit the Automated Testing page. In the example below, the `number` attribute is stored in the `issueNumber` variable.
 
@@ -458,7 +475,22 @@ This is a snippet of how the language .json works:
 ```
 
 # Step by step guide to test a metric
-TBD.
+To create a test script to automatically test a metric, you may follow these steps:
+
+1. Ensure that the Collector Events URL and the Agreements URL are correctly set in the Configurations page. The Agreements URL is only required if you will be testing metrics inside a TPA. If the URLs are not set, change them through the page or by modifying the `config.json` and `lockedConfig.ts` files in the project. Restart the application after modifying any of these variables.
+
+2. Register a metric in the application. You may do this in two different ways:
+   - Creating the metric through the Metrics page. Write or paste a metric into the textarea, type a name and click Save as JSON. The metric should be formatted as it is usually received by the Bluejay collector, including scope and window information.
+   - Extracting a metric from a TPA. In the TPA page, either create a new TPA or select an existing TPA from the list. The list is populated with all TPAs from the Bluejay registry that was indicated in the Agreements URL variable of the Configurations page. Creating a new TPA through this page will add it to the Bluejay registry. Once you know which TPA to use, click the yellow button under the Options column, and then click on Edit Metrics and Guarantees Only. In this page, under Context Section, you can find a list of all metrics of the TPA. To save a metric into the application, click the blue + button. The metric will be saved and you will be redirected to the Metrics page to edit it.
+     - You may edit the metric or leave it unchanged. Any modification under the Metrics page will not be applied to the TPA, so you can safely edit it. You may edit the metric in the textarea, but the fields that appear in the text inputs above can only be modified through those inputs, and any change to those fields in the textarea will be ignored. It is worth noting that, in some cases, a metric is expected to be calculated for each member, but the appropriate member scope is only specified in the guarantee. In this case, you may edit the metric using the fields above to modify the member scope (e.g. `*`) and then click Save as JSON.
+
+3. Start creating a test script. Usually, testing a metric includes three different phases:
+   - Executing the appropriate steps in the corresponding APIs. You can use any available steps to do the actions that will be calculated in the metric (e.g. create an issue, merge a pull request, etc.). Keep in mind that tests should be reusable without any modification. For that purpose, you may use variables to save certain values (such as the number of a created issue or pull request) to use it later, without actually specifying a fixed number. Refer to [variables](#variables) for more information.
+   - Computing the metric. If the metric was extracted from a TPA, use the `bluejay/compute/tpa` step. Otherwise, use the `bluejay/compute/metric` step. The result of the computation will be stored in an internal database.
+   - Checking for specific values inside the computation result. Using the `bluejay/check` step, you may check for various fields to ensure that, for example, the pull request you created is included in the evidences.
+   - Reverting the state of any external application. As tests should be reusable, it is important to revert any modification (e.g. created issues, merged pull requests, etc.) in the corresponding applications. Depending on your specific case, it may be enough to, for example, close an issue istead of fully deleting it.
+
+4. Save the test script. You can save the script in the application by specifying a name and clicking the Save button. It is important to note that comments in the test are not saved. Additionally, in some cases currently under investigation, if you save a test script with a syntax error, the script will be saved with no content and it will be lost. For these reasons, it is recommended to keep a copy of the test script saved outside the application.
 
 # Deployment
 To deploy this application, we recommend using Docker. This way, all files and dependencies are asily bundled and distributed. To deploy the application using Docker, follow these steps:
@@ -473,3 +505,13 @@ To deploy this application, we recommend using Docker. This way, all files and d
 
 # Recommendations for committing to this repo
 When committing to this repo, make sure that you are not including any sensitive information, such as API tokens, TPAs or metrics. In particular, yo should not upload any changes to the `code.json`, `gl-code.json` and `jira-code.json` files, and no files should be included within the `src/assets/savedMetrics` and the `src/assets/savedMetrics/tpaMetrics` directories. Note that the three token files need to exist in the repo with placeholder tokens, as the application does not automatically create them if they do not exist and will throw an error if that happens. This behavior may be improved in a future update.
+
+## Developing a new step
+Creating a new step for the Automated Testing page usually requires the following steps:
+
+1. Create a service under `src/app/services` for the API you wish to use. Currently, there are services for GitHub, GitLab and Jira, so you do not need to create a service if you want to create steps for these three applications.
+2. Inside the service, implement any function you would like to use. You may use the existing services as a guide to know what the functions should return. In general, the functions should receive the necessary information to perform a step, and it should return the API response.
+3. Modify the `src/app/pages/tests/tests.component.ts` file to add the step under the appropriate HTTP method (GET, POST, PUT or DELETE). You may check the existing steps to know what you should add here.
+4. Modify the `src/app/pages/yamels/yamels.component.ts` file to add an example of the structure of the step, as it will be used in the Automated Testing page. Add the example at the end of the existing examples, and modify the ID to the next consecutive number.
+5. Modify the `en.json` and `es.json` files under the `src/assets/i18n` directory to add a name to the step, in both English and Spanish.
+6. Test the newly created step in the Automated Testing page.
