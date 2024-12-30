@@ -316,4 +316,109 @@ export class GithubService {
       })
     )
   }
+
+  getProjectFullV2Data(token: string, owner: string, repo: string): Observable<any> {
+    const url = `${this.apiUrl}/graphql`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github.starfox-preview+json',
+    };
+    const data = {
+      query: `query {
+        repository(owner: "${owner}", name: "${repo}") {
+          id
+          projectsV2(first: 5) {
+            nodes {
+              id
+              fields(first: 100) {
+                nodes {
+                  ... on ProjectV2SingleSelectField {
+                    id
+                    name
+                    options {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+              items(first: 100) {
+                nodes {
+                  id
+                  fieldValues(first: 100) {
+                    nodes {
+                      ... on ProjectV2ItemFieldTextValue {
+                        text
+                      }
+                      ... on ProjectV2ItemFieldSingleSelectValue {
+                        name
+                        optionId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`,
+    };
+    return this.http.post(url, data, { headers });
+  }
+
+  moveIssueProject(token: string, owner: string, repo: string, issue: { title: string; column: string }): Observable<any> {
+    return this.getProjectFullV2Data(token, owner, repo).pipe(
+      switchMap((repoData: any) => {
+        const repoId = repoData.data?.repository?.id;
+        if (!repoId) throw new Error('Repo not found');
+        console.log(repoData);
+        const project = repoData.data.repository.projectsV2?.nodes[0];
+        if (!project) throw new Error('Project not found');
+        const projectId = project.id;
+        const statusField = project.fields.nodes.find(
+          (field: any) => field.name === 'Status' && field.options
+        );
+        if (!statusField) throw new Error('Status field not found');
+        const columnOption = statusField.options.find(
+          (option: any) => option.name === issue.column
+        );
+        if (!columnOption) throw new Error(`Column '${issue.column}' not found`);
+        const columnId = columnOption.id;
+        const item = project.items.nodes.find(
+          (item: any) =>
+            item.fieldValues.nodes.some(
+              (fieldValue: any) => fieldValue.text === issue.title
+            )
+        );
+        if (!item) throw new Error(`Issue with title '${issue.title}' not found`);
+        const itemId = item.id;
+        const url = `${this.apiUrl}/graphql`;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github.starfox-preview+json',
+        };
+        const data = {
+          query: `mutation {
+            updateProjectV2ItemFieldValue(
+              input: {
+                projectId: "${projectId}",
+                itemId: "${itemId}",
+                fieldId: "${statusField.id}",
+                value: {
+                  singleSelectOptionId: "${columnId}"
+                }
+              }
+            ) {
+              projectV2Item {
+                id
+              }
+            }
+          }`
+        }; 
+        return this.http.post(url, data, { headers });
+      })
+    );
+  }
 }
+
+

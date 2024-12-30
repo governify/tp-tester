@@ -15,6 +15,7 @@ const exec = util.promisify(require('child_process').exec);
 const Docker = require('dockerode');
 const docker = new Docker();
 const yaml = require('js-yaml');
+const dotenv = require('dotenv')
 const Datastore = require('nedb');
 const db = new Datastore({ filename: './myDatabase.db', autoload: true });
 const { BASE_URL, DEFAULT_COLLECTOR, COLLECTOR_EVENTS_URL, AGREEMENTS_URL, SCOPES_URL } = require('./config.js');
@@ -32,6 +33,8 @@ const swaggerOptions = {
   // ['.routes/*.js']
   apis: ['server.js']
 };
+
+dotenv.config()
 
 function checkAccessKey (req, res, next) {
   const accessKey = req.header('x-access-key');
