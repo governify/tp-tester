@@ -161,63 +161,67 @@ export class TestsComponent implements OnInit {
           return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
               const headers = new HttpHeaders({ "x-access-key": `${localStorage.getItem('access-key')}` });
-              this.http.get<any>(`${BASE_URL}/glassmatrix/api/v1/getData/${key}`, { headers }).subscribe((data: any) => {
+              this.http.get<any>(`${BASE_URL}/glassmatrix/api/v1/getData/${key.split('.')[0]}`, { headers }).subscribe((data: any) => {
                 if (data) {
-                  data.forEach((item: any) => {
+                  data.forEach((item: any) => {      
+                    // Accede al valor de la clave en el objeto de datos (Ejemplo: assignees.nodes[0].login)            
+                    const value = key.split('.').reduce((acc, currKey) => {
+                      if (currKey.includes('[') && currKey.includes(']')) {
+                        const [arrayKey, index] = currKey.split(/[\[\]]/).filter(Boolean);
+                        return acc && acc[arrayKey] && acc[arrayKey][Number(index)];
+                      }
+                      return acc && acc[currKey];
+                    }, item);
                     // Si 'value' no está definido en el paso, o si es igual al 'value' en el objeto de datos, entonces procesa el objeto
-                    if (item[key] && (step.value === undefined || item['value'] == step.value)) {
-                      const value = item[key];
-                      // Comprueba si el valor de la clave es "not found"
-                      if (value === "not found") {
-                        tempTestStatuses.push({
-                          text: `Test failed. Field '${key}' not found in the database`,
-                          success: false
-                        });
-                      } else {
-                        // Comprueba cada condición por separado
-                        if (conditions.minExpectedValue !== undefined) {
-                          if (value >= Number(conditions.minExpectedValue)) {
-                            tempTestStatuses.push({
-                              text: `Test successfully completed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`,
-                              success: true
-                            });
-                            testSuccess = true;
-                          } else {
-                            tempTestStatuses.push({
-                              text: `Test failed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`,
-                              success: false
-                            });
-                          }
-                        }
-                        if (conditions.maxExpectedValue !== undefined) {
-                          if (value <= Number(conditions.maxExpectedValue)) {
-                            tempTestStatuses.push({
-                              text: `Test successfully completed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`,
-                              success: true
-                            });
-                            testSuccess = true;
-                          } else {
-                            tempTestStatuses.push({
-                              text: `Test failed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`,
-                              success: false
-                            });
-                          }
-                        }
-                        if (conditions.expectedValue !== undefined) {
-                          if (value === conditions.expectedValue) {
-                            tempTestStatuses.push({
-                              text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`,
-                              success: true
-                            });
-                            testSuccess = true;
-                          } else {
-                            tempTestStatuses.push({
-                              text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`,
-                              success: false
-                            });
-                          }
+                    if (value && (step.value === undefined || value == step.value)) {                      
+                      // Comprueba cada condición por separado
+                      if (conditions.minExpectedValue !== undefined) {
+                        if (value >= Number(conditions.minExpectedValue)) {
+                          tempTestStatuses.push({
+                            text: `Test successfully completed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`,
+                            success: true
+                          });
+                          testSuccess = true;
+                        } else {
+                          tempTestStatuses.push({
+                            text: `Test failed.\nCondition: minExpectedValue=${conditions.minExpectedValue}\nResult: ${key}=${value}`,
+                            success: false
+                          });
                         }
                       }
+                      if (conditions.maxExpectedValue !== undefined) {
+                        if (value <= Number(conditions.maxExpectedValue)) {
+                          tempTestStatuses.push({
+                            text: `Test successfully completed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`,
+                            success: true
+                          });
+                          testSuccess = true;
+                        } else {
+                          tempTestStatuses.push({
+                            text: `Test failed.\nCondition: maxExpectedValue=${conditions.maxExpectedValue}\nResult: ${key}=${value}`,
+                            success: false
+                          });
+                        }
+                      }
+                      if (conditions.expectedValue !== undefined) {
+                        if (value === conditions.expectedValue) {
+                          tempTestStatuses.push({
+                            text: `Test successfully completed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`,
+                            success: true
+                          });
+                          testSuccess = true;
+                        } else {
+                          tempTestStatuses.push({
+                            text: `Test failed.\nCondition: expectedValue=${conditions.expectedValue}\nResult: ${key}=${value}`,
+                            success: false
+                          });
+                        }
+                      }
+                    } else {
+                      tempTestStatuses.push({
+                        text: `Test failed. Field '${key}' not found in the database`,
+                        success: false
+                      });
                     }
                   });
                   resolve();
@@ -406,6 +410,10 @@ export class TestsComponent implements OnInit {
       'github/createIssueProject': (step: { with: { [x: string]: string; }; }) => {
         const issue = { title: step.with['title'], body: step.with['body'] };
         return this.githubService.createIssueProject(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], issue).toPromise();
+      },
+      'github/moveIssueProject': (step: { with: { [x: string]: string; }; }) => {
+        const issue = { title: step.with['title'], column: step.with['column'] };
+        return this.githubService.moveIssueProject(this.token[this.tokenIndex], step.with['owner'], step.with['repoName'], issue).toPromise();
       },
       'github/createPR': (step: { with: { [x: string]: string; }; }) => {
         const pr = { title: step.with['title'], head: step.with['head'], base: step.with['base'], body: step.with['body'] };

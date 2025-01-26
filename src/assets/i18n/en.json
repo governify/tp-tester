@@ -444,7 +444,8 @@
     "example55": "Delete GitLab file with API",
     "example56": "Create issues in a project",
     "example57": "Approve a PR",
-    "example58": "Approve last created PR"
+    "example58": "Approve last created PR",
+    "example59": "Move issues in a project"
   },
   "TESTS": {
     "title": "Metrics testing with yaml",

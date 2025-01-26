@@ -532,6 +532,16 @@ export class YamelsComponent implements OnInit {
         owner: "Antoniiosc7"
         body: "Review body"
       method: "POST"`
+    },
+    {
+      id: 'example59',
+      content: `- uses: "github/moveIssueProject"
+      with:
+        repoName: "tp-testbench"
+        owner: "Antoniiosc7"
+        title: "titleText"
+        column: "Todo"
+      method: "POST"`
     }
   ];
 

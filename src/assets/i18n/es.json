@@ -444,7 +444,8 @@
     "example55": "Borrar archivo de GitLab con API",
     "example56": "Crear incidencias en un proyecto",
     "example57": "Aprobar una PR",
-    "example58": "Aprobar la última PR creada"
+    "example58": "Aprobar la última PR creada",
+    "example59": "Mover incidencias en un proyecto"
   },
   "TESTS": {
     "title": "Testeo de métricas con yaml",

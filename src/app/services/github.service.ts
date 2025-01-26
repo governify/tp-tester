@@ -325,43 +325,99 @@ export class GithubService {
     };
     const data = {
       query: `query {
-        repository(owner: "${owner}", name: "${repo}") {
-          id
-          projectsV2(first: 5) {
-            nodes {
+  repository(owner: "${owner}", name: "${repo}") {
+    id
+    projectsV2(first: 5) {
+      nodes {
+        id
+        fields(first: 100) {
+          nodes {
+            ... on ProjectV2SingleSelectField {
               id
-              fields(first: 100) {
-                nodes {
-                  ... on ProjectV2SingleSelectField {
-                    id
-                    name
-                    options {
-                      id
+              name
+              options {
+                id
+                name
+              }
+            }
+          }
+        }
+        items(first: 100) {
+          nodes {
+            id
+            content {
+              ... on Issue {
+                title
+                bodyText
+                updatedAt
+                createdAt
+                number
+                assignees(first: 10) {
+                  nodes {
+                    login
+                  }
+                }
+                linkedBranches(first: 10) {
+                  totalCount
+                  nodes {
+                    ref {
                       name
                     }
                   }
                 }
-              }
-              items(first: 100) {
-                nodes {
-                  id
-                  fieldValues(first: 100) {
-                    nodes {
-                      ... on ProjectV2ItemFieldTextValue {
-                        text
-                      }
-                      ... on ProjectV2ItemFieldSingleSelectValue {
-                        name
-                        optionId
-                      }
+                closedByPullRequestsReferences(first: 10) {
+                  totalCount
+                  nodes {
+                    state
+                    author {
+                      login
                     }
+                    title
+                  }
+                }
+                author {
+                  login
+                }
+              }
+            }
+            fieldValues(first: 100) {
+              nodes {
+                ... on ProjectV2ItemFieldTextValue {
+                  text
+                  field {
+                    ... on ProjectV2Field {
+                      name
+                    }
+                  }
+                }
+                ... on ProjectV2ItemFieldSingleSelectValue {
+                  name
+                  optionId
+                  field {
+                    ... on ProjectV2SingleSelectField {
+                      name
+                    }
+                  }
+                }
+                ... on ProjectV2ItemFieldRepositoryValue {
+                  field {
+                    ... on ProjectV2Field {
+                      name
+                    }
+                  }
+                  repository {
+                    nameWithOwner
                   }
                 }
               }
             }
           }
         }
-      }`,
+      }
+    }
+  }
+}
+`,
     };
     return this.http.post(url, data, { headers });
   }
